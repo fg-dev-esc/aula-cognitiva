@@ -1,0 +1,1569 @@
+{
+  "schemaVersion": 1,
+  "routeId": "js-arrays-console-v1",
+  "language": "es",
+  "datasetConventions": {
+    "deterministic": true,
+    "recordCountRange": {
+      "min": 4,
+      "max": 7
+    },
+    "versioning": "Cada dataset tiene un id estable terminado en -v1 y un campo version entero.",
+    "reviewUsage": "Los datasets base se usan en la primera práctica; los datasets revision-1, revision-3 y revision-7 son variantes fijas para esos días de revisión.",
+    "money": "Todo importe monetario se guarda como un entero en centavos; nunca como decimal.",
+    "mutation": "Los ejercicios consultan los registros sin modificar el dataset original."
+  },
+  "scenarios": [
+    {
+      "id": "inventario",
+      "version": 1,
+      "title": "Inventario de una tienda escolar",
+      "description": "Productos con existencias, estado comercial, etiquetas, proveedor y ubicación física.",
+      "bindingName": "productos",
+      "dataShape": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "nombre",
+            "categoria",
+            "precioCentavos",
+            "stock",
+            "activo",
+            "etiquetas",
+            "proveedor",
+            "ubicacion"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identificador único con formato P-NNN."
+            },
+            "nombre": {
+              "type": "string"
+            },
+            "categoria": {
+              "type": "string"
+            },
+            "precioCentavos": {
+              "type": "integer",
+              "minimum": 0,
+              "unit": "centavos"
+            },
+            "stock": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "activo": {
+              "type": "boolean"
+            },
+            "etiquetas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "proveedor": {
+              "type": "object",
+              "required": [
+                "id",
+                "nombre",
+                "pais"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "nombre": {
+                  "type": "string"
+                },
+                "pais": {
+                  "type": "string"
+                }
+              }
+            },
+            "ubicacion": {
+              "type": "object",
+              "required": [
+                "pasillo",
+                "estante"
+              ],
+              "properties": {
+                "pasillo": {
+                  "type": "string"
+                },
+                "estante": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "rules": [
+        {
+          "id": "inventario-id-unico",
+          "description": "Cada id identifica un solo producto dentro del dataset."
+        },
+        {
+          "id": "inventario-stock-disponible",
+          "description": "Un producto tiene existencias cuando stock es mayor que 0; activo no implica que tenga stock."
+        },
+        {
+          "id": "inventario-activo",
+          "description": "activo indica si el producto se ofrece comercialmente y es independiente de stock."
+        },
+        {
+          "id": "inventario-etiquetas-exactas",
+          "description": "Las etiquetas están normalizadas en minúsculas y se comparan por el texto completo."
+        },
+        {
+          "id": "inventario-precio-centavos",
+          "description": "precioCentavos siempre es un entero no negativo expresado en centavos."
+        }
+      ],
+      "datasets": [
+        {
+          "id": "inventario-base-v1",
+          "version": 1,
+          "reviewIntervalDay": null,
+          "records": [
+            {
+              "id": "P-101",
+              "nombre": "Cuaderno",
+              "categoria": "papeleria",
+              "precioCentavos": 450,
+              "stock": 12,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "papel"
+              ],
+              "proveedor": {
+                "id": "PR-1",
+                "nombre": "Norte",
+                "pais": "AR"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 2
+              }
+            },
+            {
+              "id": "P-102",
+              "nombre": "Lapiz",
+              "categoria": "papeleria",
+              "precioCentavos": 120,
+              "stock": 0,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "grafito"
+              ],
+              "proveedor": {
+                "id": "PR-2",
+                "nombre": "Sur",
+                "pais": "CL"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 1
+              }
+            },
+            {
+              "id": "P-103",
+              "nombre": "Mochila",
+              "categoria": "accesorios",
+              "precioCentavos": 3250,
+              "stock": 4,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "tela"
+              ],
+              "proveedor": {
+                "id": "PR-1",
+                "nombre": "Norte",
+                "pais": "AR"
+              },
+              "ubicacion": {
+                "pasillo": "B",
+                "estante": 3
+              }
+            },
+            {
+              "id": "P-104",
+              "nombre": "Regla",
+              "categoria": "papeleria",
+              "precioCentavos": 210,
+              "stock": 8,
+              "activo": false,
+              "etiquetas": [
+                "escolar",
+                "plastico"
+              ],
+              "proveedor": {
+                "id": "PR-3",
+                "nombre": "Centro",
+                "pais": "UY"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 3
+              }
+            },
+            {
+              "id": "P-105",
+              "nombre": "Botella",
+              "categoria": "accesorios",
+              "precioCentavos": 1890,
+              "stock": 2,
+              "activo": true,
+              "etiquetas": [
+                "reutilizable",
+                "deporte"
+              ],
+              "proveedor": {
+                "id": "PR-3",
+                "nombre": "Centro",
+                "pais": "UY"
+              },
+              "ubicacion": {
+                "pasillo": "C",
+                "estante": 1
+              }
+            },
+            {
+              "id": "P-106",
+              "nombre": "Agenda",
+              "categoria": "papeleria",
+              "precioCentavos": 980,
+              "stock": 5,
+              "activo": true,
+              "etiquetas": [
+                "papel",
+                "organizacion"
+              ],
+              "proveedor": {
+                "id": "PR-1",
+                "nombre": "Norte",
+                "pais": "AR"
+              },
+              "ubicacion": {
+                "pasillo": "B",
+                "estante": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "inventario-revision-1-v1",
+          "version": 1,
+          "reviewIntervalDay": 1,
+          "records": [
+            {
+              "id": "P-201",
+              "nombre": "Marcador",
+              "categoria": "papeleria",
+              "precioCentavos": 250,
+              "stock": 3,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "tinta"
+              ],
+              "proveedor": {
+                "id": "PR-2",
+                "nombre": "Sur",
+                "pais": "CL"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 4
+              }
+            },
+            {
+              "id": "P-202",
+              "nombre": "Cartuchera",
+              "categoria": "accesorios",
+              "precioCentavos": 1450,
+              "stock": 0,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "tela"
+              ],
+              "proveedor": {
+                "id": "PR-1",
+                "nombre": "Norte",
+                "pais": "AR"
+              },
+              "ubicacion": {
+                "pasillo": "B",
+                "estante": 2
+              }
+            },
+            {
+              "id": "P-203",
+              "nombre": "Calculadora",
+              "categoria": "electronica",
+              "precioCentavos": 4990,
+              "stock": 2,
+              "activo": false,
+              "etiquetas": [
+                "escolar",
+                "oficina"
+              ],
+              "proveedor": {
+                "id": "PR-4",
+                "nombre": "Tecno",
+                "pais": "MX"
+              },
+              "ubicacion": {
+                "pasillo": "D",
+                "estante": 1
+              }
+            },
+            {
+              "id": "P-204",
+              "nombre": "Carpeta",
+              "categoria": "papeleria",
+              "precioCentavos": 700,
+              "stock": 9,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "papel"
+              ],
+              "proveedor": {
+                "id": "PR-3",
+                "nombre": "Centro",
+                "pais": "UY"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 5
+              }
+            },
+            {
+              "id": "P-205",
+              "nombre": "Termo",
+              "categoria": "accesorios",
+              "precioCentavos": 4100,
+              "stock": 1,
+              "activo": true,
+              "etiquetas": [
+                "reutilizable",
+                "viaje"
+              ],
+              "proveedor": {
+                "id": "PR-3",
+                "nombre": "Centro",
+                "pais": "UY"
+              },
+              "ubicacion": {
+                "pasillo": "C",
+                "estante": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "inventario-revision-3-v1",
+          "version": 1,
+          "reviewIntervalDay": 3,
+          "records": [
+            {
+              "id": "P-301",
+              "nombre": "Goma",
+              "categoria": "papeleria",
+              "precioCentavos": 90,
+              "stock": 7,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "caucho"
+              ],
+              "proveedor": {
+                "id": "PR-1",
+                "nombre": "Norte",
+                "pais": "AR"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 1
+              }
+            },
+            {
+              "id": "P-302",
+              "nombre": "Tijera",
+              "categoria": "papeleria",
+              "precioCentavos": 680,
+              "stock": 0,
+              "activo": false,
+              "etiquetas": [
+                "escolar",
+                "metal"
+              ],
+              "proveedor": {
+                "id": "PR-3",
+                "nombre": "Centro",
+                "pais": "UY"
+              },
+              "ubicacion": {
+                "pasillo": "B",
+                "estante": 4
+              }
+            },
+            {
+              "id": "P-303",
+              "nombre": "Resaltador",
+              "categoria": "papeleria",
+              "precioCentavos": 330,
+              "stock": 6,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "tinta"
+              ],
+              "proveedor": {
+                "id": "PR-2",
+                "nombre": "Sur",
+                "pais": "CL"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 2
+              }
+            },
+            {
+              "id": "P-304",
+              "nombre": "Lonchera",
+              "categoria": "accesorios",
+              "precioCentavos": 2800,
+              "stock": 2,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "comida"
+              ],
+              "proveedor": {
+                "id": "PR-1",
+                "nombre": "Norte",
+                "pais": "AR"
+              },
+              "ubicacion": {
+                "pasillo": "C",
+                "estante": 3
+              }
+            },
+            {
+              "id": "P-305",
+              "nombre": "Compas",
+              "categoria": "papeleria",
+              "precioCentavos": 1250,
+              "stock": 1,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "geometria"
+              ],
+              "proveedor": {
+                "id": "PR-3",
+                "nombre": "Centro",
+                "pais": "UY"
+              },
+              "ubicacion": {
+                "pasillo": "B",
+                "estante": 5
+              }
+            },
+            {
+              "id": "P-306",
+              "nombre": "Papel A4",
+              "categoria": "papeleria",
+              "precioCentavos": 560,
+              "stock": 0,
+              "activo": true,
+              "etiquetas": [
+                "papel",
+                "oficina"
+              ],
+              "proveedor": {
+                "id": "PR-2",
+                "nombre": "Sur",
+                "pais": "CL"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 6
+              }
+            }
+          ]
+        },
+        {
+          "id": "inventario-revision-7-v1",
+          "version": 1,
+          "reviewIntervalDay": 7,
+          "records": [
+            {
+              "id": "P-401",
+              "nombre": "Pegamento",
+              "categoria": "papeleria",
+              "precioCentavos": 390,
+              "stock": 4,
+              "activo": true,
+              "etiquetas": [
+                "escolar",
+                "adhesivo"
+              ],
+              "proveedor": {
+                "id": "PR-2",
+                "nombre": "Sur",
+                "pais": "CL"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 2
+              }
+            },
+            {
+              "id": "P-402",
+              "nombre": "Libro de notas",
+              "categoria": "papeleria",
+              "precioCentavos": 1150,
+              "stock": 0,
+              "activo": true,
+              "etiquetas": [
+                "papel",
+                "organizacion"
+              ],
+              "proveedor": {
+                "id": "PR-1",
+                "nombre": "Norte",
+                "pais": "AR"
+              },
+              "ubicacion": {
+                "pasillo": "B",
+                "estante": 1
+              }
+            },
+            {
+              "id": "P-403",
+              "nombre": "Estuche",
+              "categoria": "accesorios",
+              "precioCentavos": 1750,
+              "stock": 3,
+              "activo": false,
+              "etiquetas": [
+                "escolar",
+                "tela"
+              ],
+              "proveedor": {
+                "id": "PR-3",
+                "nombre": "Centro",
+                "pais": "UY"
+              },
+              "ubicacion": {
+                "pasillo": "B",
+                "estante": 3
+              }
+            },
+            {
+              "id": "P-404",
+              "nombre": "Memoria USB",
+              "categoria": "electronica",
+              "precioCentavos": 3200,
+              "stock": 6,
+              "activo": true,
+              "etiquetas": [
+                "oficina",
+                "datos"
+              ],
+              "proveedor": {
+                "id": "PR-4",
+                "nombre": "Tecno",
+                "pais": "MX"
+              },
+              "ubicacion": {
+                "pasillo": "D",
+                "estante": 2
+              }
+            },
+            {
+              "id": "P-405",
+              "nombre": "Sobres",
+              "categoria": "papeleria",
+              "precioCentavos": 300,
+              "stock": 10,
+              "activo": true,
+              "etiquetas": [
+                "papel",
+                "oficina"
+              ],
+              "proveedor": {
+                "id": "PR-1",
+                "nombre": "Norte",
+                "pais": "AR"
+              },
+              "ubicacion": {
+                "pasillo": "A",
+                "estante": 7
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "biblioteca",
+      "version": 1,
+      "title": "Catálogo de una biblioteca comunitaria",
+      "description": "Libros con disponibilidad, géneros normalizados, autor y métricas de préstamo.",
+      "bindingName": "libros",
+      "dataShape": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "titulo",
+            "autor",
+            "paginas",
+            "disponible",
+            "generos",
+            "anio",
+            "prestamos"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identificador único con formato L-NNN."
+            },
+            "titulo": {
+              "type": "string"
+            },
+            "autor": {
+              "type": "object",
+              "required": [
+                "nombre",
+                "pais"
+              ],
+              "properties": {
+                "nombre": {
+                  "type": "string"
+                },
+                "pais": {
+                  "type": "string"
+                }
+              }
+            },
+            "paginas": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "disponible": {
+              "type": "boolean"
+            },
+            "generos": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "anio": {
+              "type": "integer"
+            },
+            "prestamos": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      },
+      "rules": [
+        {
+          "id": "biblioteca-id-unico",
+          "description": "Cada id identifica un solo libro dentro del dataset."
+        },
+        {
+          "id": "biblioteca-disponibilidad",
+          "description": "disponible es un booleano y no se deduce de la cantidad histórica de prestamos."
+        },
+        {
+          "id": "biblioteca-generos-exactos",
+          "description": "Los géneros están en minúsculas; includes compara el valor completo y distingue mayúsculas."
+        },
+        {
+          "id": "biblioteca-find-ausente",
+          "description": "Buscar un id inexistente con find produce undefined."
+        },
+        {
+          "id": "biblioteca-orden",
+          "description": "El orden de los registros es fijo y find devuelve la primera coincidencia en ese orden."
+        }
+      ],
+      "datasets": [
+        {
+          "id": "biblioteca-base-v1",
+          "version": 1,
+          "reviewIntervalDay": null,
+          "records": [
+            {
+              "id": "L-201",
+              "titulo": "El faro",
+              "autor": {
+                "nombre": "Ana Sol",
+                "pais": "AR"
+              },
+              "paginas": 180,
+              "disponible": true,
+              "generos": [
+                "aventura",
+                "juvenil"
+              ],
+              "anio": 2020,
+              "prestamos": 3
+            },
+            {
+              "id": "L-202",
+              "titulo": "Orbita roja",
+              "autor": {
+                "nombre": "Bruno Mar",
+                "pais": "CL"
+              },
+              "paginas": 320,
+              "disponible": false,
+              "generos": [
+                "ciencia",
+                "ficcion"
+              ],
+              "anio": 2018,
+              "prestamos": 8
+            },
+            {
+              "id": "L-203",
+              "titulo": "Cocina diaria",
+              "autor": {
+                "nombre": "Carla Rio",
+                "pais": "UY"
+              },
+              "paginas": 240,
+              "disponible": true,
+              "generos": [
+                "cocina",
+                "practico"
+              ],
+              "anio": 2022,
+              "prestamos": 2
+            },
+            {
+              "id": "L-204",
+              "titulo": "Atlas minimo",
+              "autor": {
+                "nombre": "Diego Paz",
+                "pais": "MX"
+              },
+              "paginas": 150,
+              "disponible": true,
+              "generos": [
+                "referencia",
+                "viajes"
+              ],
+              "anio": 2019,
+              "prestamos": 5
+            },
+            {
+              "id": "L-205",
+              "titulo": "Codigo claro",
+              "autor": {
+                "nombre": "Eva Luz",
+                "pais": "ES"
+              },
+              "paginas": 410,
+              "disponible": false,
+              "generos": [
+                "tecnologia",
+                "educacion"
+              ],
+              "anio": 2021,
+              "prestamos": 7
+            },
+            {
+              "id": "L-206",
+              "titulo": "Bosque azul",
+              "autor": {
+                "nombre": "Fabio Rey",
+                "pais": "AR"
+              },
+              "paginas": 290,
+              "disponible": true,
+              "generos": [
+                "ficcion",
+                "naturaleza"
+              ],
+              "anio": 2017,
+              "prestamos": 4
+            }
+          ]
+        },
+        {
+          "id": "biblioteca-revision-1-v1",
+          "version": 1,
+          "reviewIntervalDay": 1,
+          "records": [
+            {
+              "id": "L-301",
+              "titulo": "Mar abierto",
+              "autor": {
+                "nombre": "Gala Sur",
+                "pais": "AR"
+              },
+              "paginas": 210,
+              "disponible": true,
+              "generos": [
+                "aventura",
+                "naturaleza"
+              ],
+              "anio": 2016,
+              "prestamos": 6
+            },
+            {
+              "id": "L-302",
+              "titulo": "Ciencia en casa",
+              "autor": {
+                "nombre": "Hugo Gil",
+                "pais": "CL"
+              },
+              "paginas": 275,
+              "disponible": true,
+              "generos": [
+                "ciencia",
+                "educacion"
+              ],
+              "anio": 2023,
+              "prestamos": 1
+            },
+            {
+              "id": "L-303",
+              "titulo": "Historia breve",
+              "autor": {
+                "nombre": "Ines Paz",
+                "pais": "UY"
+              },
+              "paginas": 360,
+              "disponible": false,
+              "generos": [
+                "historia",
+                "ensayo"
+              ],
+              "anio": 2015,
+              "prestamos": 9
+            },
+            {
+              "id": "L-304",
+              "titulo": "Noche polar",
+              "autor": {
+                "nombre": "Joel Mar",
+                "pais": "MX"
+              },
+              "paginas": 190,
+              "disponible": true,
+              "generos": [
+                "ficcion",
+                "aventura"
+              ],
+              "anio": 2020,
+              "prestamos": 4
+            },
+            {
+              "id": "L-305",
+              "titulo": "Datos simples",
+              "autor": {
+                "nombre": "Kiara Sol",
+                "pais": "ES"
+              },
+              "paginas": 330,
+              "disponible": false,
+              "generos": [
+                "tecnologia",
+                "educacion"
+              ],
+              "anio": 2022,
+              "prestamos": 5
+            }
+          ]
+        },
+        {
+          "id": "biblioteca-revision-3-v1",
+          "version": 1,
+          "reviewIntervalDay": 3,
+          "records": [
+            {
+              "id": "L-401",
+              "titulo": "Camino norte",
+              "autor": {
+                "nombre": "Leo Vidal",
+                "pais": "AR"
+              },
+              "paginas": 205,
+              "disponible": true,
+              "generos": [
+                "viajes",
+                "aventura"
+              ],
+              "anio": 2019,
+              "prestamos": 4
+            },
+            {
+              "id": "L-402",
+              "titulo": "Laboratorio cero",
+              "autor": {
+                "nombre": "Mara Luz",
+                "pais": "CL"
+              },
+              "paginas": 340,
+              "disponible": true,
+              "generos": [
+                "ciencia",
+                "educacion"
+              ],
+              "anio": 2024,
+              "prestamos": 2
+            },
+            {
+              "id": "L-403",
+              "titulo": "Pan y fuego",
+              "autor": {
+                "nombre": "Nico Rey",
+                "pais": "UY"
+              },
+              "paginas": 160,
+              "disponible": false,
+              "generos": [
+                "cocina",
+                "historia"
+              ],
+              "anio": 2014,
+              "prestamos": 10
+            },
+            {
+              "id": "L-404",
+              "titulo": "Planeta seco",
+              "autor": {
+                "nombre": "Olga Mar",
+                "pais": "MX"
+              },
+              "paginas": 295,
+              "disponible": true,
+              "generos": [
+                "ciencia",
+                "naturaleza"
+              ],
+              "anio": 2021,
+              "prestamos": 5
+            },
+            {
+              "id": "L-405",
+              "titulo": "Redes humanas",
+              "autor": {
+                "nombre": "Pablo Gil",
+                "pais": "ES"
+              },
+              "paginas": 420,
+              "disponible": true,
+              "generos": [
+                "ensayo",
+                "sociedad"
+              ],
+              "anio": 2018,
+              "prestamos": 7
+            },
+            {
+              "id": "L-406",
+              "titulo": "Juego limpio",
+              "autor": {
+                "nombre": "Quino Sol",
+                "pais": "AR"
+              },
+              "paginas": 230,
+              "disponible": false,
+              "generos": [
+                "deporte",
+                "juvenil"
+              ],
+              "anio": 2020,
+              "prestamos": 3
+            }
+          ]
+        },
+        {
+          "id": "biblioteca-revision-7-v1",
+          "version": 1,
+          "reviewIntervalDay": 7,
+          "records": [
+            {
+              "id": "L-501",
+              "titulo": "Rio adentro",
+              "autor": {
+                "nombre": "Rita Paz",
+                "pais": "AR"
+              },
+              "paginas": 260,
+              "disponible": true,
+              "generos": [
+                "naturaleza",
+                "aventura"
+              ],
+              "anio": 2017,
+              "prestamos": 6
+            },
+            {
+              "id": "L-502",
+              "titulo": "Robot amable",
+              "autor": {
+                "nombre": "Sandro Gil",
+                "pais": "CL"
+              },
+              "paginas": 310,
+              "disponible": false,
+              "generos": [
+                "tecnologia",
+                "ficcion"
+              ],
+              "anio": 2023,
+              "prestamos": 4
+            },
+            {
+              "id": "L-503",
+              "titulo": "Mapas del tiempo",
+              "autor": {
+                "nombre": "Tania Mar",
+                "pais": "UY"
+              },
+              "paginas": 370,
+              "disponible": true,
+              "generos": [
+                "ciencia",
+                "referencia"
+              ],
+              "anio": 2022,
+              "prestamos": 3
+            },
+            {
+              "id": "L-504",
+              "titulo": "Taller de ideas",
+              "autor": {
+                "nombre": "Uri Sol",
+                "pais": "MX"
+              },
+              "paginas": 195,
+              "disponible": true,
+              "generos": [
+                "educacion",
+                "practico"
+              ],
+              "anio": 2024,
+              "prestamos": 1
+            },
+            {
+              "id": "L-505",
+              "titulo": "Ciudad minima",
+              "autor": {
+                "nombre": "Vera Luz",
+                "pais": "ES"
+              },
+              "paginas": 280,
+              "disponible": false,
+              "generos": [
+                "sociedad",
+                "ensayo"
+              ],
+              "anio": 2016,
+              "prestamos": 8
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tareas",
+      "version": 1,
+      "title": "Tablero de tareas de un equipo pequeño",
+      "description": "Tareas con estado, prioridad, estimación, etiquetas, responsable y bloqueo.",
+      "bindingName": "tareas",
+      "dataShape": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "titulo",
+            "estado",
+            "prioridad",
+            "estimacionMinutos",
+            "etiquetas",
+            "responsable",
+            "bloqueada"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identificador único con formato T-NNN."
+            },
+            "titulo": {
+              "type": "string"
+            },
+            "estado": {
+              "type": "string",
+              "enum": [
+                "pendiente",
+                "en_progreso",
+                "completada"
+              ]
+            },
+            "prioridad": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            },
+            "estimacionMinutos": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "etiquetas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "responsable": {
+              "type": "object",
+              "required": [
+                "id",
+                "nombre"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "nombre": {
+                  "type": "string"
+                }
+              }
+            },
+            "bloqueada": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "rules": [
+        {
+          "id": "tareas-id-unico",
+          "description": "Cada id identifica una sola tarea dentro del dataset."
+        },
+        {
+          "id": "tareas-prioridad",
+          "description": "La prioridad usa enteros de 1 a 3; 3 es la prioridad más alta."
+        },
+        {
+          "id": "tareas-estados",
+          "description": "estado solo puede ser pendiente, en_progreso o completada."
+        },
+        {
+          "id": "tareas-bloqueo",
+          "description": "bloqueada es independiente del estado; una consulta debe comprobar ambas reglas si las necesita."
+        },
+        {
+          "id": "tareas-etiquetas-exactas",
+          "description": "Las etiquetas están normalizadas en minúsculas y se comparan por igualdad exacta."
+        }
+      ],
+      "datasets": [
+        {
+          "id": "tareas-base-v1",
+          "version": 1,
+          "reviewIntervalDay": null,
+          "records": [
+            {
+              "id": "T-301",
+              "titulo": "Preparar informe",
+              "estado": "pendiente",
+              "prioridad": 3,
+              "estimacionMinutos": 45,
+              "etiquetas": [
+                "trabajo",
+                "urgente"
+              ],
+              "responsable": {
+                "id": "U-1",
+                "nombre": "Lia"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-302",
+              "titulo": "Revisar inventario",
+              "estado": "en_progreso",
+              "prioridad": 2,
+              "estimacionMinutos": 30,
+              "etiquetas": [
+                "trabajo",
+                "tienda"
+              ],
+              "responsable": {
+                "id": "U-2",
+                "nombre": "Omar"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-303",
+              "titulo": "Reservar sala",
+              "estado": "completada",
+              "prioridad": 1,
+              "estimacionMinutos": 10,
+              "etiquetas": [
+                "personal",
+                "agenda"
+              ],
+              "responsable": {
+                "id": "U-1",
+                "nombre": "Lia"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-304",
+              "titulo": "Corregir datos",
+              "estado": "pendiente",
+              "prioridad": 3,
+              "estimacionMinutos": 60,
+              "etiquetas": [
+                "trabajo",
+                "datos"
+              ],
+              "responsable": {
+                "id": "U-3",
+                "nombre": "Noa"
+              },
+              "bloqueada": true
+            },
+            {
+              "id": "T-305",
+              "titulo": "Enviar resumen",
+              "estado": "pendiente",
+              "prioridad": 2,
+              "estimacionMinutos": 20,
+              "etiquetas": [
+                "trabajo",
+                "comunicacion"
+              ],
+              "responsable": {
+                "id": "U-3",
+                "nombre": "Noa"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-306",
+              "titulo": "Actualizar agenda",
+              "estado": "completada",
+              "prioridad": 1,
+              "estimacionMinutos": 15,
+              "etiquetas": [
+                "personal",
+                "organizacion"
+              ],
+              "responsable": {
+                "id": "U-2",
+                "nombre": "Omar"
+              },
+              "bloqueada": false
+            }
+          ]
+        },
+        {
+          "id": "tareas-revision-1-v1",
+          "version": 1,
+          "reviewIntervalDay": 1,
+          "records": [
+            {
+              "id": "T-401",
+              "titulo": "Llamar proveedor",
+              "estado": "pendiente",
+              "prioridad": 3,
+              "estimacionMinutos": 25,
+              "etiquetas": [
+                "trabajo",
+                "compras"
+              ],
+              "responsable": {
+                "id": "U-2",
+                "nombre": "Omar"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-402",
+              "titulo": "Ordenar archivos",
+              "estado": "en_progreso",
+              "prioridad": 2,
+              "estimacionMinutos": 40,
+              "etiquetas": [
+                "trabajo",
+                "documentos"
+              ],
+              "responsable": {
+                "id": "U-1",
+                "nombre": "Lia"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-403",
+              "titulo": "Validar copia",
+              "estado": "pendiente",
+              "prioridad": 3,
+              "estimacionMinutos": 15,
+              "etiquetas": [
+                "trabajo",
+                "datos"
+              ],
+              "responsable": {
+                "id": "U-3",
+                "nombre": "Noa"
+              },
+              "bloqueada": true
+            },
+            {
+              "id": "T-404",
+              "titulo": "Comprar papel",
+              "estado": "completada",
+              "prioridad": 1,
+              "estimacionMinutos": 20,
+              "etiquetas": [
+                "personal",
+                "compras"
+              ],
+              "responsable": {
+                "id": "U-1",
+                "nombre": "Lia"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-405",
+              "titulo": "Publicar aviso",
+              "estado": "pendiente",
+              "prioridad": 2,
+              "estimacionMinutos": 10,
+              "etiquetas": [
+                "trabajo",
+                "comunicacion"
+              ],
+              "responsable": {
+                "id": "U-3",
+                "nombre": "Noa"
+              },
+              "bloqueada": false
+            }
+          ]
+        },
+        {
+          "id": "tareas-revision-3-v1",
+          "version": 1,
+          "reviewIntervalDay": 3,
+          "records": [
+            {
+              "id": "T-501",
+              "titulo": "Probar formulario",
+              "estado": "pendiente",
+              "prioridad": 3,
+              "estimacionMinutos": 35,
+              "etiquetas": [
+                "trabajo",
+                "datos"
+              ],
+              "responsable": {
+                "id": "U-3",
+                "nombre": "Noa"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-502",
+              "titulo": "Documentar cambios",
+              "estado": "en_progreso",
+              "prioridad": 2,
+              "estimacionMinutos": 50,
+              "etiquetas": [
+                "trabajo",
+                "documentos"
+              ],
+              "responsable": {
+                "id": "U-1",
+                "nombre": "Lia"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-503",
+              "titulo": "Limpiar tablero",
+              "estado": "completada",
+              "prioridad": 1,
+              "estimacionMinutos": 15,
+              "etiquetas": [
+                "trabajo",
+                "organizacion"
+              ],
+              "responsable": {
+                "id": "U-2",
+                "nombre": "Omar"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-504",
+              "titulo": "Confirmar entrega",
+              "estado": "pendiente",
+              "prioridad": 3,
+              "estimacionMinutos": 20,
+              "etiquetas": [
+                "trabajo",
+                "compras"
+              ],
+              "responsable": {
+                "id": "U-2",
+                "nombre": "Omar"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-505",
+              "titulo": "Revisar acceso",
+              "estado": "pendiente",
+              "prioridad": 2,
+              "estimacionMinutos": 25,
+              "etiquetas": [
+                "trabajo",
+                "seguridad"
+              ],
+              "responsable": {
+                "id": "U-3",
+                "nombre": "Noa"
+              },
+              "bloqueada": true
+            },
+            {
+              "id": "T-506",
+              "titulo": "Agendar reunion",
+              "estado": "completada",
+              "prioridad": 2,
+              "estimacionMinutos": 30,
+              "etiquetas": [
+                "trabajo",
+                "comunicacion"
+              ],
+              "responsable": {
+                "id": "U-1",
+                "nombre": "Lia"
+              },
+              "bloqueada": false
+            }
+          ]
+        },
+        {
+          "id": "tareas-revision-7-v1",
+          "version": 1,
+          "reviewIntervalDay": 7,
+          "records": [
+            {
+              "id": "T-601",
+              "titulo": "Medir stock",
+              "estado": "en_progreso",
+              "prioridad": 3,
+              "estimacionMinutos": 40,
+              "etiquetas": [
+                "trabajo",
+                "tienda"
+              ],
+              "responsable": {
+                "id": "U-2",
+                "nombre": "Omar"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-602",
+              "titulo": "Cerrar reporte",
+              "estado": "pendiente",
+              "prioridad": 3,
+              "estimacionMinutos": 55,
+              "etiquetas": [
+                "trabajo",
+                "datos"
+              ],
+              "responsable": {
+                "id": "U-1",
+                "nombre": "Lia"
+              },
+              "bloqueada": true
+            },
+            {
+              "id": "T-603",
+              "titulo": "Enviar factura",
+              "estado": "completada",
+              "prioridad": 2,
+              "estimacionMinutos": 15,
+              "etiquetas": [
+                "trabajo",
+                "finanzas"
+              ],
+              "responsable": {
+                "id": "U-3",
+                "nombre": "Noa"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-604",
+              "titulo": "Preparar demo",
+              "estado": "pendiente",
+              "prioridad": 2,
+              "estimacionMinutos": 30,
+              "etiquetas": [
+                "trabajo",
+                "comunicacion"
+              ],
+              "responsable": {
+                "id": "U-1",
+                "nombre": "Lia"
+              },
+              "bloqueada": false
+            },
+            {
+              "id": "T-605",
+              "titulo": "Archivar notas",
+              "estado": "completada",
+              "prioridad": 1,
+              "estimacionMinutos": 10,
+              "etiquetas": [
+                "personal",
+                "organizacion"
+              ],
+              "responsable": {
+                "id": "U-2",
+                "nombre": "Omar"
+              },
+              "bloqueada": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

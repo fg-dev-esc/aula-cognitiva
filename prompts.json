@@ -1,0 +1,59 @@
+[
+  {
+    "id": "Práctica libre",
+    "title": "Práctica libre",
+    "description": "Katas independientes para la consola del navegador.",
+    "items": [
+      {
+        "id": "carrito-compras",
+        "label": "Carrito de compras",
+        "prompt": "Crea una sola kata de consola JavaScript sobre un carrito usando filter. Incluye datos y código con TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "calificaciones",
+        "label": "Lista de calificaciones",
+        "prompt": "Crea una sola kata de consola JavaScript para calcular promedios con map. Incluye datos y un TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "gastos-mensuales",
+        "label": "Gastos mensuales",
+        "prompt": "Crea una sola kata de consola JavaScript para sumar gastos con reduce. Incluye datos y un TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "pedidos-cafeteria",
+        "label": "Pedidos de una cafetería",
+        "prompt": "Crea una sola kata de consola JavaScript para encontrar un pedido con find. Incluye datos y un TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "tareas-equipo",
+        "label": "Lista de tareas del equipo",
+        "prompt": "Crea una sola kata de consola JavaScript para detectar tareas urgentes con some. Incluye datos y un TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "inventario-tienda",
+        "label": "Inventario de una tienda",
+        "prompt": "Crea una sola kata de consola JavaScript para validar stock con every. Incluye datos y un TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "biblioteca-prestamos",
+        "label": "Biblioteca y préstamos",
+        "prompt": "Crea una sola kata de consola JavaScript para comprobar géneros con includes. Incluye datos y un TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "reservas-hotel",
+        "label": "Reservas de hotel",
+        "prompt": "Crea una sola kata de consola JavaScript para filtrar reservas confirmadas. Incluye datos y un TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "catalogo-peliculas",
+        "label": "Catálogo de películas",
+        "prompt": "Crea una sola kata de consola JavaScript para buscar una película por género. Incluye datos y un TODO, sin solución ni salida esperada."
+      },
+      {
+        "id": "registro-ventas",
+        "label": "Registro de ventas",
+        "prompt": "Crea una sola kata de consola JavaScript para obtener ventas completadas por región. Incluye datos y un TODO, sin solución ni salida esperada."
+      }
+    ]
+  }
+]

@@ -1,0 +1,1190 @@
+{
+  "schemaVersion": 1,
+  "routeId": "js-arrays-console-v1",
+  "title": "Arrays y métodos de consulta en la consola de JavaScript",
+  "language": "es",
+  "runtime": {
+    "language": "javascript",
+    "environment": "console",
+    "allowed": [
+      "JavaScript estándar",
+      "console.log"
+    ],
+    "excluded": [
+      "React",
+      "Node.js",
+      "APIs del navegador",
+      "APIs externas",
+      "red y archivos"
+    ],
+    "datasetBinding": "Antes de ejecutar starterCode, se carga una copia de records del dataset referenciado en la variable bindingName de su escenario."
+  },
+  "routePrerequisiteSkills": [
+    "declarar variables con const y let",
+    "usar console.log",
+    "leer comparaciones, if y bucles for...of"
+  ],
+  "startPolicy": {
+    "type": "manual",
+    "automaticLevelDetermination": false,
+    "diagnosticCheckpointsAssignLevel": false,
+    "availableStartLevelIds": [
+      "nivel-0",
+      "nivel-1"
+    ],
+    "instructions": "La persona elige manualmente el nivel inicial después de leer sus prerrequisitos. Los checkpoints ofrecen evidencia para decidir qué revisar, pero nunca asignan, bloquean ni cambian el nivel de forma automática."
+  },
+  "submissionContract": {
+    "sectionOrder": [
+      "CODIGO"
+    ],
+    "codeRule": "Pega únicamente el código final probado en consola."
+  },
+  "levels": [
+    {
+      "id": "nivel-0",
+      "order": 0,
+      "title": "Fundamentos para consultar arrays",
+      "description": "Construye el modelo mental de arrays de objetos, datos anidados, callbacks y predicados antes de usar métodos de consulta.",
+      "prerequisiteLevelIds": [],
+      "prerequisiteSkills": [
+        "declarar variables con const y let",
+        "usar console.log",
+        "leer comparaciones, if y bucles for...of"
+      ],
+      "manualStartAllowed": true,
+      "lessonIds": [
+        "l00-arrays-objetos",
+        "l00-datos-anidados",
+        "l00-callbacks",
+        "l00-return-predicados",
+        "l00-checkpoint"
+      ]
+    },
+    {
+      "id": "nivel-1",
+      "order": 1,
+      "title": "Métodos de consulta de arrays",
+      "description": "Aplica filter, find, includes, some y every, y aprende a elegir un método según la forma del resultado esperado.",
+      "prerequisiteLevelIds": [
+        "nivel-0"
+      ],
+      "prerequisiteSkills": [
+        "arrays de objetos",
+        "acceso a datos anidados",
+        "callbacks",
+        "predicados con return"
+      ],
+      "prerequisitePolicy": "Los prerrequisitos son explícitos y recomendados; la elección de inicio sigue siendo manual y no se calcula con una puntuación.",
+      "manualStartAllowed": true,
+      "lessonIds": [
+        "l01-filter-simple",
+        "l01-filter-compuesto-vacio",
+        "l01-find-undefined",
+        "l01-includes-igualdad",
+        "l01-some",
+        "l01-every-vacio",
+        "l01-eleccion-autonoma",
+        "l01-checkpoint"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l00-arrays-objetos",
+      "levelId": "nivel-0",
+      "order": 1,
+      "title": "Leer un array de objetos",
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Distinguir el array completo de cada objeto producto.",
+        "Leer propiedades de un objeto por índice y durante un recorrido."
+      ],
+      "primarySkills": [
+        "arrays-de-objetos"
+      ],
+      "prerequisiteSkills": [
+        "const",
+        "console.log",
+        "for...of"
+      ],
+      "prerequisiteLessonIds": [],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda necesita una lectura rápida del inventario sin modificar ningún producto.",
+        "instructions": [
+          "Completa la primera salida con id, nombre y stock del primer objeto, separados por ' | '.",
+          "Completa el for...of para mostrar id y nombre de cada producto, en el orden original."
+        ],
+        "constraints": [
+          "No uses métodos de arrays ni callbacks.",
+          "No modifiques productos ni sus objetos."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nconsole.log(/* TODO: id, nombre y stock del primer producto */);\n\nfor (const producto of productos) {\n  console.log(/* TODO: id y nombre */);\n}",
+      "acceptanceCriteria": [
+        "La primera línea contiene los tres campos solicitados del objeto en índice 0 y usa el separador indicado.",
+        "El recorrido emite exactamente una línea por registro y conserva el orden del dataset.",
+        "El código accede a propiedades de cada objeto sin alterar el array."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-for-of",
+          "description": "Recorre productos con for...of y no codifica una salida por cada id."
+        },
+        {
+          "id": "orden-completo",
+          "description": "Incluye todos los productos una sola vez y en el orden del dataset."
+        },
+        {
+          "id": "sin-mutacion",
+          "description": "No reasigna productos ni modifica sus registros."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l00-datos-anidados"
+    },
+    {
+      "id": "l00-datos-anidados",
+      "levelId": "nivel-0",
+      "order": 2,
+      "title": "Acceder a datos anidados",
+      "estimatedMinutes": 18,
+      "objectives": [
+        "Seguir una ruta de propiedades a través de objetos anidados.",
+        "Acceder a un elemento de un array que está dentro de un objeto."
+      ],
+      "primarySkills": [
+        "acceso-a-datos-anidados"
+      ],
+      "prerequisiteSkills": [
+        "arrays-de-objetos",
+        "acceso por indice"
+      ],
+      "prerequisiteLessonIds": [
+        "l00-arrays-objetos"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda quiere ubicar y reconocer al proveedor de un producto concreto.",
+        "instructions": [
+          "Usa el producto del índice 2.",
+          "Muestra nombre del producto, nombre del proveedor, pasillo-estante y primera etiqueta, separados por ' | '.",
+          "Forma pasillo-estante con un guion, sin crear datos nuevos en el objeto."
+        ],
+        "constraints": [
+          "Usa acceso directo por propiedades e índices.",
+          "No recorras ni modifiques el dataset."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nconst producto = productos[2];\n\nconsole.log(/* TODO: producto, proveedor, ubicacion y primera etiqueta */);",
+      "acceptanceCriteria": [
+        "La línea usa exclusivamente los datos del producto ubicado en el índice 2.",
+        "El proveedor y la ubicación se leen desde sus objetos anidados.",
+        "La etiqueta se lee desde el array anidado y todos los campos aparecen en el orden solicitado."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "indice-correcto",
+          "description": "Parte de productos[2]."
+        },
+        {
+          "id": "rutas-anidadas",
+          "description": "Lee proveedor.nombre, ubicacion.pasillo, ubicacion.estante y etiquetas[0]."
+        },
+        {
+          "id": "sin-aplanar",
+          "description": "No reemplaza objetos anidados por valores escritos manualmente."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l00-callbacks"
+    },
+    {
+      "id": "l00-callbacks",
+      "levelId": "nivel-0",
+      "order": 3,
+      "title": "Pasar una función como callback",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Reconocer una función callback como un valor que otro método recibe.",
+        "Relacionar los parámetros tarea e índice con cada llamada de forEach."
+      ],
+      "primarySkills": [
+        "callbacks"
+      ],
+      "prerequisiteSkills": [
+        "arrays-de-objetos",
+        "declarar funciones"
+      ],
+      "prerequisiteLessonIds": [
+        "l00-datos-anidados"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo quiere numerar las tareas manteniendo el orden del tablero.",
+        "instructions": [
+          "Completa mostrarTarea para imprimir numero humano, id y estado separados por ' | '. El primer número debe ser 1.",
+          "Pasa mostrarTarea a forEach como callback, sin invocarla en el argumento."
+        ],
+        "constraints": [
+          "Usa una función nombrada como callback.",
+          "No uses return para producir la salida."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nfunction mostrarTarea(tarea, indice) {\n  // TODO\n}\n\ntareas.forEach(/* TODO: callback */);",
+      "acceptanceCriteria": [
+        "forEach recibe la referencia a mostrarTarea.",
+        "La función se ejecuta una vez por tarea y usa el parámetro indice para numerar desde 1.",
+        "Cada línea incluye número, id y estado en el orden solicitado."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "referencia-callback",
+          "description": "Pasa mostrarTarea y no el resultado de mostrarTarea()."
+        },
+        {
+          "id": "una-llamada-por-registro",
+          "description": "Produce exactamente una salida por tarea."
+        },
+        {
+          "id": "indice-del-callback",
+          "description": "La numeración se deriva del segundo parámetro del callback."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l00-return-predicados"
+    },
+    {
+      "id": "l00-return-predicados",
+      "levelId": "nivel-0",
+      "order": 4,
+      "title": "Devolver booleanos con un predicado",
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Construir una función que devuelve un booleano mediante return.",
+        "Comprobar el mismo predicado con un caso verdadero y otro falso."
+      ],
+      "primarySkills": [
+        "predicados-con-return"
+      ],
+      "prerequisiteSkills": [
+        "arrays-de-objetos",
+        "funciones",
+        "comparaciones"
+      ],
+      "prerequisiteLessonIds": [
+        "l00-callbacks"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda necesita expresar la regla de existencia como una función reutilizable.",
+        "instructions": [
+          "Completa tieneStock para devolver true cuando stock sea mayor que 0 y false en caso contrario.",
+          "Conserva las comprobaciones ya preparadas con los productos de índices 0 y 1."
+        ],
+        "constraints": [
+          "El predicado debe devolver un booleano; no debe imprimir dentro de la función.",
+          "No uses métodos de arrays."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nfunction tieneStock(producto) {\n  // TODO\n}\n\nconsole.log(productos[0].id + \" | \" + tieneStock(productos[0]));\nconsole.log(productos[1].id + \" | \" + tieneStock(productos[1]));",
+      "acceptanceCriteria": [
+        "tieneStock usa return y siempre produce un booleano para registros válidos.",
+        "La regla depende de stock > 0, no de activo ni de otro campo.",
+        "Las dos comprobaciones muestran casos con resultados distintos."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "return-booleano",
+          "description": "La función devuelve el resultado booleano de la regla."
+        },
+        {
+          "id": "campo-stock",
+          "description": "La decisión usa exclusivamente producto.stock > 0."
+        },
+        {
+          "id": "sin-log-interno",
+          "description": "El predicado no usa console.log como sustituto de return."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l00-checkpoint"
+    },
+    {
+      "id": "l00-checkpoint",
+      "levelId": "nivel-0",
+      "order": 5,
+      "title": "Checkpoint diagnóstico de fundamentos",
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Integrar acceso anidado, callback y predicado en una consulta breve.",
+        "Reconocer qué fundamentos intervienen en una solución integrada."
+      ],
+      "primarySkills": [
+        "integracion-nivel-0"
+      ],
+      "prerequisiteSkills": [
+        "arrays-de-objetos",
+        "acceso-a-datos-anidados",
+        "callbacks",
+        "predicados-con-return"
+      ],
+      "prerequisiteLessonIds": [
+        "l00-return-predicados"
+      ],
+      "lessonType": "diagnostic_checkpoint",
+      "placementEffect": "none",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El checkpoint cuenta tareas atendibles y verifica una ruta anidada sin introducir métodos nuevos.",
+        "instructions": [
+          "Completa esAtendible: una tarea es atendible si está pendiente, tiene prioridad 3 y no está bloqueada.",
+          "Completa revisar para incrementar total solo cuando el predicado devuelva true."
+        ],
+        "constraints": [
+          "Usa el forEach y el callback nombrado ya preparados.",
+          "No uses filter, find, includes, some ni every."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nfunction esAtendible(tarea) {\n  // TODO\n}\n\nlet total = 0;\nfunction revisar(tarea) {\n  // TODO\n}\n\ntareas.forEach(revisar);\nconsole.log(\"RESPONSABLE_PRIMERA | \" + tareas[0].responsable.nombre);\nconsole.log(\"TOTAL_ATENDIBLES | \" + total);",
+      "acceptanceCriteria": [
+        "El predicado combina exactamente estado pendiente, prioridad 3 y ausencia de bloqueo.",
+        "El callback incrementa total una vez por cada tarea que cumple la regla.",
+        "La primera salida usa la ruta responsable.nombre y la segunda refleja el conteo calculado."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "regla-completa",
+          "description": "Las tres condiciones del predicado están presentes y unidas con AND."
+        },
+        {
+          "id": "conteo-por-callback",
+          "description": "total se calcula recorriendo tareas mediante revisar."
+        },
+        {
+          "id": "sin-metodos-nivel-1",
+          "description": "No anticipa los métodos de consulta del nivel siguiente."
+        },
+        {
+          "id": "sin-colocacion-automatica",
+          "description": "El código se limita al predicado, el conteo y las dos salidas solicitadas."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l01-filter-simple"
+    },
+    {
+      "id": "l01-filter-simple",
+      "levelId": "nivel-1",
+      "order": 1,
+      "title": "Crear un subconjunto con filter",
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Usar filter con un predicado de una sola condición.",
+        "Reconocer que filter devuelve un array nuevo y conserva el orden."
+      ],
+      "primarySkills": [
+        "filter-simple"
+      ],
+      "prerequisiteSkills": [
+        "callbacks",
+        "predicados-con-return"
+      ],
+      "prerequisiteLessonIds": [
+        "l00-checkpoint"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda necesita un array nuevo que contenga únicamente productos con existencias.",
+        "instructions": [
+          "Usa filter con el predicado tieneStock ya definido.",
+          "Construye disponibles como un array nuevo que conserve el orden de los registros coincidentes.",
+          "Mantén productos intacto y conserva los console.log preparados para mostrar el total y los ids."
+        ],
+        "constraints": [
+          "Usa filter exactamente una vez para construir disponibles.",
+          "No reemplaces filter por un bucle de selección manual."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nfunction tieneStock(producto) {\n  return producto.stock > 0;\n}\n\nconst disponibles = /* TODO: usa filter */;\n\nconsole.log(\"TOTAL | \" + disponibles.length);\nfor (const producto of disponibles) {\n  console.log(producto.id);\n}",
+      "acceptanceCriteria": [
+        "disponibles se crea con productos.filter y tieneStock como callback.",
+        "El resultado contiene solo registros con stock mayor que 0, en el orden original.",
+        "productos conserva la misma longitud y los mismos registros."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-filter",
+          "description": "Construye disponibles mediante productos.filter."
+        },
+        {
+          "id": "predicado-correcto",
+          "description": "Pasa tieneStock como callback sin invocarlo anticipadamente."
+        },
+        {
+          "id": "origen-intacto",
+          "description": "No elimina ni modifica elementos de productos."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l01-filter-compuesto-vacio"
+    },
+    {
+      "id": "l01-filter-compuesto-vacio",
+      "levelId": "nivel-1",
+      "order": 2,
+      "title": "Filtrar con varias reglas y leer un array vacío",
+      "estimatedMinutes": 24,
+      "objectives": [
+        "Combinar condiciones dentro del predicado de filter.",
+        "Tratar [] como un resultado válido cuando no hay coincidencias."
+      ],
+      "primarySkills": [
+        "filter-compuesto-y-resultado-vacio"
+      ],
+      "prerequisiteSkills": [
+        "filter-simple",
+        "operadores logicos"
+      ],
+      "prerequisiteLessonIds": [
+        "l01-filter-simple"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo busca tareas de prioridad 3, no bloqueadas y de 30 minutos o menos.",
+        "instructions": [
+          "Completa el predicado esCandidata con las tres reglas explícitas.",
+          "Usa filter para crear candidatas.",
+          "Si el array queda vacío, imprime SIN_COINCIDENCIAS; en caso contrario, imprime un id por línea."
+        ],
+        "constraints": [
+          "No relajes ninguna regla para forzar una coincidencia.",
+          "Un array vacío debe conservarse como resultado válido."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nfunction esCandidata(tarea) {\n  // TODO: combina las tres reglas\n}\n\nconst candidatas = /* TODO: usa filter */;\nconsole.log(\"TOTAL | \" + candidatas.length);\n\nif (candidatas.length === 0) {\n  console.log(\"SIN_COINCIDENCIAS\");\n} else {\n  for (const tarea of candidatas) {\n    console.log(tarea.id);\n  }\n}",
+      "acceptanceCriteria": [
+        "El predicado exige simultáneamente prioridad 3, bloqueada false y estimacionMinutos menor o igual que 30.",
+        "candidatas siempre es el array devuelto por filter, incluso sin coincidencias.",
+        "La rama de salida corresponde a la longitud real y no contiene ids inventados."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "tres-condiciones",
+          "description": "Las tres reglas son obligatorias y se combinan con AND."
+        },
+        {
+          "id": "resultado-array",
+          "description": "No convierte la ausencia de coincidencias en null ni undefined."
+        },
+        {
+          "id": "mensaje-vacio",
+          "description": "Muestra SIN_COINCIDENCIAS solo cuando length es 0."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l01-find-undefined"
+    },
+    {
+      "id": "l01-find-undefined",
+      "levelId": "nivel-1",
+      "order": 3,
+      "title": "Encontrar un elemento y manejar undefined",
+      "estimatedMinutes": 24,
+      "objectives": [
+        "Usar find cuando se necesita el primer objeto coincidente.",
+        "Comprobar undefined antes de acceder a propiedades."
+      ],
+      "primarySkills": [
+        "find-y-undefined"
+      ],
+      "prerequisiteSkills": [
+        "callbacks",
+        "predicados-con-return",
+        "igualdad estricta"
+      ],
+      "prerequisiteLessonIds": [
+        "l01-filter-compuesto-vacio"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "biblioteca",
+      "datasetId": "biblioteca-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La biblioteca consulta primero un id existente y luego uno que no está en el catálogo.",
+        "instructions": [
+          "Completa buscarPorId con find para devolver el primer libro cuyo id coincida exactamente.",
+          "Completa mostrarResultado para imprimir 'id | titulo' o NO_ENCONTRADO cuando reciba undefined.",
+          "Consulta L-204 y L-999 en ese orden."
+        ],
+        "constraints": [
+          "Usa find, no filter ni un índice escrito manualmente.",
+          "Comprueba undefined antes de leer id o titulo."
+        ]
+      },
+      "starterCode": "// libros contiene biblioteca-base-v1.\nfunction buscarPorId(idBuscado) {\n  // TODO: usa find\n}\n\nfunction mostrarResultado(libro) {\n  // TODO: maneja undefined antes de leer propiedades\n}\n\nmostrarResultado(buscarPorId(\"L-204\"));\nmostrarResultado(buscarPorId(\"L-999\"));",
+      "acceptanceCriteria": [
+        "buscarPorId devuelve el resultado directo de find con igualdad estricta de id.",
+        "La consulta existente imprime sus datos y la ausente imprime NO_ENCONTRADO sin lanzar error.",
+        "El código no confunde un objeto encontrado con un array de resultados."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-find",
+          "description": "La búsqueda se realiza con libros.find."
+        },
+        {
+          "id": "igualdad-id",
+          "description": "El predicado compara libro.id e idBuscado con igualdad estricta."
+        },
+        {
+          "id": "guarda-undefined",
+          "description": "No accede a propiedades del resultado ausente."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l01-includes-igualdad"
+    },
+    {
+      "id": "l01-includes-igualdad",
+      "levelId": "nivel-1",
+      "order": 4,
+      "title": "Comprobar pertenencia con includes",
+      "estimatedMinutes": 18,
+      "objectives": [
+        "Usar includes para comprobar si un valor está en un array.",
+        "Observar que las cadenas se comparan de forma exacta y distinguen mayúsculas."
+      ],
+      "primarySkills": [
+        "includes-e-igualdad-exacta"
+      ],
+      "prerequisiteSkills": [
+        "arrays anidados",
+        "booleanos"
+      ],
+      "prerequisiteLessonIds": [
+        "l01-find-undefined"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "biblioteca",
+      "datasetId": "biblioteca-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La biblioteca comprueba etiquetas de género sin normalizar la consulta durante el ejercicio.",
+        "instructions": [
+          "Usa generos del libro en índice 1.",
+          "Completa tres comprobaciones con includes para ciencia, Ciencia y ficcion, en ese orden.",
+          "Conserva las cadenas exactamente como están escritas y muestra los tres booleanos con los console.log preparados."
+        ],
+        "constraints": [
+          "No transformes mayúsculas ni minúsculas.",
+          "No uses filter, find, some ni every."
+        ]
+      },
+      "starterCode": "// libros contiene biblioteca-base-v1.\nconst generos = libros[1].generos;\n\nconsole.log(\"ciencia | \" + /* TODO: includes */);\nconsole.log(\"Ciencia | \" + /* TODO: includes */);\nconsole.log(\"ficcion | \" + /* TODO: includes */);",
+      "acceptanceCriteria": [
+        "Las tres expresiones llaman includes sobre el mismo array generos.",
+        "Cada llamada busca exactamente la cadena mostrada en la etiqueta de salida.",
+        "El código no normaliza mayúsculas ni minúsculas antes de usar includes."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-includes",
+          "description": "Cada consulta utiliza generos.includes."
+        },
+        {
+          "id": "sin-normalizacion",
+          "description": "No llama a toLowerCase ni modifica los valores."
+        },
+        {
+          "id": "tres-consultas",
+          "description": "Conserva las tres cadenas y su orden."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l01-some"
+    },
+    {
+      "id": "l01-some",
+      "levelId": "nivel-1",
+      "order": 5,
+      "title": "Responder si existe alguna coincidencia con some",
+      "estimatedMinutes": 18,
+      "objectives": [
+        "Usar some cuando la respuesta requerida es un booleano de existencia.",
+        "Interpretar true como al menos una coincidencia, no como una lista."
+      ],
+      "primarySkills": [
+        "some"
+      ],
+      "prerequisiteSkills": [
+        "callbacks",
+        "predicados compuestos"
+      ],
+      "prerequisiteLessonIds": [
+        "l01-includes-igualdad"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo solo necesita saber si existe al menos una tarea urgente que pueda comenzar.",
+        "instructions": [
+          "Usa el predicado esUrgenteLibre ya definido: pendiente, prioridad 3 y no bloqueada.",
+          "Completa hayUrgenteLibre con some y conserva el resultado booleano.",
+          "Muestra el resultado con el console.log preparado."
+        ],
+        "constraints": [
+          "Usa some exactamente una vez.",
+          "No uses filter ni find para responder."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nfunction esUrgenteLibre(tarea) {\n  return tarea.estado === \"pendiente\" && tarea.prioridad === 3 && !tarea.bloqueada;\n}\n\nconst hayUrgenteLibre = /* TODO: usa some */;\nconsole.log(\"HAY_URGENTE_LIBRE | \" + hayUrgenteLibre);",
+      "acceptanceCriteria": [
+        "hayUrgenteLibre recibe directamente el booleano devuelto por tareas.some.",
+        "some usa esUrgenteLibre como callback.",
+        "La salida contiene un solo booleano y no una colección."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-some",
+          "description": "La consulta se resuelve con tareas.some."
+        },
+        {
+          "id": "callback-correcto",
+          "description": "some recibe esUrgenteLibre como callback."
+        },
+        {
+          "id": "resultado-booleano",
+          "description": "No convierte la respuesta en array ni objeto."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l01-every-vacio"
+    },
+    {
+      "id": "l01-every-vacio",
+      "levelId": "nivel-1",
+      "order": 6,
+      "title": "Comprobar todos con every, incluso en un array vacío",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Usar every para comprobar una regla universal.",
+        "Observar que every devuelve true para un array vacío."
+      ],
+      "primarySkills": [
+        "every-y-array-vacio"
+      ],
+      "prerequisiteSkills": [
+        "filter-simple",
+        "predicados-con-return"
+      ],
+      "prerequisiteLessonIds": [
+        "l01-some"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda compara una regla sobre todo el inventario con la misma regla sobre una categoría inexistente.",
+        "instructions": [
+          "Usa every con tieneStock para comprobar todos los productos.",
+          "Filtra la categoría juguetes, que no está presente, y aplica every con el mismo predicado a ese array.",
+          "Conserva los tres console.log preparados para mostrar ambos booleanos y la longitud del subconjunto."
+        ],
+        "constraints": [
+          "No agregues un caso especial que cambie el resultado de every sobre [].",
+          "Usa el predicado tieneStock sin modificarlo."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nfunction tieneStock(producto) {\n  return producto.stock > 0;\n}\n\nconst todosConStock = /* TODO: usa every */;\nconst juguetes = productos.filter(function (producto) {\n  return producto.categoria === \"juguetes\";\n});\nconst todosLosJuguetesConStock = /* TODO: usa every */;\n\nconsole.log(\"TODOS_CON_STOCK | \" + todosConStock);\nconsole.log(\"TOTAL_JUGUETES | \" + juguetes.length);\nconsole.log(\"TODOS_LOS_JUGUETES_CON_STOCK | \" + todosLosJuguetesConStock);",
+      "acceptanceCriteria": [
+        "Ambas comprobaciones usan every con tieneStock.",
+        "juguetes es el resultado vacío de filter y no se rellena artificialmente.",
+        "El resultado de every sobre juguetes se obtiene directamente, sin sustituirlo por una comprobación manual de longitud."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-every-dos-veces",
+          "description": "Las dos respuestas universales se calculan con every."
+        },
+        {
+          "id": "subconjunto-vacio",
+          "description": "juguetes conserva longitud 0 con este dataset."
+        },
+        {
+          "id": "sin-parche-vacio",
+          "description": "No fuerza manualmente false cuando el array está vacío."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l01-eleccion-autonoma"
+    },
+    {
+      "id": "l01-eleccion-autonoma",
+      "levelId": "nivel-1",
+      "order": 7,
+      "title": "Elegir el método según la pregunta",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Elegir de forma autónoma entre filter, find, some y every.",
+        "Relacionar la elección con la forma del resultado solicitado."
+      ],
+      "primarySkills": [
+        "seleccion-autonoma-de-metodo"
+      ],
+      "prerequisiteSkills": [
+        "filter",
+        "find",
+        "includes",
+        "some",
+        "every"
+      ],
+      "prerequisiteLessonIds": [
+        "l01-every-vacio"
+      ],
+      "lessonType": "decision_practice",
+      "scenarioId": "biblioteca",
+      "datasetId": "biblioteca-revision-3-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La biblioteca pregunta si existe al menos un libro disponible que tenga el género ciencia.",
+        "instructions": [
+          "Elige entre filter, find, some y every sin seguir una indicación de método.",
+          "Escribe una sola consulta cuyo resultado sea directamente el booleano solicitado.",
+          "Conserva el console.log preparado para mostrar el booleano resultante."
+        ],
+        "constraints": [
+          "No construyas una colección si la pregunta solo pide un booleano.",
+          "Usa includes para comprobar el género exacto dentro de generos."
+        ]
+      },
+      "starterCode": "// libros contiene biblioteca-revision-3-v1.\nconst resultado = /* TODO: elige un metodo y escribe el predicado */;\n\nconsole.log(\"RESULTADO | \" + resultado);",
+      "acceptanceCriteria": [
+        "La consulta devuelve directamente un booleano.",
+        "El predicado exige disponible true y la etiqueta exacta ciencia.",
+        "La consulta evita colecciones y resultados intermedios innecesarios."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "resultado-directo-booleano",
+          "description": "La expresión asignada a resultado produce un booleano sin consultar length."
+        },
+        {
+          "id": "dos-reglas",
+          "description": "Comprueba disponibilidad y pertenencia exacta al género ciencia."
+        },
+        {
+          "id": "justificacion-autonoma",
+          "description": "La expresión usa la forma booleana del resultado y no construye colecciones intermedias."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l01-checkpoint"
+    },
+    {
+      "id": "l01-checkpoint",
+      "levelId": "nivel-1",
+      "order": 8,
+      "title": "Checkpoint de consultas de arrays",
+      "estimatedMinutes": 30,
+      "objectives": [
+        "Integrar métodos de consulta en tres preguntas breves sobre un mismo dataset.",
+        "Relacionar cada pregunta con la forma de su resultado."
+      ],
+      "primarySkills": [
+        "integracion-nivel-1"
+      ],
+      "prerequisiteSkills": [
+        "filter compuesto",
+        "find y undefined",
+        "includes",
+        "some",
+        "every",
+        "seleccion autonoma"
+      ],
+      "prerequisiteLessonIds": [
+        "l01-eleccion-autonoma"
+      ],
+      "lessonType": "level_checkpoint",
+      "placementEffect": "none",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-revision-3-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo necesita tres respuestas independientes: las tareas de prioridad 3 no bloqueadas, la primera tarea con etiqueta seguridad y si todas las completadas están sin bloqueo.",
+        "instructions": [
+          "Crea urgentesLibres como colección y muestra su total y cada id en orden.",
+          "Obtén primeraSeguridad como un solo objeto o undefined y muestra su id o NO_ENCONTRADA.",
+          "Crea completadas y comprueba si todas están sin bloqueo; muestra el booleano."
+        ],
+        "constraints": [
+          "Usa una consulta apropiada para cada forma de resultado.",
+          "Usa includes para la etiqueta y maneja explícitamente una posible ausencia.",
+          "No modifiques tareas."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-revision-3-v1.\nconst urgentesLibres = /* TODO: coleccion de prioridad 3 no bloqueada */;\nconsole.log(\"URGENTES_LIBRES_TOTAL | \" + urgentesLibres.length);\nfor (const tarea of urgentesLibres) {\n  console.log(\"URGENTE | \" + tarea.id);\n}\n\nconst primeraSeguridad = /* TODO: primer objeto con etiqueta seguridad */;\nif (primeraSeguridad === undefined) {\n  console.log(\"PRIMERA_SEGURIDAD | NO_ENCONTRADA\");\n} else {\n  console.log(\"PRIMERA_SEGURIDAD | \" + primeraSeguridad.id);\n}\n\nconst completadas = /* TODO: coleccion de completadas */;\nconst completadasSinBloqueo = /* TODO: regla universal */;\nconsole.log(\"COMPLETADAS_SIN_BLOQUEO | \" + completadasSinBloqueo);",
+      "acceptanceCriteria": [
+        "urgentesLibres contiene todas y solo las tareas de prioridad 3 no bloqueadas, en orden.",
+        "primeraSeguridad es el primer objeto cuya lista de etiquetas contiene seguridad o undefined si no existe.",
+        "completadas contiene solo tareas con estado completada y la comprobación universal usa ese subconjunto.",
+        "Cada salida se deriva de datos y no de valores escritos manualmente."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El código produce el resultado solicitado correctamente al ejecutarse con el dataset de la lección.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El código cumple los requisitos técnicos y todas las comprobaciones críticas de la lección.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El código es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "coleccion-correcta",
+          "description": "La primera consulta devuelve un array completo con las dos condiciones."
+        },
+        {
+          "id": "primer-elemento-seguro",
+          "description": "La segunda consulta usa pertenencia de etiqueta y protege undefined."
+        },
+        {
+          "id": "regla-universal-subconjunto",
+          "description": "La tercera consulta evalúa todas las tareas completadas y no todo el tablero."
+        },
+        {
+          "id": "sin-colocacion-automatica",
+          "description": "El código se limita a resolver las tres consultas solicitadas, sin lógica ajena al ejercicio."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ]
+    }
+  ]
+}

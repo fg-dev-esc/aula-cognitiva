@@ -1,0 +1,922 @@
+{
+  "schemaVersion": 1,
+  "routeId": "js-arrays-console-v1",
+  "language": "es",
+  "executionContract": {
+    "fixtureSource": "learning/scenarios.json",
+    "procedure": [
+      "Resolver scenarioId y datasetId en scenarios.json.",
+      "Crear una copia de records y declararla con el nombre indicado por bindingName.",
+      "Ejecutar executableCode inmediatamente después de esa declaración en una consola JavaScript nueva."
+    ],
+    "allowedGlobals": [
+      "console.log"
+    ],
+    "excluded": [
+      "React",
+      "Node.js",
+      "APIs del navegador",
+      "APIs externas"
+    ],
+    "deterministic": true
+  },
+  "hintPolicy": {
+    "hintsPerLesson": 3,
+    "order": [
+      "conceptual",
+      "structural",
+      "near_solution"
+    ],
+    "instructions": "Mostrar una pista por vez y respetar el orden de menor a mayor revelación."
+  },
+  "lessons": [
+    {
+      "lessonId": "l00-arrays-objetos",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "El array es productos; cada valor obtenido por índice o por for...of es un objeto con sus propias propiedades."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Para la primera línea parte de productos[0]. Dentro del bucle parte de la variable singular producto."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Concatena productos[0].id, productos[0].nombre y productos[0].stock; en el bucle concatena producto.id y producto.nombre."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "console.log(productos[0].id + \" | \" + productos[0].nombre + \" | \" + productos[0].stock);\n\nfor (const producto of productos) {\n  console.log(producto.id + \" | \" + producto.nombre);\n}",
+        "referenceOutput": [
+          "P-101 | Cuaderno | 12",
+          "P-101 | Cuaderno",
+          "P-102 | Lapiz",
+          "P-103 | Mochila",
+          "P-104 | Regla",
+          "P-105 | Botella",
+          "P-106 | Agenda"
+        ],
+        "referenceResults": {
+          "firstRecordId": "P-101",
+          "iteratedIds": [
+            "P-101",
+            "P-102",
+            "P-103",
+            "P-104",
+            "P-105",
+            "P-106"
+          ],
+          "outputLineCount": 7
+        }
+      },
+      "explanationPoints": [
+        "productos[0] selecciona un objeto; .id, .nombre y .stock seleccionan propiedades de ese objeto.",
+        "for...of entrega cada objeto en orden sin cambiar el array.",
+        "La primera línea es adicional a las seis líneas del recorrido."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l00-arrays-objetos-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-1-v1",
+          "bindingName": "productos",
+          "task": "Repite la lectura inicial y el recorrido completo con el dataset de revisión.",
+          "executableCode": "console.log(productos[0].id + \" | \" + productos[0].nombre + \" | \" + productos[0].stock);\n\nfor (const producto of productos) {\n  console.log(producto.id + \" | \" + producto.nombre);\n}",
+          "referenceOutput": [
+            "P-201 | Marcador | 3",
+            "P-201 | Marcador",
+            "P-202 | Cartuchera",
+            "P-203 | Calculadora",
+            "P-204 | Carpeta",
+            "P-205 | Termo"
+          ],
+          "referenceResults": {
+            "firstRecordId": "P-201",
+            "iteratedIds": [
+              "P-201",
+              "P-202",
+              "P-203",
+              "P-204",
+              "P-205"
+            ],
+            "outputLineCount": 6
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l00-datos-anidados",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Cada punto avanza un nivel: producto contiene proveedor y ubicacion; etiquetas es un array dentro de producto."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Usa producto.proveedor.nombre y construye la ubicación con producto.ubicacion.pasillo y producto.ubicacion.estante."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "La última parte de la línea es producto.etiquetas[0]; une pasillo y estante con '-'."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "const producto = productos[2];\n\nconsole.log(\n  producto.nombre + \" | \" +\n  producto.proveedor.nombre + \" | \" +\n  producto.ubicacion.pasillo + \"-\" + producto.ubicacion.estante + \" | \" +\n  producto.etiquetas[0]\n);",
+        "referenceOutput": [
+          "Mochila | Norte | B-3 | escolar"
+        ],
+        "referenceResults": {
+          "recordId": "P-103",
+          "providerName": "Norte",
+          "location": "B-3",
+          "firstTag": "escolar"
+        }
+      },
+      "explanationPoints": [
+        "productos[2] selecciona P-103 porque los índices comienzan en 0.",
+        "proveedor y ubicacion son objetos anidados y requieren dos accesos después de producto.",
+        "etiquetas[0] selecciona el primer texto del array anidado."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l00-datos-anidados-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-3-v1",
+          "bindingName": "productos",
+          "task": "Muestra nombre, proveedor, pasillo-estante y primera etiqueta del producto en índice 3.",
+          "executableCode": "const producto = productos[3];\n\nconsole.log(\n  producto.nombre + \" | \" +\n  producto.proveedor.nombre + \" | \" +\n  producto.ubicacion.pasillo + \"-\" + producto.ubicacion.estante + \" | \" +\n  producto.etiquetas[0]\n);",
+          "referenceOutput": [
+            "Lonchera | Norte | C-3 | escolar"
+          ],
+          "referenceResults": {
+            "recordId": "P-304",
+            "providerName": "Norte",
+            "location": "C-3",
+            "firstTag": "escolar"
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l00-callbacks",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "forEach llama a la función recibida una vez por elemento y le entrega el elemento y su índice."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Dentro de mostrarTarea usa indice + 1 para la numeración humana y lee id y estado desde tarea."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "El argumento de forEach es mostrarTarea, sin paréntesis; los paréntesis invocarían la función antes de entregarla."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "function mostrarTarea(tarea, indice) {\n  console.log((indice + 1) + \" | \" + tarea.id + \" | \" + tarea.estado);\n}\n\ntareas.forEach(mostrarTarea);",
+        "referenceOutput": [
+          "1 | T-301 | pendiente",
+          "2 | T-302 | en_progreso",
+          "3 | T-303 | completada",
+          "4 | T-304 | pendiente",
+          "5 | T-305 | pendiente",
+          "6 | T-306 | completada"
+        ],
+        "referenceResults": {
+          "callbackCalls": 6,
+          "firstIndexReceived": 0,
+          "lastIndexReceived": 5
+        }
+      },
+      "explanationPoints": [
+        "mostrarTarea es el callback porque se entrega como valor a forEach.",
+        "forEach controla las llamadas y aporta tarea e indice en cada una.",
+        "El índice técnico comienza en 0; sumar 1 solo cambia la numeración mostrada."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l00-callbacks-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-1-v1",
+          "bindingName": "tareas",
+          "task": "Numera y muestra id y estado de cada tarea mediante el mismo callback nombrado.",
+          "executableCode": "function mostrarTarea(tarea, indice) {\n  console.log((indice + 1) + \" | \" + tarea.id + \" | \" + tarea.estado);\n}\n\ntareas.forEach(mostrarTarea);",
+          "referenceOutput": [
+            "1 | T-401 | pendiente",
+            "2 | T-402 | en_progreso",
+            "3 | T-403 | pendiente",
+            "4 | T-404 | completada",
+            "5 | T-405 | pendiente"
+          ],
+          "referenceResults": {
+            "callbackCalls": 5,
+            "firstIndexReceived": 0,
+            "lastIndexReceived": 4
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l00-return-predicados",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Un predicado responde una pregunta de sí o no y devuelve ese booleano al lugar de la llamada."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "La regla usa la propiedad producto.stock y una comparación con 0."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Devuelve directamente el resultado de producto.stock > 0 con return; no necesitas if ni console.log dentro de la función."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "function tieneStock(producto) {\n  return producto.stock > 0;\n}\n\nconsole.log(productos[0].id + \" | \" + tieneStock(productos[0]));\nconsole.log(productos[1].id + \" | \" + tieneStock(productos[1]));",
+        "referenceOutput": [
+          "P-101 | true",
+          "P-102 | false"
+        ],
+        "referenceResults": {
+          "P-101": true,
+          "P-102": false
+        }
+      },
+      "explanationPoints": [
+        "La expresión > produce por sí misma un booleano.",
+        "return entrega ese valor a tieneStock(productos[n]).",
+        "P-101 tiene stock positivo y P-102 tiene stock 0; activo no participa en la regla."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l00-return-predicados-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-3-v1",
+          "bindingName": "productos",
+          "task": "Prueba tieneStock con los productos de índices 0 y 1 del dataset de revisión.",
+          "executableCode": "function tieneStock(producto) {\n  return producto.stock > 0;\n}\n\nconsole.log(productos[0].id + \" | \" + tieneStock(productos[0]));\nconsole.log(productos[1].id + \" | \" + tieneStock(productos[1]));",
+          "referenceOutput": [
+            "P-301 | true",
+            "P-302 | false"
+          ],
+          "referenceResults": {
+            "P-301": true,
+            "P-302": false
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l00-checkpoint",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Separa responsabilidades: esAtendible decide con un booleano y revisar usa esa respuesta para contar."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "El predicado une estado pendiente, prioridad 3 y no bloqueada con AND. revisar necesita un if."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Dentro de revisar, evalúa esAtendible(tarea) e incrementa total en 1 solo cuando sea true."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "function esAtendible(tarea) {\n  return tarea.estado === \"pendiente\" && tarea.prioridad === 3 && !tarea.bloqueada;\n}\n\nlet total = 0;\nfunction revisar(tarea) {\n  if (esAtendible(tarea)) {\n    total += 1;\n  }\n}\n\ntareas.forEach(revisar);\nconsole.log(\"RESPONSABLE_PRIMERA | \" + tareas[0].responsable.nombre);\nconsole.log(\"TOTAL_ATENDIBLES | \" + total);",
+        "referenceOutput": [
+          "RESPONSABLE_PRIMERA | Lia",
+          "TOTAL_ATENDIBLES | 1"
+        ],
+        "referenceResults": {
+          "firstResponsible": "Lia",
+          "attendableIds": [
+            "T-301"
+          ],
+          "attendableCount": 1
+        }
+      },
+      "explanationPoints": [
+        "Las tres condiciones deben ser verdaderas para que esAtendible devuelva true.",
+        "T-304 tiene prioridad 3 y está pendiente, pero queda fuera por estar bloqueada.",
+        "El checkpoint informa qué revisar; no asigna ni cambia el nivel."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l00-checkpoint-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-1-v1",
+          "bindingName": "tareas",
+          "task": "Repite el diagnóstico con la misma regla de tarea atendible y el nuevo tablero.",
+          "executableCode": "function esAtendible(tarea) {\n  return tarea.estado === \"pendiente\" && tarea.prioridad === 3 && !tarea.bloqueada;\n}\n\nlet total = 0;\nfunction revisar(tarea) {\n  if (esAtendible(tarea)) {\n    total += 1;\n  }\n}\n\ntareas.forEach(revisar);\nconsole.log(\"RESPONSABLE_PRIMERA | \" + tareas[0].responsable.nombre);\nconsole.log(\"TOTAL_ATENDIBLES | \" + total);",
+          "referenceOutput": [
+            "RESPONSABLE_PRIMERA | Omar",
+            "TOTAL_ATENDIBLES | 1"
+          ],
+          "referenceResults": {
+            "firstResponsible": "Omar",
+            "attendableIds": [
+              "T-401"
+            ],
+            "attendableCount": 1
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l01-filter-simple",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "filter evalúa el predicado para cada producto y coloca en un array nuevo aquellos que producen true."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Llama al método sobre productos y entrega la función tieneStock como argumento."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "La expresión que falta tiene la forma productos.filter(tieneStock), sin paréntesis después del nombre del callback."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "function tieneStock(producto) {\n  return producto.stock > 0;\n}\n\nconst disponibles = productos.filter(tieneStock);\n\nconsole.log(\"TOTAL | \" + disponibles.length);\nfor (const producto of disponibles) {\n  console.log(producto.id);\n}",
+        "referenceOutput": [
+          "TOTAL | 5",
+          "P-101",
+          "P-103",
+          "P-104",
+          "P-105",
+          "P-106"
+        ],
+        "referenceResults": {
+          "sourceCount": 6,
+          "filteredCount": 5,
+          "filteredIds": [
+            "P-101",
+            "P-103",
+            "P-104",
+            "P-105",
+            "P-106"
+          ]
+        }
+      },
+      "explanationPoints": [
+        "filter devuelve un array aun cuando haya una o ninguna coincidencia.",
+        "P-104 se incluye porque la regla solo mira stock; su valor activo no importa.",
+        "El array original conserva seis registros y el resultado conserva el orden relativo."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l01-filter-simple-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-3-v1",
+          "bindingName": "productos",
+          "task": "Crea y recorre un nuevo array de productos con stock positivo.",
+          "executableCode": "function tieneStock(producto) {\n  return producto.stock > 0;\n}\n\nconst disponibles = productos.filter(tieneStock);\n\nconsole.log(\"TOTAL | \" + disponibles.length);\nfor (const producto of disponibles) {\n  console.log(producto.id);\n}",
+          "referenceOutput": [
+            "TOTAL | 4",
+            "P-301",
+            "P-303",
+            "P-304",
+            "P-305"
+          ],
+          "referenceResults": {
+            "sourceCount": 6,
+            "filteredCount": 4,
+            "filteredIds": [
+              "P-301",
+              "P-303",
+              "P-304",
+              "P-305"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l01-filter-compuesto-vacio",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Para entrar en el resultado, una tarea debe cumplir las tres reglas a la vez. Cero coincidencias sigue siendo un resultado correcto."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Compara prioridad con 3 y estimacionMinutos con 30; para el bloqueo puedes negar tarea.bloqueada."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Une las tres expresiones con && y pasa esCandidata a tareas.filter. No cambies la rama que comprueba length === 0."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "function esCandidata(tarea) {\n  return tarea.prioridad === 3 && !tarea.bloqueada && tarea.estimacionMinutos <= 30;\n}\n\nconst candidatas = tareas.filter(esCandidata);\nconsole.log(\"TOTAL | \" + candidatas.length);\n\nif (candidatas.length === 0) {\n  console.log(\"SIN_COINCIDENCIAS\");\n} else {\n  for (const tarea of candidatas) {\n    console.log(tarea.id);\n  }\n}",
+        "referenceOutput": [
+          "TOTAL | 0",
+          "SIN_COINCIDENCIAS"
+        ],
+        "referenceResults": {
+          "filteredCount": 0,
+          "filteredIds": [],
+          "isEmptyArray": true
+        }
+      },
+      "explanationPoints": [
+        "T-301 falla por exceder 30 minutos y T-304 falla por estar bloqueada y exceder 30 minutos.",
+        "filter devuelve [] porque ninguna tarea supera todo el predicado.",
+        "La longitud 0 activa el mensaje sin convertir el resultado en error, null o undefined."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l01-filter-compuesto-vacio-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-3-v1",
+          "bindingName": "tareas",
+          "task": "Aplica las mismas tres reglas; esta variante comprueba que el código también maneja una coincidencia.",
+          "executableCode": "function esCandidata(tarea) {\n  return tarea.prioridad === 3 && !tarea.bloqueada && tarea.estimacionMinutos <= 30;\n}\n\nconst candidatas = tareas.filter(esCandidata);\nconsole.log(\"TOTAL | \" + candidatas.length);\n\nif (candidatas.length === 0) {\n  console.log(\"SIN_COINCIDENCIAS\");\n} else {\n  for (const tarea of candidatas) {\n    console.log(tarea.id);\n  }\n}",
+          "referenceOutput": [
+            "TOTAL | 1",
+            "T-504"
+          ],
+          "referenceResults": {
+            "filteredCount": 1,
+            "filteredIds": [
+              "T-504"
+            ],
+            "isEmptyArray": false
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l01-find-undefined",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "find devuelve el primer objeto cuyo predicado es true; si ninguno coincide, devuelve undefined."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Dentro de buscarPorId compara libro.id con idBuscado. En mostrarResultado decide primero si libro es undefined."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Devuelve libros.find(function (libro) { return libro.id === idBuscado; }); y usa un if antes de leer libro.id."
+        }
+      ],
+      "solution": {
+        "scenarioId": "biblioteca",
+        "datasetId": "biblioteca-base-v1",
+        "bindingName": "libros",
+        "executableCode": "function buscarPorId(idBuscado) {\n  return libros.find(function (libro) {\n    return libro.id === idBuscado;\n  });\n}\n\nfunction mostrarResultado(libro) {\n  if (libro === undefined) {\n    console.log(\"NO_ENCONTRADO\");\n  } else {\n    console.log(libro.id + \" | \" + libro.titulo);\n  }\n}\n\nmostrarResultado(buscarPorId(\"L-204\"));\nmostrarResultado(buscarPorId(\"L-999\"));",
+        "referenceOutput": [
+          "L-204 | Atlas minimo",
+          "NO_ENCONTRADO"
+        ],
+        "referenceResults": {
+          "existingQuery": {
+            "id": "L-204",
+            "found": true,
+            "title": "Atlas minimo"
+          },
+          "missingQuery": {
+            "id": "L-999",
+            "found": false,
+            "valueType": "undefined"
+          }
+        }
+      },
+      "explanationPoints": [
+        "find devuelve el objeto L-204 directamente, no un array de un elemento.",
+        "L-999 no aparece y por eso el valor es undefined.",
+        "Comprobar undefined antes del acceso evita intentar leer propiedades de una ausencia."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l01-find-undefined-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "biblioteca",
+          "datasetId": "biblioteca-revision-1-v1",
+          "bindingName": "libros",
+          "task": "Busca L-302 y L-999, en ese orden, y maneja de forma segura la ausencia.",
+          "executableCode": "function buscarPorId(idBuscado) {\n  return libros.find(function (libro) {\n    return libro.id === idBuscado;\n  });\n}\n\nfunction mostrarResultado(libro) {\n  if (libro === undefined) {\n    console.log(\"NO_ENCONTRADO\");\n  } else {\n    console.log(libro.id + \" | \" + libro.titulo);\n  }\n}\n\nmostrarResultado(buscarPorId(\"L-302\"));\nmostrarResultado(buscarPorId(\"L-999\"));",
+          "referenceOutput": [
+            "L-302 | Ciencia en casa",
+            "NO_ENCONTRADO"
+          ],
+          "referenceResults": {
+            "existingQuery": {
+              "id": "L-302",
+              "found": true,
+              "title": "Ciencia en casa"
+            },
+            "missingQuery": {
+              "id": "L-999",
+              "found": false,
+              "valueType": "undefined"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l01-includes-igualdad",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "includes responde si el array contiene exactamente el valor buscado. No transforma las cadenas."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Las tres expresiones llaman al método sobre generos y cambian únicamente la cadena argumento."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Completa con generos.includes('ciencia'), generos.includes('Ciencia') y generos.includes('ficcion') en ese orden."
+        }
+      ],
+      "solution": {
+        "scenarioId": "biblioteca",
+        "datasetId": "biblioteca-base-v1",
+        "bindingName": "libros",
+        "executableCode": "const generos = libros[1].generos;\n\nconsole.log(\"ciencia | \" + generos.includes(\"ciencia\"));\nconsole.log(\"Ciencia | \" + generos.includes(\"Ciencia\"));\nconsole.log(\"ficcion | \" + generos.includes(\"ficcion\"));",
+        "referenceOutput": [
+          "ciencia | true",
+          "Ciencia | false",
+          "ficcion | true"
+        ],
+        "referenceResults": {
+          "recordId": "L-202",
+          "genres": [
+            "ciencia",
+            "ficcion"
+          ],
+          "checks": {
+            "ciencia": true,
+            "Ciencia": false,
+            "ficcion": true
+          }
+        }
+      },
+      "explanationPoints": [
+        "El libro en índice 1 tiene las cadenas ciencia y ficcion.",
+        "La C mayúscula hace que Ciencia sea un valor distinto de ciencia.",
+        "includes devuelve un booleano y no la posición del valor."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l01-includes-igualdad-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "biblioteca",
+          "datasetId": "biblioteca-revision-7-v1",
+          "bindingName": "libros",
+          "task": "En los géneros del libro en índice 1, comprueba tecnologia, Tecnologia y ciencia.",
+          "executableCode": "const generos = libros[1].generos;\n\nconsole.log(\"tecnologia | \" + generos.includes(\"tecnologia\"));\nconsole.log(\"Tecnologia | \" + generos.includes(\"Tecnologia\"));\nconsole.log(\"ciencia | \" + generos.includes(\"ciencia\"));",
+          "referenceOutput": [
+            "tecnologia | true",
+            "Tecnologia | false",
+            "ciencia | false"
+          ],
+          "referenceResults": {
+            "recordId": "L-502",
+            "genres": [
+              "tecnologia",
+              "ficcion"
+            ],
+            "checks": {
+              "tecnologia": true,
+              "Tecnologia": false,
+              "ciencia": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l01-some",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "La pregunta empieza con 'existe al menos una', por lo que necesitas un booleano de existencia."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Llama al método sobre tareas y reutiliza esUrgenteLibre como callback."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Asigna tareas.some(esUrgenteLibre) a hayUrgenteLibre; no invoques el predicado al pasarlo."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "function esUrgenteLibre(tarea) {\n  return tarea.estado === \"pendiente\" && tarea.prioridad === 3 && !tarea.bloqueada;\n}\n\nconst hayUrgenteLibre = tareas.some(esUrgenteLibre);\nconsole.log(\"HAY_URGENTE_LIBRE | \" + hayUrgenteLibre);",
+        "referenceOutput": [
+          "HAY_URGENTE_LIBRE | true"
+        ],
+        "referenceResults": {
+          "value": true,
+          "witnessIds": [
+            "T-301"
+          ]
+        }
+      },
+      "explanationPoints": [
+        "some devuelve true en cuanto existe una tarea que cumple el predicado.",
+        "T-301 es una evidencia suficiente: está pendiente, tiene prioridad 3 y no está bloqueada.",
+        "El resultado pedido es booleano, así que crear una lista con filter sería innecesario."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l01-some-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-7-v1",
+          "bindingName": "tareas",
+          "task": "Comprueba con some si existe alguna tarea pendiente, de prioridad 3 y no bloqueada.",
+          "executableCode": "function esUrgenteLibre(tarea) {\n  return tarea.estado === \"pendiente\" && tarea.prioridad === 3 && !tarea.bloqueada;\n}\n\nconst hayUrgenteLibre = tareas.some(esUrgenteLibre);\nconsole.log(\"HAY_URGENTE_LIBRE | \" + hayUrgenteLibre);",
+          "referenceOutput": [
+            "HAY_URGENTE_LIBRE | false"
+          ],
+          "referenceResults": {
+            "value": false,
+            "witnessIds": []
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l01-every-vacio",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "every intenta encontrar un elemento que rompa la regla. En [] no existe ningún elemento que pueda romperla."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Aplica el mismo callback tieneStock primero a productos y después a juguetes."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Completa con productos.every(tieneStock) y juguetes.every(tieneStock); no agregues && juguetes.length > 0."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "function tieneStock(producto) {\n  return producto.stock > 0;\n}\n\nconst todosConStock = productos.every(tieneStock);\nconst juguetes = productos.filter(function (producto) {\n  return producto.categoria === \"juguetes\";\n});\nconst todosLosJuguetesConStock = juguetes.every(tieneStock);\n\nconsole.log(\"TODOS_CON_STOCK | \" + todosConStock);\nconsole.log(\"TOTAL_JUGUETES | \" + juguetes.length);\nconsole.log(\"TODOS_LOS_JUGUETES_CON_STOCK | \" + todosLosJuguetesConStock);",
+        "referenceOutput": [
+          "TODOS_CON_STOCK | false",
+          "TOTAL_JUGUETES | 0",
+          "TODOS_LOS_JUGUETES_CON_STOCK | true"
+        ],
+        "referenceResults": {
+          "allProductsHaveStock": false,
+          "counterexampleIds": [
+            "P-102"
+          ],
+          "toyCount": 0,
+          "allToysHaveStock": true
+        }
+      },
+      "explanationPoints": [
+        "P-102 rompe la regla universal sobre productos porque su stock es 0.",
+        "No hay productos con categoría juguetes, por lo que el subconjunto es [].",
+        "every([]) es true por verdad vacía: no afirma que exista un juguete."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l01-every-vacio-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-1-v1",
+          "bindingName": "productos",
+          "task": "Comprueba si todos están activos y repite la regla sobre la categoría alimentos, que está vacía.",
+          "executableCode": "function estaActivo(producto) {\n  return producto.activo;\n}\n\nconst todosActivos = productos.every(estaActivo);\nconst alimentos = productos.filter(function (producto) {\n  return producto.categoria === \"alimentos\";\n});\nconst todosLosAlimentosActivos = alimentos.every(estaActivo);\n\nconsole.log(\"TODOS_ACTIVOS | \" + todosActivos);\nconsole.log(\"TOTAL_ALIMENTOS | \" + alimentos.length);\nconsole.log(\"TODOS_LOS_ALIMENTOS_ACTIVOS | \" + todosLosAlimentosActivos);",
+          "referenceOutput": [
+            "TODOS_ACTIVOS | false",
+            "TOTAL_ALIMENTOS | 0",
+            "TODOS_LOS_ALIMENTOS_ACTIVOS | true"
+          ],
+          "referenceResults": {
+            "allProductsActive": false,
+            "counterexampleIds": [
+              "P-203"
+            ],
+            "foodCount": 0,
+            "allFoodsActive": true
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l01-eleccion-autonoma",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Empieza por la forma de respuesta: la pregunta no pide los libros ni el primero, sino un sí o no sobre existencia."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "El predicado necesita dos comprobaciones: libro.disponible y libro.generos.includes('ciencia')."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "El método de existencia es some; úsalo sobre libros con un callback que una ambas comprobaciones con &&."
+        }
+      ],
+      "solution": {
+        "scenarioId": "biblioteca",
+        "datasetId": "biblioteca-revision-3-v1",
+        "bindingName": "libros",
+        "executableCode": "const resultado = libros.some(function (libro) {\n  return libro.disponible && libro.generos.includes(\"ciencia\");\n});\n\nconsole.log(\"RESULTADO | \" + resultado);",
+        "referenceOutput": [
+          "RESULTADO | true"
+        ],
+        "referenceResults": {
+          "selectedMethod": "some",
+          "value": true,
+          "witnessIds": [
+            "L-402",
+            "L-404"
+          ]
+        }
+      },
+      "explanationPoints": [
+        "some coincide con una pregunta de existencia y devuelve directamente un booleano.",
+        "filter produciría una colección innecesaria y find produciría un objeto o undefined.",
+        "L-402 y L-404 están disponibles e incluyen exactamente ciencia."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l01-eleccion-autonoma-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "biblioteca",
+          "datasetId": "biblioteca-revision-7-v1",
+          "bindingName": "libros",
+          "task": "Elige un método para obtener el primer libro no disponible con género tecnologia y muestra id y título o NO_ENCONTRADO.",
+          "executableCode": "const resultado = libros.find(function (libro) {\n  return !libro.disponible && libro.generos.includes(\"tecnologia\");\n});\n\nif (resultado === undefined) {\n  console.log(\"NO_ENCONTRADO\");\n} else {\n  console.log(resultado.id + \" | \" + resultado.titulo);\n}",
+          "referenceOutput": [
+            "L-502 | Robot amable"
+          ],
+          "referenceResults": {
+            "selectedMethod": "find",
+            "found": true,
+            "recordId": "L-502",
+            "title": "Robot amable"
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l01-checkpoint",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Asigna una forma a cada respuesta: colección completa, primer objeto y booleano universal."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "La primera consulta combina prioridad y bloqueo; la segunda aplica includes a etiquetas; la tercera separa primero las completadas."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Usa filter para urgentesLibres, find para primeraSeguridad, filter para completadas y every sobre completadas para comprobar !tarea.bloqueada."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-revision-3-v1",
+        "bindingName": "tareas",
+        "executableCode": "const urgentesLibres = tareas.filter(function (tarea) {\n  return tarea.prioridad === 3 && !tarea.bloqueada;\n});\nconsole.log(\"URGENTES_LIBRES_TOTAL | \" + urgentesLibres.length);\nfor (const tarea of urgentesLibres) {\n  console.log(\"URGENTE | \" + tarea.id);\n}\n\nconst primeraSeguridad = tareas.find(function (tarea) {\n  return tarea.etiquetas.includes(\"seguridad\");\n});\nif (primeraSeguridad === undefined) {\n  console.log(\"PRIMERA_SEGURIDAD | NO_ENCONTRADA\");\n} else {\n  console.log(\"PRIMERA_SEGURIDAD | \" + primeraSeguridad.id);\n}\n\nconst completadas = tareas.filter(function (tarea) {\n  return tarea.estado === \"completada\";\n});\nconst completadasSinBloqueo = completadas.every(function (tarea) {\n  return !tarea.bloqueada;\n});\nconsole.log(\"COMPLETADAS_SIN_BLOQUEO | \" + completadasSinBloqueo);",
+        "referenceOutput": [
+          "URGENTES_LIBRES_TOTAL | 2",
+          "URGENTE | T-501",
+          "URGENTE | T-504",
+          "PRIMERA_SEGURIDAD | T-505",
+          "COMPLETADAS_SIN_BLOQUEO | true"
+        ],
+        "referenceResults": {
+          "urgentFreeIds": [
+            "T-501",
+            "T-504"
+          ],
+          "firstSecurityId": "T-505",
+          "completedIds": [
+            "T-503",
+            "T-506"
+          ],
+          "allCompletedUnblocked": true
+        }
+      },
+      "explanationPoints": [
+        "filter corresponde a una colección de todas las tareas que cumplen dos reglas.",
+        "find corresponde al primer objeto con la etiqueta exacta y puede devolver undefined.",
+        "every evalúa la regla universal únicamente después de formar el subconjunto de completadas.",
+        "El checkpoint resume evidencia de aprendizaje y no asigna un nivel automáticamente."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l01-checkpoint-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-7-v1",
+          "bindingName": "tareas",
+          "task": "Repite las tres formas de consulta; sustituye la etiqueta seguridad por finanzas.",
+          "executableCode": "const urgentesLibres = tareas.filter(function (tarea) {\n  return tarea.prioridad === 3 && !tarea.bloqueada;\n});\nconsole.log(\"URGENTES_LIBRES_TOTAL | \" + urgentesLibres.length);\nfor (const tarea of urgentesLibres) {\n  console.log(\"URGENTE | \" + tarea.id);\n}\n\nconst primeraFinanzas = tareas.find(function (tarea) {\n  return tarea.etiquetas.includes(\"finanzas\");\n});\nif (primeraFinanzas === undefined) {\n  console.log(\"PRIMERA_FINANZAS | NO_ENCONTRADA\");\n} else {\n  console.log(\"PRIMERA_FINANZAS | \" + primeraFinanzas.id);\n}\n\nconst completadas = tareas.filter(function (tarea) {\n  return tarea.estado === \"completada\";\n});\nconst completadasSinBloqueo = completadas.every(function (tarea) {\n  return !tarea.bloqueada;\n});\nconsole.log(\"COMPLETADAS_SIN_BLOQUEO | \" + completadasSinBloqueo);",
+          "referenceOutput": [
+            "URGENTES_LIBRES_TOTAL | 1",
+            "URGENTE | T-601",
+            "PRIMERA_FINANZAS | T-603",
+            "COMPLETADAS_SIN_BLOQUEO | true"
+          ],
+          "referenceResults": {
+            "urgentFreeIds": [
+              "T-601"
+            ],
+            "firstFinanceId": "T-603",
+            "completedIds": [
+              "T-603",
+              "T-605"
+            ],
+            "allCompletedUnblocked": true
+          }
+        }
+      ]
+    }
+  ]
+}
