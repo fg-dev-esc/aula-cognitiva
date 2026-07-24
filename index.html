@@ -165,7 +165,7 @@
     <div class="drawer-overlay" id="drawerOverlay"></div>
     <aside class="drawer" id="drawer">
       <div class="drawer-header">
-        <h2>Actividad</h2>
+        <h2>Conversaciones</h2>
         <button class="icon-btn" id="closeDrawerBtn" aria-label="Cerrar">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 6L6 18M6 6l12 12" />
@@ -182,7 +182,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
         </svg>
-        <input type="text" id="conversationSearch" placeholder="Buscar actividad…">
+        <input type="text" id="conversationSearch" placeholder="Buscar conversaciones…">
       </div>
       <div class="drawer-list" id="conversationList">
         <div class="drawer-empty">
@@ -251,6 +251,7 @@
 
     // Estado de los cursos. Neon es la unica fuente de verdad para este estado.
     let learningEngine = null;
+    let learningContent = null;
     let curriculum = null;
     let scenarios = null;
     let support = null;
@@ -525,48 +526,6 @@
       return (run?.messages || []).filter(message => message.type !== 'hint');
     }
 
-    function renderLearningChronology(filter) {
-      if (!learningEngine || !learningState) return '';
-      const query = filter.toLowerCase();
-      const groups = learningEngine.getChronology(learningState).map(group => ({
-        ...group,
-        runs: group.runs.filter(run =>
-          String(run.lessonSnapshot?.title || '').toLowerCase().includes(query)
-        ),
-      })).filter(group => group.runs.length > 0);
-
-      const body = groups.length ? groups.map(group => {
-        const dateLabel = formatDrawerDate(`${group.dateKey}T00:00:00`, {
-          weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
-        });
-        return `
-          <div class="timeline-day">
-            <div class="timeline-date">${escapeHtml(dateLabel)}</div>
-            ${group.runs.map(run => {
-              const score = lessonRunScore(run);
-              const attempts = (run.attempts || []).length;
-              const scoreText = score === null ? 'sin score' : `${score}/100`;
-              const kind = run.kind === 'review' ? 'Repaso' : run.kind === 'checkpoint' ? 'Checkpoint' : 'Lección';
-              return `
-                <button class="lesson-run-item ${run.id === currentLessonRunId ? 'active' : ''}" type="button"
-                  data-run-id="${escapeHtml(run.id)}">
-                  <span class="lesson-run-order">${escapeHtml(run.dailyOrder)}.</span>
-                  <span class="lesson-run-content">
-                    <span class="lesson-run-title">${escapeHtml(run.lessonSnapshot?.title || run.lessonId)}</span>
-                    <span class="lesson-run-meta">
-                      ${escapeHtml(kind)} · ${escapeHtml(lessonRunStatusLabel(run.status))} · ${escapeHtml(scoreText)} · ${escapeHtml(attempts)} intento${attempts === 1 ? '' : 's'}
-                    </span>
-                  </span>
-                </button>
-              `;
-            }).join('')}
-          </div>
-        `;
-      }).join('') : '<p class="drawer-section-empty">No hay lecciones para mostrar</p>';
-
-      return `<section class="drawer-section learning-timeline"><h3>Cursos</h3>${body}</section>`;
-    }
-
     function renderConversations(filter = '') {
       const query = filter.toLowerCase();
       const filtered = conversations.filter(c =>
@@ -614,16 +573,11 @@
       `;
 
       drawerList.innerHTML = `
-        ${renderLearningChronology(filter)}
         <section class="drawer-section chat-history">
-          <h3>Práctica libre</h3>
+          <h3>Conversaciones</h3>
           ${chats}
         </section>
       `;
-
-      drawerList.querySelectorAll('.lesson-run-item').forEach(item => {
-        item.addEventListener('click', () => selectLessonRun(item.dataset.runId));
-      });
 
       drawerList.querySelectorAll('.conversation-content').forEach(content => {
         content.addEventListener('click', () => {
@@ -1008,14 +962,22 @@
     function enterLessonMode(runId) {
       if (currentLessonRunId !== runId) resetLessonTutor();
       currentLessonRunId = runId;
+      const run = learningState?.lessonRuns?.find(candidate => candidate.id === runId);
+      const modality = run ? learningContent.lessonModality(findLesson(run.lessonId)) : 'console';
+      const projectFiles = modality === learningContent.LESSON_MODALITIES.PROJECT_FILES;
       updateKataToggle();
       attachedImages = [];
       renderImagePreview();
       chatInput.value = '';
       chatInput.style.height = 'auto';
       charCounter.textContent = '';
-      chatInput.placeholder = 'Pega aquí tu código final...';
-      chatInput.setAttribute('aria-label', 'Código final de la lección');
+      chatInput.placeholder = projectFiles
+        ? 'Pega aquí los archivos completos en el orden indicado...'
+        : 'Pega aquí tu código final...';
+      chatInput.setAttribute('aria-label', projectFiles
+        ? 'Archivos finales de la lección'
+        : 'Código final de la lección');
+      chatInput.spellcheck = false;
     }
 
     function leaveLessonMode() {
@@ -1026,6 +988,7 @@
       chatInput.disabled = false;
       chatInput.placeholder = 'Escribe un mensaje…';
       chatInput.setAttribute('aria-label', 'Mensaje');
+      chatInput.spellcheck = true;
       if (wasLesson) {
         chatInput.value = '';
         chatInput.style.height = 'auto';
@@ -1060,6 +1023,12 @@
           chatInput.setSelectionRange(chatInput.value.length, chatInput.value.length);
         }
       } else if (e.key === 'Enter' && !e.shiftKey) {
+        const run = currentLessonRunId
+          ? learningState?.lessonRuns?.find(candidate => candidate.id === currentLessonRunId)
+          : null;
+        const projectFiles = run && learningContent.lessonModality(findLesson(run.lessonId))
+          === learningContent.LESSON_MODALITIES.PROJECT_FILES;
+        if (projectFiles && !e.ctrlKey && !e.metaKey) return;
         e.preventDefault();
         handleSend();
       }
@@ -1289,12 +1258,16 @@
     function buildLessonTutorSystemMessage(run, selection) {
       const session = resolveLessonSession(run);
       const lastAttempt = run.attempts.at(-1);
+      const starter = session.modality === learningContent.LESSON_MODALITIES.PROJECT_FILES
+        ? learningContent.projectFilesMarkdown(session.starterFiles, 3)
+        : session.lesson.starterCode || '';
       return [
         'Eres un tutor efímero para una lección de programación.',
         'Ayuda con explicaciones breves y preguntas orientadoras. No evalúes la entrega, no asignes ni cambies puntuaciones y no guardes nada. No afirmes que has modificado el progreso. Evita dar una solución final lista para copiar.',
         `Título: ${session.lesson.title}`,
+        `Modalidad: ${session.modality}`,
         `Tarea: ${compactLessonValue(session.task)}`,
-        `Código inicial:\n${session.lesson.starterCode || ''}`,
+        `Material inicial:\n${starter}`,
         `Criterios de aceptación: ${compactLessonValue(session.lesson.acceptanceCriteria || [])}`,
         `Último intento: ${lastAttempt ? compactLessonValue(lastAttempt.submission) : 'ninguno'}`,
         `Texto seleccionado: ${selection || 'ninguno; usa la consigna completa como contexto'}`,
@@ -1466,29 +1439,59 @@
       return import('/scripts/learning-engine.mjs');
     }
 
+    async function importLearningContent() {
+      return import('/scripts/learning-content.mjs');
+    }
+
     async function initLearning() {
       learningLoadError = null;
       try {
-        const [engineModule, curriculumResponse, scenariosResponse, supportResponse, stateResponse] = await Promise.all([
+        const [
+          engineModule,
+          contentModule,
+          curriculumResponse,
+          scenariosResponse,
+          supportResponse,
+          advancedConsoleResponse,
+          projectCoursesResponse,
+          stateResponse,
+        ] = await Promise.all([
           importLearningEngine(),
+          importLearningContent(),
           fetch('/learning/curriculum.json'),
           fetch('/learning/scenarios.json'),
           fetch('/learning/support.json'),
+          fetch('/learning/advanced-console.json'),
+          fetch('/learning/project-courses.json'),
           fetch('/api/learning', { cache: 'no-store' }),
         ]);
-        const [curriculumData, scenariosData, supportData, stateData] = await Promise.all([
+        const [
+          curriculumData,
+          scenariosData,
+          supportData,
+          advancedConsoleData,
+          projectCoursesData,
+          stateData,
+        ] = await Promise.all([
           readJsonResponse(curriculumResponse),
           readJsonResponse(scenariosResponse),
           readJsonResponse(supportResponse),
+          readJsonResponse(advancedConsoleResponse),
+          readJsonResponse(projectCoursesResponse),
           readJsonResponse(stateResponse),
         ]);
         if (curriculumData.routeId !== scenariosData.routeId || curriculumData.routeId !== supportData.routeId) {
           throw new Error('Los archivos de la ruta no comparten el mismo routeId');
         }
         learningEngine = engineModule;
-        curriculum = curriculumData;
+        learningContent = contentModule;
+        const merged = learningContent.mergeLearningContent(curriculumData, supportData, [
+          advancedConsoleData,
+          projectCoursesData,
+        ]);
+        curriculum = merged.curriculum;
         scenarios = scenariosData;
-        support = supportData;
+        support = merged.support;
         applyLearningResponse(stateData);
       } catch (error) {
         learningLoadError = error.message;
@@ -1642,7 +1645,7 @@
               const progress = learningCourseProgress(level, now);
               const selected = learningState?.settings?.selectedLevelId === level.id;
               return `
-                <details class="course-panel ${selected ? 'selected' : ''}" open>
+                <details class="course-panel ${selected ? 'selected' : ''}">
                   <summary class="course-heading">
                     <div>
                       <span>Curso ${escapeHtml(level.order + 1)}</span>
@@ -1683,7 +1686,7 @@
                           <span class="lesson-catalog-order">${String(index + 1).padStart(2, '0')}</span>
                           <span class="lesson-catalog-copy">
                             <strong>${escapeHtml(lesson.title)}</strong>
-                            <small>${escapeHtml(status)}</small>
+                            <small>${escapeHtml(status)} · ${learningContent.lessonModality(lesson) === learningContent.LESSON_MODALITIES.PROJECT_FILES ? 'Proyecto' : 'Consola'}</small>
                           </span>
                           <span class="lesson-catalog-score">${escapeHtml(score)}/100</span>
                         </button>
@@ -1796,6 +1799,7 @@
       const lesson = findLesson(run.lessonId);
       const lessonSupport = support.lessons.find(item => item.lessonId === lesson.id);
       if (!lessonSupport) throw new Error(`No existe soporte para ${lesson.id}`);
+      const modality = learningContent.lessonModality(lesson);
 
       let variant = null;
       if (run.kind === 'review') {
@@ -1804,6 +1808,30 @@
         variant = (lessonSupport.fixedVariants || []).find(item =>
           item.reviewIntervalDay === review.intervalDays
         ) || lessonSupport.fixedVariants?.[0] || null;
+      }
+
+      const task = variant?.task ?? lesson.task;
+      if (modality === learningContent.LESSON_MODALITIES.PROJECT_FILES) {
+        const solution = lessonSupport.solution;
+        const expectedBrowserResult = variant?.verification || lesson.expectedBrowserResult || [];
+        const reference = variant
+          ? { ...solution, reviewTask: variant.task, verification: expectedBrowserResult }
+          : solution;
+        return {
+          modality,
+          lesson,
+          lessonSupport,
+          variant,
+          task,
+          runtime: lesson.runtime,
+          workspace: lesson.workspace,
+          starterFiles: variant?.starterFiles || lesson.starterFiles,
+          submissionFiles: lesson.submissionFiles,
+          expectedBrowserResult,
+          reference,
+          solution,
+          datasetContext: null,
+        };
       }
 
       const scenarioId = variant?.scenarioId || lesson.scenarioId;
@@ -1816,13 +1844,16 @@
       if (!/^[A-Za-z_$][\w$]*$/.test(bindingName)) throw new Error('El bindingName del escenario no es válido');
 
       return {
+        modality,
         lesson,
         lessonSupport,
         variant,
         scenario,
         dataset,
         bindingName,
-        task: variant ? variant.task : lesson.task,
+        task,
+        runtime: lesson.runtime || curriculum.runtime,
+        starterCode: lesson.starterCode,
         reference: variant || lessonSupport.solution,
         solution: variant || lessonSupport.solution,
         datasetContext: {
@@ -1884,6 +1915,9 @@
     function buildLessonChallenge(run, state) {
       const session = resolveLessonSession(run, state);
       const previous = state.lessonRuns.find(candidate => candidate.id === run.previousRunId);
+      if (session.modality === learningContent.LESSON_MODALITIES.PROJECT_FILES) {
+        return buildProjectFilesChallenge(run, session, previous);
+      }
       const continuity = previous
         ? `Continúas después de **${previous.lessonSnapshot.title}**. Usa lo aprendido allí como punto de partida.`
         : 'Esta es la primera lección de tu ruta. Trabaja directamente en la consola del navegador.';
@@ -1934,6 +1968,67 @@
         '',
         '## Entrega',
         'Practica y comprueba el ejercicio en la consola. Pega aquí únicamente el código final: no incluyas predicción, salida copiada ni explicación.',
+      ].join('\n');
+    }
+
+    function buildProjectFilesChallenge(run, session, previous) {
+      const task = session.task;
+      const context = typeof task === 'string' ? session.lesson.task?.context : task.context;
+      const instructions = typeof task === 'string' ? [task] : task.instructions;
+      const constraints = typeof task === 'string' ? session.lesson.task?.constraints || [] : task.constraints;
+      const title = run.kind === 'review' ? `Repaso: ${session.lesson.title}` : session.lesson.title;
+      const continuity = previous
+        ? `Continúas después de **${previous.lessonSnapshot.title}**. Abre el proyecto indicado y parte de los archivos iniciales de esta lección.`
+        : 'Trabaja en VS Code, ejecuta el proyecto con Vite y comprueba el resultado en el navegador antes de entregar.';
+      const workspace = session.workspace || {};
+      const projectDirectory = workspace.projectId === 'vite-react' ? 'aula-react' : 'aula-frontend';
+      const deliveryOrder = (session.submissionFiles || [])
+        .map((path, index) => `${index + 1}. \`${path}\``)
+        .join('\n');
+
+      return [
+        `# ${title}`,
+        '',
+        '## Continuidad',
+        continuity,
+        '',
+        '## Objetivos',
+        markdownItems(session.lesson.objectives),
+        '',
+        '## Entorno de trabajo',
+        `- Proyecto base: \`${workspace.projectId || 'vite'}\``,
+        `- Carpeta reutilizable: \`${projectDirectory}\``,
+        `- Ejercicio: ${workspace.projectName || session.lesson.title}`,
+        `- Preparación inicial: \`${workspace.setupCommand || 'npm install'}\``,
+        `- Inicio: \`${workspace.startCommand || 'npm run dev'}\``,
+        `- Navegador: \`${workspace.url || 'http://localhost:5173'}\``,
+        '',
+        '## Archivos iniciales',
+        'Crea o reemplaza estos archivos en el proyecto base:',
+        '',
+        learningContent.projectFilesMarkdown(session.starterFiles, 3),
+        '',
+        '## Consigna',
+        context || '',
+        '',
+        '### Instrucciones',
+        markdownItems(instructions?.length ? instructions : ['Completa los archivos para resolver la consigna.']),
+        '',
+        '### Restricciones',
+        markdownItems(constraints),
+        '',
+        '## Resultado esperado en el navegador',
+        markdownItems(session.expectedBrowserResult),
+        '',
+        '## Criterios de aceptación',
+        markdownItems(session.lesson.acceptanceCriteria),
+        '',
+        '## Entrega',
+        'Pega completos los siguientes archivos, en este orden:',
+        '',
+        deliveryOrder,
+        '',
+        'Puedes separarlos con espacios o saltos de línea. Las rutas como encabezado son opcionales; no incluyas capturas ni explicaciones.',
       ].join('\n');
     }
 
@@ -2032,6 +2127,8 @@
         && (run.status === 'in_progress' || resolvedLesson)
         && bestAttemptScore >= SOLUTION_UNLOCK_SCORE && !run.solutionViewed;
       const score = lessonRunScore(run);
+      const projectFiles = learningContent.lessonModality(findLesson(run.lessonId))
+        === learningContent.LESSON_MODALITIES.PROJECT_FILES;
       lessonControls.hidden = false;
       lessonControls.innerHTML = `
         <div class="lesson-control-meta">
@@ -2062,7 +2159,9 @@
         : pending
           ? 'La evaluación está pendiente...'
           : run.status === 'in_progress'
-            ? 'Pega aquí tu respuesta...'
+            ? projectFiles
+              ? 'Pega los archivos completos en el orden indicado...'
+              : 'Pega aquí tu respuesta...'
             : 'Repaso completado';
       updateLessonTutorVisibility();
       updateSendBtn();
@@ -2098,23 +2197,40 @@
       try {
         const session = resolveLessonSession(run);
         const solution = session.solution;
-        const output = Array.isArray(solution.referenceOutput) ? solution.referenceOutput.join('\n') : String(solution.referenceOutput || '');
         const explanation = markdownItems(session.lessonSupport.explanationPoints);
-        const content = [
-          '## Solución de referencia',
-          '',
-          '```js',
-          solution.executableCode,
-          '```',
-          '',
-          '### Salida',
-          '```text',
-          output,
-          '```',
-          '',
-          '### Puntos de explicación',
-          explanation,
-        ].join('\n');
+        let content;
+        if (session.modality === learningContent.LESSON_MODALITIES.PROJECT_FILES) {
+          content = [
+            '## Solución de referencia',
+            '',
+            learningContent.projectFilesMarkdown(solution.files, 3),
+            '',
+            '### Verificación en el navegador',
+            markdownItems(session.expectedBrowserResult || solution.verification),
+            '',
+            '### Puntos de explicación',
+            explanation,
+          ].join('\n');
+        } else {
+          const output = Array.isArray(solution.referenceOutput)
+            ? solution.referenceOutput.join('\n')
+            : String(solution.referenceOutput || '');
+          content = [
+            '## Solución de referencia',
+            '',
+            '```js',
+            solution.executableCode,
+            '```',
+            '',
+            '### Salida',
+            '```text',
+            output,
+            '```',
+            '',
+            '### Puntos de explicación',
+            explanation,
+          ].join('\n');
+        }
         const now = new Date();
         let nextState = learningEngine.revealSolution(learningState, run.id, { now });
         nextState = learningEngine.appendLessonMessage(nextState, run.id, {
@@ -2149,20 +2265,30 @@
 
     function evaluationContextFor(run, submission) {
       const session = resolveLessonSession(run);
+      const projectFiles = session.modality === learningContent.LESSON_MODALITIES.PROJECT_FILES;
       return {
         lessonId: session.lesson.id,
         title: session.lesson.title,
         type: session.lesson.lessonType.includes('checkpoint') ? 'checkpoint' : 'lesson',
+        modality: session.modality,
         skills: session.lesson.primarySkills,
         task: session.task,
         dataset: session.datasetContext,
-        acceptanceCriteria: codeObservableAcceptanceCriteria(session.lesson),
-        rubric: [
+        runtime: session.runtime,
+        workspace: projectFiles ? session.workspace : null,
+        submissionFiles: projectFiles ? session.submissionFiles : [],
+        expectedBrowserResult: projectFiles ? session.expectedBrowserResult : [],
+        acceptanceCriteria: projectFiles
+          ? session.lesson.acceptanceCriteria
+          : codeObservableAcceptanceCriteria(session.lesson),
+        rubric: session.lesson.rubric || [
           { id: 'resultado', criterion: 'El código produce el resultado solicitado.', points: 60 },
           { id: 'requisitos', criterion: 'Cumple los criterios y comprobaciones críticas.', points: 30 },
           { id: 'claridad', criterion: 'El código es legible y directo.', points: 10 },
         ],
-        criticalChecks: codeObservableCriticalChecks(session.lesson),
+        criticalChecks: projectFiles
+          ? session.lesson.criticalChecks
+          : codeObservableCriticalChecks(session.lesson),
         reference: session.reference,
         submission,
       };
@@ -2750,7 +2876,6 @@
       const isConversationSearch = e.target === conversationSearch;
       const isEditingTitle = e.target.matches('[contenteditable="true"]');
       const isConversationAction = e.target.classList.contains('conv-action-btn');
-      const isLessonRunItem = Boolean(e.target.closest('.lesson-run-item'));
 
       if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'o') {
         e.preventDefault();
@@ -2812,7 +2937,7 @@
         return;
       }
 
-      if (!drawer.classList.contains('open') || isConversationSearch || isEditingTitle || isLessonRunItem
+      if (!drawer.classList.contains('open') || isConversationSearch || isEditingTitle
           || (e.key === 'Enter' && isConversationAction)) return;
 
       if (e.key === 'ArrowDown') {

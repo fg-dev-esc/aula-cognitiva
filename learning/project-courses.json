@@ -1,0 +1,1352 @@
+{
+  "schemaVersion": 1,
+  "routeId": "js-arrays-console-v1",
+  "levels": [
+    {
+      "id": "nivel-7",
+      "order": 7,
+      "title": "Web breve con Vite",
+      "description": "Integra HTML semántico, CSS adaptable y JavaScript del navegador en proyectos Vite pequeños.",
+      "prerequisiteLevelIds": [],
+      "prerequisiteSkills": ["JavaScript básico", "arrays", "funciones", "eventos"],
+      "manualStartAllowed": true,
+      "lessonIds": ["l08-semantica-vite", "l08-css-responsive", "l08-dom-interaccion", "l08-checkpoint-lecturas"]
+    },
+    {
+      "id": "nivel-8",
+      "order": 8,
+      "title": "Estado e interacción en React",
+      "description": "Gestiona estado local y compartido entre componentes mediante props y callbacks.",
+      "prerequisiteLevelIds": ["nivel-7"],
+      "prerequisiteSkills": ["JSX", "componentes", "props"],
+      "manualStartAllowed": true,
+      "lessonIds": ["l09-estado-local", "l09-formularios-inmutables", "l09-estado-derivado", "l09-checkpoint-carrito"]
+    },
+    {
+      "id": "nivel-9",
+      "order": 9,
+      "title": "Efectos y APIs",
+      "description": "Sincroniza React con el navegador y APIs locales deterministas.",
+      "prerequisiteLevelIds": ["nivel-8"],
+      "prerequisiteSkills": ["useState", "eventos React", "renderizado condicional"],
+      "manualStartAllowed": true,
+      "lessonIds": ["l10-efectos-navegador", "l10-fetch-local", "l10-api-dependencias", "l10-checkpoint-biblioteca"]
+    },
+    {
+      "id": "nivel-10",
+      "order": 10,
+      "title": "Reducer, context y hooks",
+      "description": "Modela transiciones, comparte estado y extrae lógica reutilizable.",
+      "prerequisiteLevelIds": ["nivel-9"],
+      "prerequisiteSkills": ["useEffect", "estado inmutable", "APIs del navegador"],
+      "manualStartAllowed": true,
+      "lessonIds": ["l11-reducer", "l11-context", "l11-hook-persistente", "l11-checkpoint-planificador"]
+    },
+    {
+      "id": "nivel-11",
+      "order": 11,
+      "title": "Arquitectura, routing y patrones",
+      "description": "Organiza aplicaciones por responsabilidades e implementa navegación y patrones avanzados sin paquetes adicionales.",
+      "prerequisiteLevelIds": ["nivel-10"],
+      "prerequisiteSkills": ["useReducer", "context", "hooks personalizados"],
+      "manualStartAllowed": true,
+      "lessonIds": ["l12-arquitectura-feature", "l12-routing-history", "l12-tabs-compuestos", "l12-checkpoint-rutas-lazy"]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l08-semantica-vite",
+      "levelId": "nivel-7",
+      "order": 1,
+      "title": "Estructura semántica con Vite",
+      "estimatedMinutes": 20,
+      "objectives": ["Crear una página semántica completa.", "Conectar la entrada JavaScript y CSS mediante Vite."],
+      "primarySkills": ["html-semantico", "vite-vanilla"],
+      "prerequisiteSkills": ["HTML básico", "rutas de archivos"],
+      "prerequisiteLessonIds": [],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "vite", "baseProject": "vite-vanilla", "externalDependencies": []},
+      "workspace": {"projectId": "vite-vanilla", "projectName": "Agenda semántica", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"devDependencies\": {\"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Laboratorio abierto</title>\n</head>\n<body>\n  <!-- TODO: header, main, section y dos article -->\n  <script type=\"module\" src=\"/src/main.js\"></script>\n</body>\n</html>\n"},
+        {"path": "src/main.js", "language": "javascript", "content": "import \"./styles.css\";\n"},
+        {"path": "src/styles.css", "language": "css", "content": "* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, sans-serif; }\n/* TODO: composición y adaptación móvil */\n"}
+      ],
+      "submissionFiles": ["index.html", "src/main.js", "src/styles.css"],
+      "expectedBrowserResult": ["Muestra el título Laboratorio abierto y la fecha Viernes 18:00.", "Muestra las actividades HTML con propósito y CSS adaptable.", "Las tarjetas forman una columna con un viewport de 640 px o menos."],
+      "task": {
+        "context": "Un laboratorio comunitario necesita una agenda breve que funcione en escritorio y móvil.",
+        "instructions": ["Construye el encabezado y la agenda con elementos semánticos.", "Incluye dos actividades con hora, título y descripción.", "Crea una cuadrícula de dos columnas que pase a una columna en móvil."],
+        "constraints": ["Usa un solo h1.", "No uses estilos inline.", "Conserva main.js como módulo y punto de entrada del CSS."]
+      },
+      "acceptanceCriteria": ["La página usa header, main, section y dos article.", "Las dos actividades contienen todos los datos solicitados.", "El diseño no produce desplazamiento horizontal y responde a 640 px."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "html-semantico", "description": "Incluye header, main, section y exactamente dos article."},
+        {"id": "entrada-vite", "description": "index.html carga /src/main.js como módulo y main.js importa styles.css."},
+        {"id": "responsive-640", "description": "Una media query convierte la agenda en una columna a 640 px o menos."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l08-css-responsive"
+    },
+    {
+      "id": "l08-css-responsive",
+      "levelId": "nivel-7",
+      "order": 2,
+      "title": "CSS adaptable y estados visuales",
+      "estimatedMinutes": 22,
+      "objectives": ["Crear una cuadrícula adaptable.", "Representar un estado mediante un selector de atributo."],
+      "primarySkills": ["css-grid", "css-responsive", "selectores-atributo"],
+      "prerequisiteSkills": ["HTML semántico", "selectores CSS"],
+      "prerequisiteLessonIds": ["l08-semantica-vite"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "vite", "baseProject": "vite-vanilla", "externalDependencies": []},
+      "workspace": {"projectId": "vite-vanilla", "projectName": "Talleres adaptables", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"devDependencies\": {\"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Talleres</title></head>\n<body>\n  <main>\n    <h1>Talleres del sábado</h1>\n    <section class=\"workshops\" aria-label=\"Talleres\">\n      <article data-status=\"open\"><h2>Diseño editorial</h2><p>3 plazas</p><a href=\"#editorial\">Ver taller</a></article>\n      <article data-status=\"full\"><h2>Animación CSS</h2><p>Completo</p><a href=\"#animacion\">Ver taller</a></article>\n      <article data-status=\"open\"><h2>JavaScript visual</h2><p>1 plaza</p><a href=\"#javascript\">Ver taller</a></article>\n    </section>\n  </main>\n  <script type=\"module\" src=\"/src/main.js\"></script>\n</body>\n</html>\n"},
+        {"path": "src/main.js", "language": "javascript", "content": "import \"./styles.css\";\n"},
+        {"path": "src/styles.css", "language": "css", "content": "* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, sans-serif; }\n/* TODO: cuadrícula, estado full, foco y media query */\n"}
+      ],
+      "submissionFiles": ["index.html", "src/main.js", "src/styles.css"],
+      "expectedBrowserResult": ["Muestra tres tarjetas en una cuadrícula de tres columnas.", "Animación CSS aparece atenuada y con borde discontinuo.", "A 700 px o menos las tarjetas forman una sola columna y los enlaces conservan foco visible."],
+      "task": {
+        "context": "La cartelera debe comunicar disponibilidad sin depender de JavaScript.",
+        "instructions": ["Diseña la cuadrícula de tres talleres.", "Usa data-status para distinguir el taller completo.", "Añade un foco visible y una composición móvil de una columna."],
+        "constraints": ["No cambies los atributos data-status.", "No uses JavaScript para aplicar estilos.", "No fijes un ancho que supere el viewport."]
+      },
+      "acceptanceCriteria": ["La sección usa CSS Grid con tres columnas en escritorio.", "El estado full se selecciona por atributo y no por una clase nueva.", "La media query y el foco son claramente observables."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "grid-tres-columnas", "description": "workshops usa una cuadrícula de tres columnas en escritorio."},
+        {"id": "estado-por-atributo", "description": "El estilo de completo parte de article[data-status=full]."},
+        {"id": "movil-y-foco", "description": "A 700 px hay una columna y :focus-visible tiene un indicador perceptible."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l08-dom-interaccion"
+    },
+    {
+      "id": "l08-dom-interaccion",
+      "levelId": "nivel-7",
+      "order": 3,
+      "title": "Estado y eventos del DOM",
+      "estimatedMinutes": 25,
+      "objectives": ["Mantener un estado simple fuera del DOM.", "Sincronizar texto y controles desde una función render."],
+      "primarySkills": ["dom-eventos", "estado-render", "limites-interaccion"],
+      "prerequisiteSkills": ["funciones", "condicionales", "querySelector"],
+      "prerequisiteLessonIds": ["l08-css-responsive"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "vite", "baseProject": "vite-vanilla", "externalDependencies": []},
+      "workspace": {"projectId": "vite-vanilla", "projectName": "Control de reservas", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"devDependencies\": {\"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Reservas</title></head>\n<body>\n  <main class=\"card\"><h1>Mesa de prototipado</h1><output id=\"status\" aria-live=\"polite\"></output><div><button id=\"release\">Liberar</button><button id=\"reserve\">Reservar</button></div></main>\n  <script type=\"module\" src=\"/src/main.js\"></script>\n</body>\n</html>\n"},
+        {"path": "src/main.js", "language": "javascript", "content": "import \"./styles.css\";\nconst MAX = 5;\nlet reserved = 2;\nconst status = document.querySelector(\"#status\");\nconst releaseButton = document.querySelector(\"#release\");\nconst reserveButton = document.querySelector(\"#reserve\");\nfunction render() {\n  // TODO: texto y disabled\n}\nreleaseButton.addEventListener(\"click\", () => { /* TODO */ });\nreserveButton.addEventListener(\"click\", () => { /* TODO */ });\nrender();\n"},
+        {"path": "src/styles.css", "language": "css", "content": "* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, sans-serif; background: #f4effb; }\n.card { width: min(28rem, calc(100% - 2rem)); margin: 4rem auto; padding: 1.5rem; background: white; border-radius: 1rem; }\nbutton { margin: 1rem .5rem 0 0; padding: .7rem 1rem; }\nbutton:disabled { opacity: .45; }\n"}
+      ],
+      "submissionFiles": ["index.html", "src/main.js", "src/styles.css"],
+      "expectedBrowserResult": ["El estado inicial dice 2 de 5 plazas ocupadas.", "Reservar incrementa y Liberar decrementa el valor visible.", "Liberar se desactiva en 0 y Reservar se desactiva en 5."],
+      "task": {
+        "context": "Una mesa compartida admite como máximo cinco reservas.",
+        "instructions": ["Completa render para actualizar texto y botones.", "Conecta ambos eventos y respeta los límites.", "Mantén toda la interfaz sincronizada después de cada cambio."],
+        "constraints": ["Usa reserved como única fuente de estado.", "Usa una sola función render.", "No codifiques una salida distinta para cada clic."]
+      },
+      "acceptanceCriteria": ["El valor nunca sale del intervalo 0 a 5.", "Cada evento modifica reserved y llama render.", "El output y ambos atributos disabled reflejan el mismo estado."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "estado-unico", "description": "reserved es la única fuente del conteo y el DOM no se usa como estado."},
+        {"id": "render-completo", "description": "render actualiza el texto y los dos estados disabled."},
+        {"id": "limites-cero-cinco", "description": "Los handlers impiden valores menores que 0 o mayores que 5."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l08-checkpoint-lecturas"
+    },
+    {
+      "id": "l08-checkpoint-lecturas",
+      "levelId": "nivel-7",
+      "order": 4,
+      "title": "Checkpoint: lista de lecturas",
+      "estimatedMinutes": 35,
+      "objectives": ["Integrar estructura, estilos y comportamiento.", "Renderizar una colección y modificarla desde eventos."],
+      "primarySkills": ["integracion-vite-vanilla", "formularios-dom", "render-listas"],
+      "prerequisiteSkills": ["HTML semántico", "CSS adaptable", "eventos DOM", "arrays inmutables"],
+      "prerequisiteLessonIds": ["l08-dom-interaccion"],
+      "lessonType": "level_checkpoint",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "vite", "baseProject": "vite-vanilla", "externalDependencies": []},
+      "workspace": {"projectId": "vite-vanilla", "projectName": "Lista de lecturas", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"devDependencies\": {\"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Lecturas</title></head>\n<body>\n  <main><h1>Lecturas de la semana</h1><form id=\"reading-form\"><label for=\"title\">Nueva lectura</label><input id=\"title\" autocomplete=\"off\"><button>Agregar</button></form><p id=\"summary\" aria-live=\"polite\"></p><ul id=\"reading-list\"></ul></main>\n  <script type=\"module\" src=\"/src/main.js\"></script>\n</body>\n</html>\n"},
+        {"path": "src/main.js", "language": "javascript", "content": "import \"./styles.css\";\nlet readings = [{ id: \"r1\", title: \"HTML semántico\", done: true }, { id: \"r2\", title: \"CSS adaptable\", done: false }];\nconst form = document.querySelector(\"#reading-form\");\nconst input = document.querySelector(\"#title\");\nconst summary = document.querySelector(\"#summary\");\nconst list = document.querySelector(\"#reading-list\");\nfunction render() { /* TODO */ }\nform.addEventListener(\"submit\", (event) => { event.preventDefault(); /* TODO */ });\nlist.addEventListener(\"click\", (event) => { /* TODO */ });\nrender();\n"},
+        {"path": "src/styles.css", "language": "css", "content": "* { box-sizing: border-box; }\nbody { margin: 0; font-family: system-ui, sans-serif; background: #f3f6f2; }\nmain { width: min(38rem, calc(100% - 2rem)); margin: 3rem auto; }\nform { display: flex; flex-wrap: wrap; gap: .6rem; }\ninput, button { padding: .7rem; font: inherit; }\nul { list-style: none; padding: 0; display: grid; gap: .5rem; }\nli button { width: 100%; text-align: left; }\n"}
+      ],
+      "submissionFiles": ["index.html", "src/main.js", "src/styles.css"],
+      "expectedBrowserResult": ["Inicia con dos lecturas y el resumen 1 de 2 completadas.", "Agregar Accesibilidad crea una tercera lectura y limpia el input.", "Pulsar una lectura alterna su marca y actualiza el resumen sin recargar."],
+      "task": {
+        "context": "Una persona quiere registrar y marcar las lecturas de la semana.",
+        "instructions": ["Renderiza el resumen y un botón por lectura sin innerHTML.", "Agrega títulos no vacíos desde el formulario.", "Usa delegación de eventos para alternar una lectura por id."],
+        "constraints": ["Usa preventDefault.", "Conserva los datos en un array de objetos.", "No uses innerHTML ni recargues la página."]
+      },
+      "acceptanceCriteria": ["El render se deriva por completo de readings.", "El alta recorta espacios, ignora vacío y limpia el input.", "La alternancia reemplaza solo el objeto del id seleccionado.", "La interfaz sigue siendo utilizable en un viewport estrecho."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "alta-valida", "description": "El formulario evita recarga, ignora texto vacío y agrega un objeto nuevo."},
+        {"id": "render-sin-innerhtml", "description": "La lista y el resumen se reconstruyen con APIs DOM seguras."},
+        {"id": "toggle-delegado", "description": "Un listener en la lista identifica data-id y alterna la lectura correcta."},
+        {"id": "resumen-derivado", "description": "El conteo se calcula desde readings después de cada cambio."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l09-estado-local"
+    },
+    {
+      "id": "l09-estado-local",
+      "levelId": "nivel-8",
+      "order": 1,
+      "title": "Estado local y actualización funcional",
+      "estimatedMinutes": 20,
+      "objectives": ["Gestionar estado local con useState.", "Comunicar interacciones mediante callbacks por props."],
+      "primarySkills": ["react-use-state", "actualizacion-funcional", "callbacks-props"],
+      "prerequisiteSkills": ["JSX", "componentes", "props"],
+      "prerequisiteLessonIds": ["l08-checkpoint-lecturas"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Contador de rondas", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>React</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(52rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}.card{padding:1rem;border-radius:.8rem;background:white}button,input{font:inherit;padding:.65rem}button{cursor:pointer}.secondary{background:#dce5f8;border:0}.active{outline:3px solid #86a7f7}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport RoundCounter from \"./RoundCounter.jsx\";\nexport default function App() {\n  const [rounds, setRounds] = useState(0);\n  return <main className=\"stack\"><h1>Práctica deliberada</h1><RoundCounter value={rounds} onIncrement={() => {}} onDecrement={() => {}} onReset={() => {}} /></main>;\n}\n"},
+        {"path": "src/RoundCounter.jsx", "language": "jsx", "content": "export default function RoundCounter({ value, onIncrement, onDecrement, onReset }) {\n  return <section className=\"card stack\"><h2>Rondas completadas</h2><strong aria-live=\"polite\">{value}</strong><div className=\"row\"><button onClick={onDecrement} disabled={value === 0}>Restar</button><button onClick={onIncrement}>Sumar</button><button className=\"secondary\" onClick={onReset}>Reiniciar</button></div></section>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/RoundCounter.jsx"],
+      "expectedBrowserResult": ["El contador comienza en 0 y Restar está deshabilitado.", "Dos clics en Sumar muestran 2.", "Reiniciar devuelve el valor a 0."],
+      "task": {
+        "context": "Una sesión de práctica necesita registrar rondas completadas.",
+        "instructions": ["Mantén el conteo en App.", "Pasa el valor y tres acciones a RoundCounter.", "Impide que Restar produzca valores negativos."],
+        "constraints": ["RoundCounter no usa useState.", "Sumar y Restar usan actualización funcional.", "No dupliques el conteo en otro estado."]
+      },
+      "acceptanceCriteria": ["App es la única fuente del conteo.", "RoundCounter recibe valor y callbacks por props.", "El valor nunca baja de cero y Reiniciar funciona desde cualquier valor."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "estado-en-app", "description": "Solo App declara el estado rounds."},
+        {"id": "actualizacion-funcional", "description": "Incremento y decremento usan el valor current del setter."},
+        {"id": "props-interaccion", "description": "RoundCounter comunica las tres intenciones mediante callbacks recibidos."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l09-formularios-inmutables"
+    },
+    {
+      "id": "l09-formularios-inmutables",
+      "levelId": "nivel-8",
+      "order": 2,
+      "title": "Formularios controlados y listas inmutables",
+      "estimatedMinutes": 25,
+      "objectives": ["Controlar un input con estado.", "Agregar y eliminar elementos sin mutar arrays."],
+      "primarySkills": ["formularios-controlados", "arrays-inmutables-react", "listas-keys"],
+      "prerequisiteSkills": ["useState", "props", "map y filter"],
+      "prerequisiteLessonIds": ["l09-estado-local"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Banco de ideas", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>React</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(52rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}.card{padding:1rem;border-radius:.8rem;background:white}button,input{font:inherit;padding:.65rem}button{cursor:pointer}.secondary{background:#dce5f8;border:0}ul{list-style:none;padding:0}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport IdeaForm from \"./IdeaForm.jsx\";\nimport IdeaList from \"./IdeaList.jsx\";\nconst initialIdeas = [{ id: \"i1\", text: \"Mapa mental\" }, { id: \"i2\", text: \"Prototipo en papel\" }];\nexport default function App() {\n  const [ideas, setIdeas] = useState(initialIdeas);\n  function addIdea(text) { /* TODO */ }\n  function removeIdea(id) { /* TODO */ }\n  return <main className=\"stack\"><h1>Banco de ideas</h1><IdeaForm onAdd={addIdea} /><IdeaList ideas={ideas} onRemove={removeIdea} /></main>;\n}\n"},
+        {"path": "src/IdeaForm.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nexport default function IdeaForm({ onAdd }) {\n  const [text, setText] = useState(\"\");\n  function submit(event) { event.preventDefault(); /* TODO */ }\n  return <form className=\"row\" onSubmit={submit}><label>Idea <input value={text} onChange={(event) => setText(event.target.value)} /></label><button>Agregar</button></form>;\n}\n"},
+        {"path": "src/IdeaList.jsx", "language": "jsx", "content": "export default function IdeaList({ ideas, onRemove }) {\n  return <ul className=\"stack\">{ideas.map((idea) => <li className=\"card row\" key={idea.id}><span>{idea.text}</span><button className=\"secondary\" onClick={() => onRemove(idea.id)}>Eliminar</button></li>)}</ul>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/IdeaForm.jsx", "src/IdeaList.jsx"],
+      "expectedBrowserResult": ["Inicia con Mapa mental y Prototipo en papel.", "Agregar una idea no vacía la coloca al final y limpia el input.", "Eliminar retira únicamente la idea seleccionada y los espacios vacíos se ignoran."],
+      "task": {
+        "context": "Un equipo registra ideas breves antes de una sesión de diseño.",
+        "instructions": ["Completa el formulario controlado.", "Agrega objetos con id estable al final de la colección.", "Elimina ideas por id desde la lista."],
+        "constraints": ["No leas el DOM directamente.", "No uses push ni splice.", "IdeaForm conserva solo el texto temporal y App conserva la colección."]
+      },
+      "acceptanceCriteria": ["El input está conectado a value y onChange.", "El submit recorta texto, ignora vacío, llama onAdd y limpia el campo.", "App agrega con expansión y elimina con filter.", "Cada fila usa idea.id como key."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "input-controlado", "description": "IdeaForm controla el input mediante estado y evita la recarga del formulario."},
+        {"id": "alta-inmutable", "description": "La nueva idea se agrega creando un array nuevo."},
+        {"id": "baja-por-id", "description": "La eliminación usa filter y no depende del índice ni del texto."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l09-estado-derivado"
+    },
+    {
+      "id": "l09-estado-derivado",
+      "levelId": "nivel-8",
+      "order": 3,
+      "title": "Elevar estado y derivar una vista",
+      "estimatedMinutes": 28,
+      "objectives": ["Ubicar estado en el ancestro común.", "Derivar una lista filtrada durante el render."],
+      "primarySkills": ["estado-elevado", "estado-derivado", "actualizacion-objetos"],
+      "prerequisiteSkills": ["useState", "listas React", "callbacks"],
+      "prerequisiteLessonIds": ["l09-formularios-inmutables"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Plan de entrega", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>React</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(52rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}.card{padding:1rem;border-radius:.8rem;background:white}button,input{font:inherit;padding:.65rem}.secondary{background:#dce5f8;border:0}.active{outline:3px solid #86a7f7}ul{list-style:none;padding:0}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport FilterBar from \"./FilterBar.jsx\";\nimport TaskList from \"./TaskList.jsx\";\nconst initialTasks = [{ id: \"t1\", title: \"Leer requisitos\", done: true }, { id: \"t2\", title: \"Construir interfaz\", done: false }, { id: \"t3\", title: \"Probar interacciones\", done: false }];\nexport default function App() {\n  const [tasks, setTasks] = useState(initialTasks);\n  const [filter, setFilter] = useState(\"all\");\n  const visibleTasks = tasks; // TODO\n  function toggleTask(id) { /* TODO */ }\n  return <main className=\"stack\"><h1>Plan de entrega</h1><FilterBar value={filter} onChange={setFilter} /><TaskList tasks={visibleTasks} onToggle={toggleTask} /></main>;\n}\n"},
+        {"path": "src/FilterBar.jsx", "language": "jsx", "content": "const filters = [[\"all\", \"Todas\"], [\"pending\", \"Pendientes\"], [\"done\", \"Completadas\"]];\nexport default function FilterBar({ value, onChange }) {\n  return <div className=\"row\" aria-label=\"Filtrar tareas\">{filters.map(([id, label]) => <button className={value === id ? \"active\" : \"secondary\"} key={id} onClick={() => onChange(id)}>{label}</button>)}</div>;\n}\n"},
+        {"path": "src/TaskList.jsx", "language": "jsx", "content": "export default function TaskList({ tasks, onToggle }) {\n  return <ul className=\"stack\">{tasks.map((task) => <li className=\"card\" key={task.id}><label className=\"row\"><input type=\"checkbox\" checked={task.done} onChange={() => onToggle(task.id)} />{task.title}</label></li>)}</ul>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/FilterBar.jsx", "src/TaskList.jsx"],
+      "expectedBrowserResult": ["Todas muestra tres tareas y Pendientes muestra dos.", "Completadas muestra inicialmente solo Leer requisitos.", "Alternar una tarea actualiza de inmediato la vista correspondiente."],
+      "task": {
+        "context": "Un plan de entrega debe mostrar subconjuntos sin perder su colección completa.",
+        "instructions": ["Mantén tareas y filtro en App.", "Deriva visibleTasks según all, pending o done.", "Alterna done creando objetos y arrays nuevos."],
+        "constraints": ["No guardes visibleTasks en estado.", "FilterBar y TaskList no duplican estado.", "No mutes los objetos de initialTasks." ]
+      },
+      "acceptanceCriteria": ["FilterBar recibe el filtro actual y comunica uno nuevo.", "visibleTasks se calcula durante cada render.", "toggleTask reemplaza únicamente la tarea coincidente.", "Los checkboxes son controlados por task.done."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "estado-elevado", "description": "tasks y filter pertenecen a App y se distribuyen por props."},
+        {"id": "vista-derivada", "description": "La colección visible no usa un tercer useState."},
+        {"id": "toggle-inmutable", "description": "La alternancia usa map y propagación del objeto seleccionado."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l09-checkpoint-carrito"
+    },
+    {
+      "id": "l09-checkpoint-carrito",
+      "levelId": "nivel-8",
+      "order": 4,
+      "title": "Checkpoint: carrito derivado",
+      "estimatedMinutes": 40,
+      "objectives": ["Gestionar cantidades por producto.", "Derivar líneas, unidades y total monetario."],
+      "primarySkills": ["estado-compuesto-react", "totales-derivados", "integracion-interacciones"],
+      "prerequisiteSkills": ["useState", "actualización funcional", "listas y props", "reduce"],
+      "prerequisiteLessonIds": ["l09-estado-derivado"],
+      "lessonType": "level_checkpoint",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Carrito de aula", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>React</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(52rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row,.grid{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}.card{padding:1rem;border-radius:.8rem;background:white;flex:1 1 14rem}button{font:inherit;padding:.65rem;cursor:pointer}.secondary{background:#dce5f8;border:0}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport ProductList from \"./ProductList.jsx\";\nimport CartSummary from \"./CartSummary.jsx\";\nconst products = [{ id: \"p1\", name: \"Cuaderno\", priceCents: 450 }, { id: \"p2\", name: \"Lápiz\", priceCents: 120 }];\nexport default function App() {\n  const [cart, setCart] = useState({});\n  function addProduct(id) { /* TODO */ }\n  function decreaseProduct(id) { /* TODO */ }\n  const items = []; const units = 0; const totalCents = 0; // TODO\n  return <main className=\"stack\"><h1>Tienda de aula</h1><ProductList products={products} onAdd={addProduct} /><CartSummary items={items} units={units} totalCents={totalCents} onDecrease={decreaseProduct} /></main>;\n}\n"},
+        {"path": "src/ProductList.jsx", "language": "jsx", "content": "const money = (cents) => `$${(cents / 100).toFixed(2)}`;\nexport default function ProductList({ products, onAdd }) {\n  return <section className=\"grid\">{products.map((product) => <article className=\"card\" key={product.id}><h2>{product.name}</h2><p>{money(product.priceCents)}</p><button onClick={() => onAdd(product.id)}>Agregar</button></article>)}</section>;\n}\n"},
+        {"path": "src/CartSummary.jsx", "language": "jsx", "content": "const money = (cents) => `$${(cents / 100).toFixed(2)}`;\nexport default function CartSummary({ items, units, totalCents, onDecrease }) {\n  return <section className=\"card stack\"><h2>Carrito</h2>{items.length === 0 ? <p>Carrito vacío</p> : items.map((item) => <div className=\"row\" key={item.id}><span>{item.name} × {item.quantity}</span><button className=\"secondary\" onClick={() => onDecrease(item.id)}>Reducir</button></div>)}<strong aria-live=\"polite\">{units} unidades · {money(totalCents)}</strong></section>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/ProductList.jsx", "src/CartSummary.jsx"],
+      "expectedBrowserResult": ["El carrito comienza vacío con 0 unidades y $0.00.", "Agregar dos Cuadernos muestra 2 unidades y $9.00.", "Agregar un Lápiz produce 3 unidades y $10.20; Reducir elimina una línea cuando llega a cero."],
+      "task": {
+        "context": "Una tienda de aula vende productos cuyos precios se almacenan en centavos.",
+        "instructions": ["Guarda cantidades por id en cart.", "Implementa agregar y reducir mediante setters funcionales.", "Deriva líneas, unidades y total desde products y cart."],
+        "constraints": ["No guardes items, units ni totalCents en estado.", "No mutes cart.", "Mantén todos los importes como enteros en centavos hasta mostrarlos."]
+      },
+      "acceptanceCriteria": ["Agregar incrementa solo el id seleccionado.", "Reducir decrementa y elimina la propiedad cuando llega a cero.", "Las líneas y ambos totales se derivan correctamente.", "ProductList y CartSummary reciben datos y acciones por props."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "cantidades-inmutables", "description": "Las dos operaciones parten de una actualización funcional y devuelven un objeto nuevo."},
+        {"id": "totales-derivados", "description": "items, units y totalCents se calculan y no usan useState."},
+        {"id": "decremento-elimina", "description": "Una cantidad de uno desaparece del carrito al reducir."},
+        {"id": "precios-centavos", "description": "La aritmética usa priceCents y solo formatea al presentar."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l10-efectos-navegador"
+    },
+    {
+      "id": "l10-efectos-navegador",
+      "levelId": "nivel-9",
+      "order": 1,
+      "title": "Sincronizar React con el navegador",
+      "estimatedMinutes": 24,
+      "objectives": ["Sincronizar document.title mediante un efecto.", "Registrar y limpiar un listener global."],
+      "primarySkills": ["react-use-effect", "cleanup-efectos", "dependencias-efecto"],
+      "prerequisiteSkills": ["useState", "eventos React", "renderizado condicional"],
+      "prerequisiteLessonIds": ["l09-checkpoint-carrito"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Sesiones enfocadas", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Sesiones</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(52rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;flex-wrap:wrap;gap:.7rem}.secondary{padding:.7rem;background:#dce5f8;border:0}.active{padding:.7rem;outline:3px solid #86a7f7}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useEffect, useState } from \"react\";\nimport FocusControls from \"./FocusControls.jsx\";\nexport default function App() {\n  const [session, setSession] = useState(\"\");\n  useEffect(() => { /* TODO: título y restauración */ }, [session]);\n  useEffect(() => { /* TODO: Escape y cleanup */ }, []);\n  return <main className=\"stack\"><h1>Sesiones</h1><FocusControls value={session} onChange={setSession} /><p aria-live=\"polite\">{session ? `En foco: ${session}` : \"Sin sesión activa\"}</p></main>;\n}\n"},
+        {"path": "src/FocusControls.jsx", "language": "jsx", "content": "export default function FocusControls({ value, onChange }) {\n  return <div className=\"row\">{[\"React\", \"JavaScript\", \"CSS\"].map((name) => <button className={value === name ? \"active\" : \"secondary\"} key={name} onClick={() => onChange(name)}>{name}</button>)}</div>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/FocusControls.jsx"],
+      "expectedBrowserResult": ["La página inicia con Sin sesión activa y el título del documento Sesiones.", "Elegir React muestra En foco: React y cambia el título a En foco: React.", "Pulsar Escape limpia la selección y restaura Sesiones."],
+      "task": {
+        "context": "Un selector de sesión debe reflejar su estado en la pestaña del navegador y responder a Escape.",
+        "instructions": ["Sincroniza document.title con session.", "Restaura el título anterior al limpiar el efecto.", "Añade un listener global de keydown con cleanup."],
+        "constraints": ["No cambies document.title durante el render.", "Registra el listener una sola vez.", "El cleanup elimina exactamente el handler registrado."]
+      },
+      "acceptanceCriteria": ["El efecto del título depende de session y restaura el valor anterior.", "Escape llama setSession con texto vacío.", "El listener se elimina al desmontar.", "FocusControls permanece presentacional."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "efecto-titulo", "description": "document.title se escribe dentro de un efecto dependiente de session."},
+        {"id": "cleanup-listener", "description": "keydown se registra y elimina con la misma función."},
+        {"id": "escape-restablece", "description": "La tecla Escape limpia session y sincroniza interfaz y título."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l10-fetch-local"
+    },
+    {
+      "id": "l10-fetch-local",
+      "levelId": "nivel-9",
+      "order": 2,
+      "title": "Consumir una API local",
+      "estimatedMinutes": 28,
+      "objectives": ["Cargar JSON con fetch desde un efecto.", "Representar estados loading, error y success."],
+      "primarySkills": ["fetch-react", "estados-asincronos", "abort-controller"],
+      "prerequisiteSkills": ["useEffect", "async y await", "renderizado condicional"],
+      "prerequisiteLessonIds": ["l10-efectos-navegador"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Catálogo remoto local", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Catálogo</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(58rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem}.card{padding:1rem;border-radius:.8rem;background:white}.badge{padding:.2rem .5rem;background:#dce5f8;border-radius:1rem}.error{color:#a02020}\n"},
+        {"path": "public/api/books.json", "language": "json", "content": "[\n  {\"id\": \"b1\", \"title\": \"El faro\", \"available\": true},\n  {\"id\": \"b2\", \"title\": \"Órbita roja\", \"available\": false},\n  {\"id\": \"b3\", \"title\": \"Código claro\", \"available\": true}\n]\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useEffect, useState } from \"react\";\nimport BookList from \"./BookList.jsx\";\nexport default function App() {\n  const [state, setState] = useState({ status: \"loading\", books: [], error: \"\" });\n  useEffect(() => { /* TODO: fetch y abort */ }, []);\n  return <main className=\"stack\"><h1>Catálogo</h1>{state.status === \"loading\" && <p>Cargando catálogo…</p>}{state.status === \"error\" && <p className=\"error\">{state.error}</p>}{state.status === \"success\" && <BookList books={state.books} />}</main>;\n}\n"},
+        {"path": "src/BookList.jsx", "language": "jsx", "content": "export default function BookList({ books }) {\n  return <section className=\"grid\">{books.map((book) => <article className=\"card\" key={book.id}><h2>{book.title}</h2><span className=\"badge\">{book.available ? \"Disponible\" : \"Prestado\"}</span></article>)}</section>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/BookList.jsx"],
+      "expectedBrowserResult": ["Durante la solicitud muestra Cargando catálogo…", "Después muestra El faro, Órbita roja y Código claro.", "Órbita roja aparece como Prestado y los otros dos como Disponible."],
+      "task": {
+        "context": "El catálogo se sirve como un endpoint JSON local y debe manejar el ciclo completo de una solicitud.",
+        "instructions": ["Solicita /api/books.json dentro de useEffect.", "Valida response.ok y actualiza loading, error o success.", "Cancela la solicitud al limpiar el efecto."],
+        "constraints": ["No codifiques libros dentro de los componentes entregables.", "Usa AbortController.", "No presentes AbortError como fallo de usuario."]
+      },
+      "acceptanceCriteria": ["La fuente de libros es el fixture JSON.", "La interfaz distingue tres estados asíncronos.", "BookList presenta una tarjeta con key estable por libro.", "El cleanup aborta la solicitud activa."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "fetch-api-local", "description": "El efecto solicita exactamente /api/books.json y comprueba response.ok."},
+        {"id": "tres-estados", "description": "loading, error y success tienen representaciones explícitas."},
+        {"id": "aborto-seguro", "description": "AbortController se cancela en cleanup y AbortError se ignora."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l10-api-dependencias"
+    },
+    {
+      "id": "l10-api-dependencias",
+      "levelId": "nivel-9",
+      "order": 3,
+      "title": "Cliente API y dependencias",
+      "estimatedMinutes": 30,
+      "objectives": ["Separar el cliente HTTP de la interfaz.", "Repetir un efecto cuando cambia una dependencia."],
+      "primarySkills": ["cliente-api", "dependencias-use-effect", "solicitudes-obsoletas"],
+      "prerequisiteSkills": ["fetch", "AbortController", "select controlado"],
+      "prerequisiteLessonIds": ["l10-fetch-local"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Pronóstico por ciudad", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Pronóstico</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(48rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.card{padding:1rem;border-radius:.8rem;background:white}select{font:inherit;padding:.65rem}.error{color:#a02020}\n"},
+        {"path": "public/api/forecast.json", "language": "json", "content": "{\n  \"Quito\": {\"temperature\": 18, \"condition\": \"Nublado\"},\n  \"Lima\": {\"temperature\": 22, \"condition\": \"Despejado\"},\n  \"Bogotá\": {\"temperature\": 16, \"condition\": \"Lluvia\"}\n}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useEffect, useState } from \"react\";\nimport { getForecast } from \"./api/forecast.js\";\nimport ForecastCard from \"./ForecastCard.jsx\";\nexport default function App() {\n  const [city, setCity] = useState(\"Quito\");\n  const [state, setState] = useState({ status: \"loading\", data: null, error: \"\" });\n  useEffect(() => { /* TODO: solicitar, actualizar y abortar */ }, [city]);\n  return <main className=\"stack\"><h1>Pronóstico</h1><label>Ciudad <select value={city} onChange={(event) => setCity(event.target.value)}>{[\"Quito\", \"Lima\", \"Bogotá\"].map((name) => <option key={name}>{name}</option>)}</select></label>{state.status === \"loading\" && <p>Cargando {city}…</p>}{state.status === \"error\" && <p className=\"error\">{state.error}</p>}{state.status === \"success\" && <ForecastCard city={city} forecast={state.data} />}</main>;\n}\n"},
+        {"path": "src/api/forecast.js", "language": "javascript", "content": "export async function getForecast(city, { signal } = {}) {\n  // TODO: fetch, validaciones y retorno\n  return null;\n}\n"},
+        {"path": "src/ForecastCard.jsx", "language": "jsx", "content": "export default function ForecastCard({ city, forecast }) {\n  return <article className=\"card\"><h2>{city}</h2><p>{forecast.temperature} °C · {forecast.condition}</p></article>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/api/forecast.js", "src/ForecastCard.jsx"],
+      "expectedBrowserResult": ["Quito termina mostrando 18 °C · Nublado.", "Cambiar a Lima pasa por Cargando Lima… y termina en 22 °C · Despejado.", "Cambios sucesivos no permiten que una respuesta anterior sustituya la ciudad actual."],
+      "task": {
+        "context": "El pronóstico depende de la ciudad seleccionada y debe ignorar solicitudes obsoletas.",
+        "instructions": ["Implementa getForecast como único acceso HTTP.", "Ejecuta una consulta por cada cambio de city.", "Cancela la consulta anterior durante cleanup."],
+        "constraints": ["App no llama fetch directamente.", "city aparece en el array de dependencias.", "El cliente valida response.ok y la existencia de la ciudad."]
+      },
+      "acceptanceCriteria": ["El selector es controlado.", "getForecast devuelve solo el registro solicitado o lanza un error claro.", "Cada ejecución crea y limpia su propio AbortController.", "El estado vuelve a loading antes de cada consulta."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "api-separada", "description": "Solo src/api/forecast.js usa fetch."},
+        {"id": "dependencia-city", "description": "El efecto vuelve a ejecutarse exclusivamente cuando cambia city."},
+        {"id": "aborto-por-cambio", "description": "Cada ejecución cancela su solicitud al cambiar la dependencia o desmontar."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l10-checkpoint-biblioteca"
+    },
+    {
+      "id": "l10-checkpoint-biblioteca",
+      "levelId": "nivel-9",
+      "order": 4,
+      "title": "Checkpoint: biblioteca remota",
+      "estimatedMinutes": 42,
+      "objectives": ["Integrar carga, recarga y búsqueda.", "Distinguir sincronización externa de cálculos derivados."],
+      "primarySkills": ["integracion-efectos-api", "retry-controlado", "filtro-derivado"],
+      "prerequisiteSkills": ["useEffect", "fetch", "AbortController", "estado derivado"],
+      "prerequisiteLessonIds": ["l10-api-dependencias"],
+      "lessonType": "level_checkpoint",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Biblioteca con búsqueda", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Biblioteca</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(58rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;flex-wrap:wrap;gap:.7rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem}.card{padding:1rem;border-radius:.8rem;background:white}button,input{font:inherit;padding:.65rem}.error{color:#a02020}\n"},
+        {"path": "public/api/library.json", "language": "json", "content": "[\n  {\"id\": \"l1\", \"title\": \"React sin magia\", \"topic\": \"react\"},\n  {\"id\": \"l2\", \"title\": \"Efectos claros\", \"topic\": \"react\"},\n  {\"id\": \"l3\", \"title\": \"CSS en sistemas\", \"topic\": \"css\"},\n  {\"id\": \"l4\", \"title\": \"JavaScript práctico\", \"topic\": \"javascript\"}\n]\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useEffect, useState } from \"react\";\nimport { getBooks } from \"./api/library.js\";\nimport CatalogView from \"./CatalogView.jsx\";\nexport default function App() {\n  const [query, setQuery] = useState(\"\");\n  const [reloadKey, setReloadKey] = useState(0);\n  const [state, setState] = useState({ status: \"loading\", books: [], error: \"\" });\n  useEffect(() => { /* TODO: carga y cleanup según reloadKey */ }, [reloadKey]);\n  const visibleBooks = state.books; // TODO: filtro derivado\n  useEffect(() => { /* TODO: título Biblioteca (n) */ }, [visibleBooks.length]);\n  return <main className=\"stack\"><h1>Biblioteca</h1><div className=\"row\"><label>Buscar <input value={query} onChange={(event) => setQuery(event.target.value)} /></label><button onClick={() => setReloadKey((key) => key + 1)}>Recargar</button></div><CatalogView state={state} books={visibleBooks} /></main>;\n}\n"},
+        {"path": "src/api/library.js", "language": "javascript", "content": "export async function getBooks({ signal } = {}) {\n  // TODO\n  return [];\n}\n"},
+        {"path": "src/CatalogView.jsx", "language": "jsx", "content": "export default function CatalogView({ state, books }) {\n  if (state.status === \"loading\") return <p>Cargando biblioteca…</p>;\n  if (state.status === \"error\") return <p className=\"error\">{state.error}</p>;\n  if (books.length === 0) return <p>Sin resultados</p>;\n  return <section className=\"grid\">{books.map((book) => <article className=\"card\" key={book.id}><h2>{book.title}</h2><p>{book.topic}</p></article>)}</section>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/api/library.js", "src/CatalogView.jsx"],
+      "expectedBrowserResult": ["Carga y presenta cuatro libros desde /api/library.json.", "Buscar React sin distinguir mayúsculas deja React sin magia y cambia el título a Biblioteca (1).", "Recargar conserva la consulta, repite la carga y vuelve a mostrar el resultado filtrado."],
+      "task": {
+        "context": "Una biblioteca necesita cargar un catálogo, buscar localmente y repetir una solicitud bajo demanda.",
+        "instructions": ["Implementa el cliente getBooks y el efecto de carga.", "Deriva visibleBooks desde query y state.books.", "Usa reloadKey para recargar y sincroniza document.title con la cantidad visible."],
+        "constraints": ["No filtres mediante useEffect.", "No añadas query como dependencia del fetch.", "Aborta cada solicitud en cleanup y conserva query al recargar."]
+      },
+      "acceptanceCriteria": ["El cliente valida response.ok y devuelve el JSON.", "La búsqueda recorta y normaliza mayúsculas.", "reloadKey provoca una nueva solicitud sin borrar query.", "El título se actualiza desde un efecto con cleanup.", "CatalogView presenta loading, error, vacío o resultados."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "cliente-aislado", "description": "Solo library.js accede a /api/library.json."},
+        {"id": "filtro-sin-efecto", "description": "visibleBooks es un cálculo de render y no estado sincronizado."},
+        {"id": "recarga-controlada", "description": "reloadKey es la dependencia que repite el fetch y cada ejecución aborta en cleanup."},
+        {"id": "titulo-cantidad", "description": "document.title refleja visibleBooks.length desde un efecto."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l11-reducer"
+    },
+    {
+      "id": "l11-reducer",
+      "levelId": "nivel-10",
+      "order": 1,
+      "title": "Transiciones con useReducer",
+      "estimatedMinutes": 25,
+      "objectives": ["Modelar cambios mediante acciones.", "Mantener un reducer puro y exhaustivo."],
+      "primarySkills": ["react-use-reducer", "acciones-reducer", "reducer-puro"],
+      "prerequisiteSkills": ["estado inmutable", "objetos", "eventos React"],
+      "prerequisiteLessonIds": ["l10-checkpoint-biblioteca"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Pedido con reducer", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Pedido</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(48rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}.card{padding:1rem;border-radius:.8rem;background:white}button{font:inherit;padding:.65rem;cursor:pointer}.secondary{background:#dce5f8;border:0}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useReducer } from \"react\";\nimport { initialOrder, orderReducer } from \"./orderReducer.js\";\nconst products = [{ id: \"tea\", name: \"Té\" }, { id: \"bread\", name: \"Pan\" }];\nexport default function App() {\n  const [order, dispatch] = useReducer(orderReducer, initialOrder);\n  const units = Object.values(order).reduce((sum, quantity) => sum + quantity, 0);\n  return <main className=\"stack\"><h1>Pedido</h1>{products.map((product) => <article className=\"card row\" key={product.id}><strong>{product.name}: {order[product.id]}</strong><button onClick={() => dispatch({ type: \"added\", id: product.id })}>Agregar</button><button className=\"secondary\" onClick={() => dispatch({ type: \"removed\", id: product.id })}>Quitar</button></article>)}<p aria-live=\"polite\">{units} unidades</p><button onClick={() => dispatch({ type: \"cleared\" })}>Vaciar</button></main>;\n}\n"},
+        {"path": "src/orderReducer.js", "language": "javascript", "content": "export const initialOrder = { tea: 0, bread: 0 };\nexport function orderReducer(state, action) {\n  // TODO: added, removed, cleared y default\n  return state;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/orderReducer.js"],
+      "expectedBrowserResult": ["El pedido inicia con Té 0, Pan 0 y 0 unidades.", "Agregar dos tés y un pan muestra 3 unidades.", "Quitar nunca produce cantidades negativas y Vaciar devuelve todo a cero."],
+      "task": {
+        "context": "Un pedido pequeño necesita transiciones explícitas para agregar, quitar y vaciar.",
+        "instructions": ["Implementa los casos added, removed y cleared.", "Devuelve un estado nuevo en cada cambio real.", "Conserva el estado para acciones desconocidas."],
+        "constraints": ["El reducer no produce efectos ni modifica state.", "Las acciones son objetos serializables.", "Una cantidad nunca puede ser negativa."]
+      },
+      "acceptanceCriteria": ["added incrementa solo action.id.", "removed limita el resultado inferior a cero.", "cleared devuelve un objeto limpio.", "El total se deriva en App y no forma parte del reducer."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "reducer-puro", "description": "orderReducer no muta state ni accede a APIs externas."},
+        {"id": "acciones-explicitas", "description": "Los tres tipos tienen transiciones independientes y existe un default seguro."},
+        {"id": "sin-negativos", "description": "removed conserva cero cuando el producto ya está vacío."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l11-context"
+    },
+    {
+      "id": "l11-context",
+      "levelId": "nivel-10",
+      "order": 2,
+      "title": "Compartir estado con context",
+      "estimatedMinutes": 28,
+      "objectives": ["Crear y proporcionar un contexto.", "Consumir una fuente compartida sin prop drilling."],
+      "primarySkills": ["react-context", "context-provider", "estado-compartido"],
+      "prerequisiteSkills": ["useState", "estado elevado", "componentes hermanos"],
+      "prerequisiteLessonIds": ["l11-reducer"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Tareas compartidas", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Equipo</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(48rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;gap:.7rem;align-items:center}.card{padding:1rem;border-radius:.8rem;background:white}ul{list-style:none;padding:0}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { TasksProvider } from \"./TasksContext.jsx\";\nimport TaskHeader from \"./TaskHeader.jsx\";\nimport TaskList from \"./TaskList.jsx\";\nexport default function App() {\n  return <TasksProvider><main className=\"stack\"><TaskHeader /><TaskList /></main></TasksProvider>;\n}\n"},
+        {"path": "src/TasksContext.jsx", "language": "jsx", "content": "import { createContext, useState } from \"react\";\nexport const TasksContext = createContext(null);\nconst initialTasks = [{ id: \"t1\", title: \"Preparar demo\", done: false }, { id: \"t2\", title: \"Enviar notas\", done: false }, { id: \"t3\", title: \"Cerrar tablero\", done: true }];\nexport function TasksProvider({ children }) {\n  const [tasks, setTasks] = useState(initialTasks);\n  const pending = tasks.length; // TODO\n  function toggle(id) { /* TODO */ }\n  return <TasksContext.Provider value={{ tasks, pending, toggle }}>{children}</TasksContext.Provider>;\n}\n"},
+        {"path": "src/TaskHeader.jsx", "language": "jsx", "content": "import { useContext } from \"react\";\nimport { TasksContext } from \"./TasksContext.jsx\";\nexport default function TaskHeader() { const { pending } = useContext(TasksContext); return <header><h1>Equipo</h1><p>{pending} pendientes</p></header>; }\n"},
+        {"path": "src/TaskList.jsx", "language": "jsx", "content": "import { useContext } from \"react\";\nimport { TasksContext } from \"./TasksContext.jsx\";\nexport default function TaskList() {\n  const { tasks, toggle } = useContext(TasksContext);\n  return <ul className=\"stack\">{tasks.map((task) => <li className=\"card\" key={task.id}><label className=\"row\"><input type=\"checkbox\" checked={task.done} onChange={() => toggle(task.id)} />{task.title}</label></li>)}</ul>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/TasksContext.jsx", "src/TaskHeader.jsx", "src/TaskList.jsx"],
+      "expectedBrowserResult": ["El encabezado muestra inicialmente 2 pendientes.", "Preparar demo, Enviar notas y Cerrar tablero aparecen en la lista.", "Alternar Preparar demo actualiza su checkbox y reduce el encabezado a 1 pendiente."],
+      "task": {
+        "context": "Un encabezado y una lista hermanos necesitan leer y modificar la misma colección.",
+        "instructions": ["Calcula pending desde tasks.", "Implementa toggle dentro del provider.", "Consume TasksContext directamente desde encabezado y lista."],
+        "constraints": ["App no pasa tasks, pending ni toggle como props.", "Existe un solo estado tasks.", "La actualización de tareas es inmutable."]
+      },
+      "acceptanceCriteria": ["TasksProvider envuelve ambos consumidores.", "pending cuenta únicamente tareas no completadas.", "toggle reemplaza el objeto correspondiente.", "Los componentes hermanos se actualizan desde el mismo contexto."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "provider-compartido", "description": "TasksProvider contiene la fuente única y envuelve encabezado y lista."},
+        {"id": "consumo-directo", "description": "TaskHeader y TaskList usan TasksContext sin prop drilling."},
+        {"id": "toggle-inmutable-context", "description": "toggle usa una actualización funcional con map y propagación."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l11-hook-persistente"
+    },
+    {
+      "id": "l11-hook-persistente",
+      "levelId": "nivel-10",
+      "order": 3,
+      "title": "Extraer un hook persistente",
+      "estimatedMinutes": 28,
+      "objectives": ["Extraer estado y efecto a un hook reutilizable.", "Persistir tipos JSON en localStorage."],
+      "primarySkills": ["hooks-personalizados", "inicializacion-perezosa", "local-storage-react"],
+      "prerequisiteSkills": ["useState", "useEffect", "JSON", "localStorage"],
+      "prerequisiteLessonIds": ["l11-context"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Preferencias persistentes", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Preferencias</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(42rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;gap:.7rem;align-items:center}.card{padding:1rem;border-radius:.8rem;background:white}.compact .card{padding:.5rem}input{font:inherit;padding:.65rem}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useLocalStorage } from \"./hooks/useLocalStorage.js\";\nexport default function App() {\n  const [name, setName] = useLocalStorage(\"profile-name\", \"\");\n  const [compact, setCompact] = useLocalStorage(\"compact-mode\", false);\n  return <main className={`stack ${compact ? \"compact\" : \"\"}`}><h1>Preferencias</h1><section className=\"card stack\"><label>Nombre <input value={name} onChange={(event) => setName(event.target.value)} /></label><label className=\"row\"><input type=\"checkbox\" checked={compact} onChange={(event) => setCompact(event.target.checked)} />Modo compacto</label><p aria-live=\"polite\">Hola, {name || \"visitante\"}</p></section></main>;\n}\n"},
+        {"path": "src/hooks/useLocalStorage.js", "language": "javascript", "content": "import { useEffect, useState } from \"react\";\nexport function useLocalStorage(key, initialValue) {\n  // TODO: lectura perezosa, escritura y retorno\n  return [initialValue, () => {}];\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/hooks/useLocalStorage.js"],
+      "expectedBrowserResult": ["Sin datos guardados muestra Hola, visitante y modo compacto desactivado.", "Escribir Lia muestra Hola, Lia y activar el modo reduce el espacio de la tarjeta.", "Después de recargar, Lia y el booleano compacto permanecen."],
+      "task": {
+        "context": "Dos preferencias de tipos distintos deben sobrevivir a una recarga.",
+        "instructions": ["Lee localStorage una sola vez mediante inicialización perezosa.", "Analiza y serializa valores con JSON.", "Persiste cuando cambien key o value y devuelve [value, setValue]."],
+        "constraints": ["App no accede directamente a localStorage.", "El hook se llama al nivel superior.", "JSON inválido recupera initialValue sin romper el render." ]
+      },
+      "acceptanceCriteria": ["El hook funciona con texto y booleanos.", "La lectura inicial tolera ausencia y JSON inválido.", "El efecto escribe la clave y el valor actuales.", "La API del hook puede sustituir useState en App."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "hook-reutilizable", "description": "useLocalStorage no contiene nombres ni reglas propios de la interfaz."},
+        {"id": "lectura-perezosa", "description": "localStorage.getItem se ejecuta dentro del inicializador de useState."},
+        {"id": "persistencia-json", "description": "Un efecto dependiente de key y value usa JSON.stringify."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l11-checkpoint-planificador"
+    },
+    {
+      "id": "l11-checkpoint-planificador",
+      "levelId": "nivel-10",
+      "order": 4,
+      "title": "Checkpoint: planificador compartido",
+      "estimatedMinutes": 45,
+      "objectives": ["Integrar reducer y context en un provider.", "Crear hooks de acceso y datos derivados."],
+      "primarySkills": ["integracion-reducer-context", "hook-acceso-context", "hook-datos-derivados"],
+      "prerequisiteSkills": ["useReducer", "context", "hooks personalizados", "formularios controlados"],
+      "prerequisiteLessonIds": ["l11-hook-persistente"],
+      "lessonType": "level_checkpoint",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Planificador compartido", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Planificador</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(50rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}.card{padding:1rem;border-radius:.8rem;background:white}button,input{font:inherit;padding:.65rem}ul{list-style:none;padding:0}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { PlannerProvider } from \"./planner/PlannerContext.jsx\";\nimport PlannerBoard from \"./PlannerBoard.jsx\";\nexport default function App() { return <PlannerProvider><PlannerBoard /></PlannerProvider>; }\n"},
+        {"path": "src/planner/PlannerContext.jsx", "language": "jsx", "content": "import { createContext, useContext, useReducer } from \"react\";\nconst PlannerContext = createContext(null);\nconst initialTasks = [{ id: \"p1\", title: \"Revisar props\", done: true }, { id: \"p2\", title: \"Practicar estado\", done: false }];\nfunction reducer(state, action) { /* TODO */ return state; }\nexport function PlannerProvider({ children }) { const [tasks, dispatch] = useReducer(reducer, initialTasks); return <PlannerContext.Provider value={{ tasks, dispatch }}>{children}</PlannerContext.Provider>; }\nexport function usePlanner() { const value = useContext(PlannerContext); /* TODO: guard */ return value; }\n"},
+        {"path": "src/planner/usePlannerStats.js", "language": "javascript", "content": "import { usePlanner } from \"./PlannerContext.jsx\";\nexport function usePlannerStats() { const { tasks } = usePlanner(); return { total: tasks.length, completed: 0, pending: 0 }; }\n"},
+        {"path": "src/PlannerBoard.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport { usePlanner } from \"./planner/PlannerContext.jsx\";\nimport { usePlannerStats } from \"./planner/usePlannerStats.js\";\nexport default function PlannerBoard() {\n  const [title, setTitle] = useState(\"\"); const { tasks, dispatch } = usePlanner(); const stats = usePlannerStats();\n  function submit(event) { event.preventDefault(); const clean = title.trim(); if (!clean) return; dispatch({ type: \"added\", id: crypto.randomUUID(), title: clean }); setTitle(\"\"); }\n  return <main className=\"stack\"><h1>Planificador</h1><p>{stats.total} total · {stats.completed} completadas · {stats.pending} pendientes</p><form className=\"row\" onSubmit={submit}><input aria-label=\"Actividad\" value={title} onChange={(event) => setTitle(event.target.value)} /><button>Agregar</button></form><ul className=\"stack\">{tasks.map((task) => <li className=\"card\" key={task.id}><label className=\"row\"><input type=\"checkbox\" checked={task.done} onChange={() => dispatch({ type: \"toggled\", id: task.id })} />{task.title}</label></li>)}</ul><button onClick={() => dispatch({ type: \"completedCleared\" })}>Limpiar completadas</button></main>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/planner/PlannerContext.jsx", "src/planner/usePlannerStats.js", "src/PlannerBoard.jsx"],
+      "expectedBrowserResult": ["Inicia con 2 total, 1 completada y 1 pendiente.", "Agregar Practicar reducer produce 3 total, 1 completada y limpia el input.", "Alternar la nueva actividad produce 2 completadas; limpiar completadas conserva solo Practicar estado."],
+      "task": {
+        "context": "Un planificador necesita transiciones centralizadas y estadísticas disponibles desde cualquier consumidor.",
+        "instructions": ["Implementa added, toggled y completedCleared en el reducer.", "Protege usePlanner cuando no existe provider.", "Deriva total, completed y pending en usePlannerStats."],
+        "constraints": ["La colección vive únicamente en useReducer.", "Las estadísticas no usan estado.", "PlannerBoard accede a datos y dispatch mediante hooks, no props globales."]
+      },
+      "acceptanceCriteria": ["Las tres acciones producen arrays nuevos y resultados correctos.", "usePlanner lanza un error claro fuera de PlannerProvider.", "usePlannerStats calcula las tres cantidades desde tasks.", "El formulario valida, agrega y limpia el texto.", "Limpiar completadas conserva todas las pendientes."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "reducer-central", "description": "Todas las modificaciones de tasks ocurren en el reducer."},
+        {"id": "context-guard", "description": "usePlanner comprueba null y explica el provider requerido."},
+        {"id": "stats-derivadas", "description": "usePlannerStats calcula cantidades sin useState ni efectos."},
+        {"id": "integracion-acciones", "description": "Alta, alternancia y limpieza funcionan desde PlannerBoard."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l12-arquitectura-feature"
+    },
+    {
+      "id": "l12-arquitectura-feature",
+      "levelId": "nivel-11",
+      "order": 1,
+      "title": "Arquitectura por feature",
+      "estimatedMinutes": 28,
+      "objectives": ["Separar modelo, contenedor y presentación.", "Respetar una dirección de dependencias simple."],
+      "primarySkills": ["arquitectura-feature", "selector-puro", "componente-presentacional"],
+      "prerequisiteSkills": ["componentes", "estado derivado", "módulos ES"],
+      "prerequisiteLessonIds": ["l11-checkpoint-planificador"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Catálogo por feature", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Catálogo modular</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(58rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:1rem}.card{padding:1rem;border-radius:.8rem;background:white}input{font:inherit;padding:.65rem}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import CatalogPage from \"./features/catalog/CatalogPage.jsx\";\nexport default function App() { return <CatalogPage />; }\n"},
+        {"path": "src/features/catalog/model.js", "language": "javascript", "content": "export const products = [{ id: \"p1\", name: \"Lámpara\", category: \"hogar\" }, { id: \"p2\", name: \"Cuaderno\", category: \"papelería\" }, { id: \"p3\", name: \"Mochila\", category: \"viaje\" }];\nexport function filterProducts(items, query) {\n  // TODO: selector puro\n  return items;\n}\n"},
+        {"path": "src/features/catalog/CatalogPage.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport { filterProducts, products } from \"./model.js\";\nimport ProductGrid from \"./ProductGrid.jsx\";\nexport default function CatalogPage() {\n  const [query, setQuery] = useState(\"\"); const visibleProducts = filterProducts(products, query);\n  return <main className=\"stack\"><h1>Catálogo modular</h1><label>Buscar <input value={query} onChange={(event) => setQuery(event.target.value)} /></label><ProductGrid products={visibleProducts} /></main>;\n}\n"},
+        {"path": "src/features/catalog/ProductGrid.jsx", "language": "jsx", "content": "export default function ProductGrid({ products }) {\n  if (products.length === 0) return <p>Sin resultados</p>;\n  return <section className=\"grid\">{products.map((product) => <article className=\"card\" key={product.id}><h2>{product.name}</h2><p>{product.category}</p></article>)}</section>;\n}\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/features/catalog/model.js", "src/features/catalog/CatalogPage.jsx", "src/features/catalog/ProductGrid.jsx"],
+       "expectedBrowserResult": ["Sin consulta muestra Lámpara, Cuaderno y Mochila.", "Buscar HOGAR sin distinguir mayúsculas deja únicamente Lámpara.", "Limpiar la consulta restaura los tres productos; una consulta ausente muestra Sin resultados."],
+      "task": {
+        "context": "Un catálogo debe crecer sin mezclar reglas de dominio con presentación.",
+        "instructions": ["Implementa filterProducts como función pura.", "Mantén query en CatalogPage.", "Deja ProductGrid limitado a representar sus props."],
+        "constraints": ["model.js no importa React ni APIs del navegador.", "ProductGrid no filtra ni declara estado.", "App solo compone la feature." ]
+      },
+      "acceptanceCriteria": ["El selector normaliza nombre, categoría y consulta.", "El modelo puede ejecutarse sin React.", "CatalogPage coordina estado, selector y vista.", "ProductGrid representa vacío o tarjetas sin reglas de búsqueda."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "modelo-sin-react", "description": "model.js contiene datos y selector sin imports de interfaz."},
+        {"id": "selector-puro", "description": "filterProducts no modifica items ni depende de estado externo."},
+        {"id": "vista-presentacional", "description": "ProductGrid recibe products y no conoce query ni el modelo."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l12-routing-history"
+    },
+    {
+      "id": "l12-routing-history",
+      "levelId": "nivel-11",
+      "order": 2,
+      "title": "Routing con History API",
+      "estimatedMinutes": 32,
+      "objectives": ["Tratar la URL como estado externo.", "Navegar sin recargar y responder a Atrás."],
+      "primarySkills": ["history-api", "router-react-minimo", "navegacion-accesible"],
+      "prerequisiteSkills": ["useEffect", "hooks personalizados", "renderizado condicional"],
+      "prerequisiteLessonIds": ["l12-arquitectura-feature"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Router History API", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Router</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(52rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}a{color:#1748bd}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { usePathname } from \"./routing/router.jsx\";\nimport { HomePage, NotFoundPage, ProjectPage } from \"./pages.jsx\";\nexport default function App() { const pathname = usePathname(); if (pathname === \"/\") return <HomePage />; if (pathname === \"/projects/aula\") return <ProjectPage />; return <NotFoundPage pathname={pathname} />; }\n"},
+        {"path": "src/routing/router.jsx", "language": "jsx", "content": "import { useEffect, useState } from \"react\";\nconst NAVIGATE_EVENT = \"app:navigate\";\nexport function navigate(to) { /* TODO */ }\nexport function usePathname() {\n  const [pathname, setPathname] = useState(window.location.pathname);\n  useEffect(() => { /* TODO: popstate, evento propio y cleanup */ }, []);\n  return pathname;\n}\nexport function Link({ to, children }) {\n  function click(event) { /* TODO: respetar clics modificados */ }\n  return <a href={to} onClick={click}>{children}</a>;\n}\n"},
+        {"path": "src/pages.jsx", "language": "jsx", "content": "import { Link } from \"./routing/router.jsx\";\nexport function HomePage() { return <main className=\"stack\"><h1>Inicio</h1><Link to=\"/projects/aula\">Ver proyecto Aula</Link></main>; }\nexport function ProjectPage() { return <main className=\"stack\"><h1>Proyecto Aula</h1><Link to=\"/\">Volver al inicio</Link></main>; }\nexport function NotFoundPage({ pathname }) { return <main className=\"stack\"><h1>Página no encontrada</h1><code>{pathname}</code><Link to=\"/\">Ir al inicio</Link></main>; }\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/routing/router.jsx", "src/pages.jsx"],
+      "expectedBrowserResult": ["La ruta / muestra Inicio y un enlace con href /projects/aula.", "El enlace cambia la URL y muestra Proyecto Aula sin recargar el documento.", "Atrás regresa a Inicio y una ruta desconocida muestra Página no encontrada."],
+      "task": {
+        "context": "Una aplicación pequeña necesita routing sin incorporar una dependencia externa.",
+        "instructions": ["Implementa navigate con pushState y un evento propio.", "Sincroniza usePathname con popstate y el evento propio.", "Intercepta únicamente clics primarios sin modificadores."],
+        "constraints": ["No uses react-router-dom.", "Link conserva un href real.", "El hook elimina ambos listeners en cleanup." ]
+      },
+      "acceptanceCriteria": ["pushState cambia la URL sin navegación de documento.", "React se actualiza tras navigate y navegación histórica.", "Los clics modificados conservan el comportamiento normal del navegador.", "App presenta un fallback para rutas no reconocidas."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "pushstate-evento", "description": "navigate llama pushState y notifica al hook sin recargar."},
+        {"id": "popstate-cleanup", "description": "usePathname escucha Atrás/Adelante y elimina sus listeners."},
+        {"id": "link-progresivo", "description": "Link conserva href e intercepta solo el clic adecuado."},
+        {"id": "fallback-ruta", "description": "App muestra NotFoundPage para toda ruta no reconocida."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l12-tabs-compuestos"
+    },
+    {
+      "id": "l12-tabs-compuestos",
+      "levelId": "nivel-11",
+      "order": 3,
+      "title": "Componentes compuestos controlados",
+      "estimatedMinutes": 34,
+      "objectives": ["Diseñar una API de componentes compuestos.", "Implementar selección controlada y semántica ARIA."],
+      "primarySkills": ["compound-components", "componentes-controlados", "aria-tabs"],
+      "prerequisiteSkills": ["context", "useId", "eventos de teclado"],
+      "prerequisiteLessonIds": ["l12-routing-history"],
+      "lessonType": "guided_practice",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Tabs compuestas", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Tabs</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}main{width:min(48rem,calc(100% - 2rem));margin:2rem auto}.stack{display:grid;gap:1rem}.row{display:flex;gap:.7rem}.card{padding:1rem;border-radius:.8rem;background:white}button{font:inherit;padding:.65rem}.active{outline:3px solid #86a7f7}.secondary{background:#dce5f8;border:0}\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport { Tabs } from \"./ui/Tabs.jsx\";\nexport default function App() {\n  const [tab, setTab] = useState(\"summary\");\n  return <main className=\"stack\"><h1>Ficha del proyecto</h1><Tabs value={tab} onValueChange={setTab}><Tabs.List aria-label=\"Secciones\"><Tabs.Tab value=\"summary\">Resumen</Tabs.Tab><Tabs.Tab value=\"details\">Detalles</Tabs.Tab></Tabs.List><Tabs.Panel value=\"summary\">Proyecto breve de aprendizaje.</Tabs.Panel><Tabs.Panel value=\"details\">Cuatro entregas y un checkpoint.</Tabs.Panel></Tabs><p>Selección: {tab}</p></main>;\n}\n"},
+        {"path": "src/ui/Tabs.jsx", "language": "jsx", "content": "import { createContext, useContext, useId } from \"react\";\nconst TabsContext = createContext(null);\nfunction Root({ value, onValueChange, children }) { const baseId = useId(); return <TabsContext.Provider value={{ value, onValueChange, baseId }}>{children}</TabsContext.Provider>; }\nfunction List({ children, ...props }) { return <div role=\"tablist\" className=\"row\" {...props}>{children}</div>; }\nfunction Tab({ value, children }) { /* TODO */ return <button role=\"tab\">{children}</button>; }\nfunction Panel({ value, children }) { /* TODO */ return <section role=\"tabpanel\">{children}</section>; }\nexport const Tabs = Object.assign(Root, { List, Tab, Panel });\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/ui/Tabs.jsx"],
+      "expectedBrowserResult": ["Resumen aparece seleccionado al iniciar y solo su panel es visible.", "Un clic en Detalles muestra su panel y el texto Selección: details.", "Flechas, Home y End mueven foco y selección entre ambas pestañas."],
+      "task": {
+        "context": "Una ficha reutilizable necesita una API Tabs.List, Tabs.Tab y Tabs.Panel controlada por su consumidor.",
+        "instructions": ["Crea un hook interno que valide el contexto.", "Relaciona tabs y panels con ids y atributos ARIA.", "Implementa navegación de teclado en Tabs.List."],
+        "constraints": ["El valor seleccionado vive en App.", "No inspecciones ni clones children.", "Los subcomponentes se comunican mediante contexto interno." ]
+      },
+      "acceptanceCriteria": ["Tabs expone la API compuesta indicada.", "Cada tab refleja aria-selected y controla su panel.", "Solo el panel activo se muestra.", "ArrowLeft, ArrowRight, Home y End seleccionan y enfocan una pestaña.", "Usar un subcomponente fuera de Root produce un error claro."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "api-compuesta", "description": "Tabs incluye List, Tab y Panel como propiedades de Root."},
+        {"id": "seleccion-controlada", "description": "El contexto usa value y onValueChange recibidos, sin estado interno duplicado."},
+        {"id": "aria-enlazada", "description": "aria-controls y aria-labelledby conectan ids únicos generados con useId."},
+        {"id": "teclado-tabs", "description": "Las cuatro teclas requeridas actualizan foco y selección."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": "l12-checkpoint-rutas-lazy"
+    },
+    {
+      "id": "l12-checkpoint-rutas-lazy",
+      "levelId": "nivel-11",
+      "order": 4,
+      "title": "Checkpoint: rutas configuradas y carga diferida",
+      "estimatedMinutes": 50,
+      "objectives": ["Resolver rutas desde una configuración central.", "Combinar layout persistente, lazy y Suspense."],
+      "primarySkills": ["arquitectura-routing", "react-lazy", "suspense-layout"],
+      "prerequisiteSkills": ["History API", "routing local", "arquitectura por feature", "patrones controlados"],
+      "prerequisiteLessonIds": ["l12-tabs-compuestos"],
+      "lessonType": "level_checkpoint",
+      "modality": "project_files",
+      "runtime": {"language": "javascript", "environment": "browser", "framework": "react", "baseProject": "vite-react", "externalDependencies": []},
+      "workspace": {"projectId": "vite-react", "projectName": "Documentación enrutada", "setupCommand": "npm install", "startCommand": "npm run dev -- --host 0.0.0.0 --port 5173 --strictPort", "url": "http://localhost:5173"},
+      "starterFiles": [
+        {"path": "package.json", "language": "json", "content": "{\n  \"scripts\": {\"dev\": \"vite\", \"build\": \"vite build\"},\n  \"dependencies\": {\"react\": \"^19.1.0\", \"react-dom\": \"^19.1.0\"},\n  \"devDependencies\": {\"@vitejs/plugin-react\": \"^4.6.0\", \"vite\": \"^7.0.0\"}\n}\n"},
+        {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Documentación</title></head><body><div id=\"root\"></div><script type=\"module\" src=\"/src/main.jsx\"></script></body></html>\n"},
+        {"path": "vite.config.js", "language": "javascript", "content": "import { defineConfig } from \"vite\";\nimport react from \"@vitejs/plugin-react\";\nexport default defineConfig({ plugins: [react()] });\n"},
+        {"path": "src/main.jsx", "language": "jsx", "content": "import { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport App from \"./App.jsx\";\nimport \"./styles.css\";\ncreateRoot(document.getElementById(\"root\")).render(<StrictMode><App /></StrictMode>);\n"},
+        {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6fa;color:#172033}header,main{width:min(58rem,calc(100% - 2rem));margin:1rem auto}.row{display:flex;flex-wrap:wrap;gap:1rem}.card{padding:1rem;border-radius:.8rem;background:white}a{color:#1748bd}\n"},
+        {"path": "src/routing/router.jsx", "language": "jsx", "content": "import { useEffect, useState } from \"react\";\nconst EVENT = \"app:navigate\";\nexport function navigate(to) { history.pushState({}, \"\", to); dispatchEvent(new Event(EVENT)); }\nexport function usePathname() { const [path, setPath] = useState(location.pathname); useEffect(() => { const sync = () => setPath(location.pathname); addEventListener(\"popstate\", sync); addEventListener(EVENT, sync); return () => { removeEventListener(\"popstate\", sync); removeEventListener(EVENT, sync); }; }, []); return path; }\nexport function Link({ to, children }) { return <a href={to} onClick={(event) => { if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); navigate(to); }}>{children}</a>; }\n"},
+        {"path": "src/pages/HomePage.jsx", "language": "jsx", "content": "import { Link } from \"../routing/router.jsx\";\nexport default function HomePage() { return <section><h1>Inicio</h1><Link to=\"/guides/state\">Leer Estado</Link></section>; }\n"},
+        {"path": "src/pages/GuidePage.jsx", "language": "jsx", "content": "export default function GuidePage({ guide }) { return <article className=\"card\"><h1>{guide.title}</h1><p>{guide.summary}</p></article>; }\n"},
+        {"path": "src/pages/NotFoundPage.jsx", "language": "jsx", "content": "import { Link } from \"../routing/router.jsx\";\nexport default function NotFoundPage({ pathname }) { return <section><h1>404</h1><p>No existe {pathname}</p><Link to=\"/\">Inicio</Link></section>; }\n"},
+        {"path": "src/App.jsx", "language": "jsx", "content": "import { Suspense } from \"react\";\nimport Layout from \"./Layout.jsx\";\nimport { usePathname } from \"./routing/router.jsx\";\nimport { resolveRoute } from \"./routes.jsx\";\nexport default function App() { const route = resolveRoute(usePathname()); const Page = route.Component; return <Layout>{/* TODO: Suspense */}<Page {...route.props} /></Layout>; }\n"},
+        {"path": "src/routes.jsx", "language": "jsx", "content": "import { lazy } from \"react\";\nconst HomePage = lazy(() => import(\"./pages/HomePage.jsx\"));\nconst GuidePage = lazy(() => import(\"./pages/GuidePage.jsx\"));\nconst NotFoundPage = lazy(() => import(\"./pages/NotFoundPage.jsx\"));\nconst guides = { state: { title: \"Estado\", summary: \"Datos que cambian durante la interacción.\" }, effects: { title: \"Efectos\", summary: \"Sincronización con sistemas externos.\" } };\nexport function resolveRoute(pathname) { /* TODO */ return { Component: HomePage, props: {} }; }\n"},
+        {"path": "src/Layout.jsx", "language": "jsx", "content": "import { Link } from \"./routing/router.jsx\";\nexport default function Layout({ children }) { return <><header className=\"card\"><nav className=\"row\" aria-label=\"Principal\">{/* TODO: tres enlaces */}</nav></header><main>{children}</main></>; }\n"}
+      ],
+      "submissionFiles": ["src/App.jsx", "src/routes.jsx", "src/Layout.jsx"],
+      "expectedBrowserResult": ["La ruta / muestra Inicio dentro de un layout con enlaces Inicio, Estado y Efectos.", "/guides/state muestra Estado y /guides/effects muestra Efectos sin recargar el layout.", "Una ruta o slug desconocido muestra 404 y las páginas diferidas tienen el fallback Cargando página…"],
+      "task": {
+        "context": "Una mini documentación necesita rutas centralizadas, páginas diferidas y navegación persistente.",
+        "instructions": ["Resuelve inicio, guías conocidas y fallback desde routes.jsx.", "Rodea la página diferida con Suspense dentro del layout.", "Completa la navegación persistente del layout."],
+        "constraints": ["No uses react-router-dom.", "Las páginas se importan únicamente mediante lazy.", "Suspense rodea el contenido de página, no todo el layout."]
+      },
+      "acceptanceCriteria": ["resolveRoute devuelve Component y props para cada caso.", "Solo state y effects producen GuidePage.", "El fallback de Suspense tiene role status y texto Cargando página…", "Layout conserva navegación con href reales.", "Rutas desconocidas reciben pathname en NotFoundPage."],
+      "rubric": [
+        {"id": "resultado-correccion", "criterion": "El proyecto produce el resultado observable solicitado en el navegador.", "points": 60},
+        {"id": "requisitos-criticos", "criterion": "La entrega satisface todas las comprobaciones críticas y restricciones técnicas.", "points": 30},
+        {"id": "claridad", "criterion": "Los archivos son claros, legibles y evitan complejidad innecesaria.", "points": 10}
+      ],
+      "criticalChecks": [
+        {"id": "resolucion-central", "description": "routes.jsx es la fuente única de correspondencia entre pathname y página."},
+        {"id": "paginas-lazy", "description": "HomePage, GuidePage y NotFoundPage se cargan con React.lazy."},
+        {"id": "suspense-interno", "description": "Suspense envuelve Page dentro de Layout y presenta un estado de carga."},
+        {"id": "fallback-completo", "description": "Toda ruta o guía desconocida produce NotFoundPage con pathname."}
+      ],
+      "reviewIntervals": [1, 3, 7],
+      "nextLessonId": null
+    }
+  ],
+  "supportLessons": [
+    {
+      "lessonId": "l08-semantica-vite",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "Usa elementos que describan el papel del contenido antes de pensar en su apariencia."},
+        {"level": 2, "kind": "structural", "text": "Coloca los dos article dentro de una section con h2, y deja un único h1 en header."},
+        {"level": 3, "kind": "near_solution", "text": "Aplica display:grid a .agenda y cambia grid-template-columns a 1fr dentro de @media (max-width: 640px)."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Laboratorio abierto</title></head>\n<body>\n  <header class=\"hero\"><p>Viernes 18:00</p><h1>Laboratorio abierto</h1><p>Dos prácticas breves para construir en el navegador.</p></header>\n  <main><section aria-labelledby=\"agenda-title\"><h2 id=\"agenda-title\">Agenda</h2><div class=\"agenda\"><article><p>18:15</p><h3>HTML con propósito</h3><p>Estructura una noticia semántica.</p></article><article><p>19:00</p><h3>CSS adaptable</h3><p>Convierte una cuadrícula para móvil.</p></article></div></section></main>\n  <script type=\"module\" src=\"/src/main.js\"></script>\n</body>\n</html>\n"},
+          {"path": "src/main.js", "language": "javascript", "content": "import \"./styles.css\";\n"},
+          {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f4f1e8;color:#172033}.hero,main{width:min(58rem,calc(100% - 2rem));margin-inline:auto}.hero{padding:3rem 0 1.5rem}.agenda{display:grid;grid-template-columns:1fr 1fr;gap:1rem}article{padding:1rem;border:2px solid #172033;border-radius:.8rem;background:white}@media(max-width:640px){.agenda{grid-template-columns:1fr}}\n"}
+        ],
+        "verification": ["El documento contiene un h1 y dos article.", "Los títulos de ambas actividades son visibles.", "A 640 px las tarjetas forman una columna."]
+      },
+      "explanationPoints": ["La semántica comunica estructura aunque no cargue el CSS.", "main.js actúa como entrada de Vite para el estilo.", "La media query modifica solo la composición necesaria."],
+      "fixedVariants": [
+        {"id": "l08-semantica-vite-review-7", "reviewIntervalDay": 7, "task": "Repite la agenda desde los starters originales sin consultar la solución y verifica semántica, entrada Vite y móvil.", "reuse": {"lessonId": "l08-semantica-vite", "starterFiles": true, "solutionFiles": true}, "verification": ["Un h1 y dos actividades semánticas.", "main.js importa styles.css.", "La agenda pasa a una columna a 640 px."]}
+      ]
+    },
+    {
+      "lessonId": "l08-css-responsive",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "La disponibilidad ya está expresada en data-status; CSS puede leer ese dato directamente."},
+        {"level": 2, "kind": "structural", "text": "Aplica Grid a .workshops y el estado visual a article[data-status=full]."},
+        {"level": 3, "kind": "near_solution", "text": "Usa tres columnas, opacity y border-style:dashed para full, y una columna bajo 700 px."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\">\n<head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Talleres</title></head>\n<body><main><h1>Talleres del sábado</h1><section class=\"workshops\" aria-label=\"Talleres\"><article data-status=\"open\"><h2>Diseño editorial</h2><p>3 plazas</p><a href=\"#editorial\">Ver taller</a></article><article data-status=\"full\"><h2>Animación CSS</h2><p>Completo</p><a href=\"#animacion\">Ver taller</a></article><article data-status=\"open\"><h2>JavaScript visual</h2><p>1 plaza</p><a href=\"#javascript\">Ver taller</a></article></section></main><script type=\"module\" src=\"/src/main.js\"></script></body>\n</html>\n"},
+          {"path": "src/main.js", "language": "javascript", "content": "import \"./styles.css\";\n"},
+          {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#eef4e9;color:#183029}main{width:min(68rem,calc(100% - 2rem));margin:3rem auto}.workshops{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}article{padding:1rem;border:1px solid #7c9489;border-radius:.8rem;background:white}article[data-status=\"full\"]{opacity:.58;border-style:dashed}a:focus-visible{outline:3px solid #e46d25;outline-offset:4px}@media(max-width:700px){.workshops{grid-template-columns:1fr}}\n"}
+        ],
+        "verification": ["Hay tres columnas sobre 700 px.", "Solo Animación CSS recibe el estado visual full.", "Los enlaces tienen foco visible y en móvil hay una columna."]
+      },
+      "explanationPoints": ["El atributo mantiene separado el dato de su presentación.", "Grid pertenece al contenedor de tarjetas.", "focus-visible evita ocultar la posición del teclado."],
+      "fixedVariants": [
+        {"id": "l08-css-responsive-review-7", "reviewIntervalDay": 7, "task": "Repite la cartelera original y comprueba la misma solución con teclado y un viewport de 700 px.", "reuse": {"lessonId": "l08-css-responsive", "starterFiles": true, "solutionFiles": true}, "verification": ["Tres columnas en escritorio.", "full se deriva del atributo.", "Una columna y foco visible en móvil."]}
+      ]
+    },
+    {
+      "lessonId": "l08-dom-interaccion",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "reserved es el estado; el texto y disabled son dos representaciones de ese estado."},
+        {"level": 2, "kind": "structural", "text": "Cada handler comprueba un límite, modifica reserved y llama render."},
+        {"level": 3, "kind": "near_solution", "text": "render asigna el texto, reserved === 0 a Liberar y reserved === MAX a Reservar."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Reservas</title></head><body><main class=\"card\"><h1>Mesa de prototipado</h1><output id=\"status\" aria-live=\"polite\"></output><div><button id=\"release\">Liberar</button><button id=\"reserve\">Reservar</button></div></main><script type=\"module\" src=\"/src/main.js\"></script></body></html>\n"},
+          {"path": "src/main.js", "language": "javascript", "content": "import \"./styles.css\";\nconst MAX=5;let reserved=2;const status=document.querySelector(\"#status\");const releaseButton=document.querySelector(\"#release\");const reserveButton=document.querySelector(\"#reserve\");function render(){status.textContent=`${reserved} de ${MAX} plazas ocupadas`;releaseButton.disabled=reserved===0;reserveButton.disabled=reserved===MAX}releaseButton.addEventListener(\"click\",()=>{if(reserved>0)reserved-=1;render()});reserveButton.addEventListener(\"click\",()=>{if(reserved<MAX)reserved+=1;render()});render();\n"},
+          {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f4effb}.card{width:min(28rem,calc(100% - 2rem));margin:4rem auto;padding:1.5rem;background:white;border-radius:1rem}button{margin:1rem .5rem 0 0;padding:.7rem 1rem}button:disabled{opacity:.45}\n"}
+        ],
+        "verification": ["La carga inicial muestra 2 de 5.", "El conteo se detiene en ambos límites.", "Los botones disabled coinciden con el valor visible."]
+      },
+      "explanationPoints": ["Una fuente de estado evita divergencias entre controles y texto.", "render es idempotente para un mismo reserved.", "Las guardas protegen el estado incluso si un evento se dispara programáticamente."],
+      "fixedVariants": [
+        {"id": "l08-dom-interaccion-review-7", "reviewIntervalDay": 7, "task": "Reconstruye el control original y prueba la secuencia liberar tres veces, reservar seis veces y liberar una vez.", "reuse": {"lessonId": "l08-dom-interaccion", "starterFiles": true, "solutionFiles": true}, "verification": ["La primera secuencia termina en 0.", "La segunda termina en 5.", "La última termina en 4 con ambos límites preservados."]}
+      ]
+    },
+    {
+      "lessonId": "l08-checkpoint-lecturas",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "Todos los elementos visibles se pueden reconstruir desde readings; no guardes conteos ni marcas en otro lugar."},
+        {"level": 2, "kind": "structural", "text": "render limpia la lista, calcula completadas y crea li y button para cada lectura."},
+        {"level": 3, "kind": "near_solution", "text": "En el listener delegado usa closest, data-id y map para reemplazar la lectura coincidente."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "index.html", "language": "html", "content": "<!doctype html>\n<html lang=\"es\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Lecturas</title></head><body><main><h1>Lecturas de la semana</h1><form id=\"reading-form\"><label for=\"title\">Nueva lectura</label><input id=\"title\" autocomplete=\"off\"><button>Agregar</button></form><p id=\"summary\" aria-live=\"polite\"></p><ul id=\"reading-list\"></ul></main><script type=\"module\" src=\"/src/main.js\"></script></body></html>\n"},
+          {"path": "src/main.js", "language": "javascript", "content": "import \"./styles.css\";\nlet readings=[{id:\"r1\",title:\"HTML semántico\",done:true},{id:\"r2\",title:\"CSS adaptable\",done:false}];const form=document.querySelector(\"#reading-form\");const input=document.querySelector(\"#title\");const summary=document.querySelector(\"#summary\");const list=document.querySelector(\"#reading-list\");function render(){list.textContent=\"\";const completed=readings.filter((reading)=>reading.done).length;summary.textContent=`${completed} de ${readings.length} completadas`;for(const reading of readings){const item=document.createElement(\"li\");const button=document.createElement(\"button\");button.type=\"button\";button.dataset.id=reading.id;button.textContent=`${reading.done?\"✓\":\"○\"} ${reading.title}`;button.setAttribute(\"aria-pressed\",String(reading.done));item.append(button);list.append(item)}}form.addEventListener(\"submit\",(event)=>{event.preventDefault();const title=input.value.trim();if(!title)return;readings=[...readings,{id:crypto.randomUUID(),title,done:false}];input.value=\"\";render()});list.addEventListener(\"click\",(event)=>{const button=event.target.closest(\"button[data-id]\");if(!button)return;readings=readings.map((reading)=>reading.id===button.dataset.id?{...reading,done:!reading.done}:reading);render()});render();\n"},
+          {"path": "src/styles.css", "language": "css", "content": "*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#f3f6f2}main{width:min(38rem,calc(100% - 2rem));margin:3rem auto}form{display:flex;flex-wrap:wrap;gap:.6rem}input,button{padding:.7rem;font:inherit}ul{list-style:none;padding:0;display:grid;gap:.5rem}li button{width:100%;text-align:left}li button[aria-pressed=\"true\"]{text-decoration:line-through}\n"}
+        ],
+        "verification": ["El estado inicial es 1 de 2 completadas.", "Un alta válida agrega al final y limpia el input.", "La alternancia actualiza aria-pressed, marca y resumen sin innerHTML."]
+      },
+      "explanationPoints": ["La lista se reconstruye de forma determinista desde el array.", "La delegación permite un solo listener aunque se creen botones nuevos.", "map conserva las referencias de lecturas no modificadas."],
+      "fixedVariants": [
+        {"id": "l08-checkpoint-lecturas-review-7", "reviewIntervalDay": 7, "task": "Repite el checkpoint con los starters originales; agrega Accesibilidad, alterna esa lectura y alterna HTML semántico.", "reuse": {"lessonId": "l08-checkpoint-lecturas", "starterFiles": true, "solutionFiles": true}, "verification": ["Hay tres lecturas.", "Accesibilidad queda completada.", "El resumen final es 1 de 3 completadas."]}
+      ]
+    },
+    {
+      "lessonId": "l09-estado-local",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "App conoce el valor; RoundCounter solo presenta ese valor y comunica intenciones."},
+        {"level": 2, "kind": "structural", "text": "Entrega tres funciones distintas y usa el setter funcional para las operaciones relativas."},
+        {"level": 3, "kind": "near_solution", "text": "Incrementa current + 1, decrementa Math.max(0, current - 1) y reinicia con 0."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport RoundCounter from \"./RoundCounter.jsx\";\nexport default function App(){const[rounds,setRounds]=useState(0);return <main className=\"stack\"><h1>Práctica deliberada</h1><RoundCounter value={rounds} onIncrement={()=>setRounds((current)=>current+1)} onDecrement={()=>setRounds((current)=>Math.max(0,current-1))} onReset={()=>setRounds(0)}/></main>}\n"},
+          {"path": "src/RoundCounter.jsx", "language": "jsx", "content": "export default function RoundCounter({value,onIncrement,onDecrement,onReset}){return <section className=\"card stack\"><h2>Rondas completadas</h2><strong aria-live=\"polite\">{value}</strong><div className=\"row\"><button onClick={onDecrement} disabled={value===0}>Restar</button><button onClick={onIncrement}>Sumar</button><button className=\"secondary\" onClick={onReset}>Reiniciar</button></div></section>}\n"}
+        ],
+        "verification": ["Inicia en cero con Restar deshabilitado.", "Las operaciones relativas usan setters funcionales.", "Reiniciar restablece el estado y la interfaz." ]
+      },
+      "explanationPoints": ["El estado pertenece al ancestro que coordina las acciones.", "La forma funcional evita depender de un cierre obsoleto.", "disabled se deriva del valor y no necesita otro estado."],
+      "fixedVariants": [
+        {"id": "l09-estado-local-review-7", "reviewIntervalDay": 7, "task": "Repite el contador original; suma tres, resta cinco y reinicia después de una suma.", "reuse": {"lessonId": "l09-estado-local", "starterFiles": true, "solutionFiles": true}, "verification": ["Tras tres sumas muestra 3.", "Cinco restas terminan en 0.", "La secuencia final termina en 0."]}
+      ]
+    },
+    {
+      "lessonId": "l09-formularios-inmutables",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "El formulario posee el borrador; App posee la colección definitiva."},
+        {"level": 2, "kind": "structural", "text": "El submit recorta el texto antes de llamar onAdd y App crea un array nuevo."},
+        {"level": 3, "kind": "near_solution", "text": "Agrega con [...current, nuevaIdea] y elimina con current.filter usando id."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nimport IdeaForm from \"./IdeaForm.jsx\";import IdeaList from \"./IdeaList.jsx\";\nconst initialIdeas=[{id:\"i1\",text:\"Mapa mental\"},{id:\"i2\",text:\"Prototipo en papel\"}];\nexport default function App(){const[ideas,setIdeas]=useState(initialIdeas);function addIdea(text){setIdeas((current)=>[...current,{id:crypto.randomUUID(),text}])}function removeIdea(id){setIdeas((current)=>current.filter((idea)=>idea.id!==id))}return <main className=\"stack\"><h1>Banco de ideas</h1><IdeaForm onAdd={addIdea}/><IdeaList ideas={ideas} onRemove={removeIdea}/></main>}\n"},
+          {"path": "src/IdeaForm.jsx", "language": "jsx", "content": "import { useState } from \"react\";\nexport default function IdeaForm({onAdd}){const[text,setText]=useState(\"\");function submit(event){event.preventDefault();const clean=text.trim();if(!clean)return;onAdd(clean);setText(\"\")}return <form className=\"row\" onSubmit={submit}><label>Idea <input value={text} onChange={(event)=>setText(event.target.value)}/></label><button>Agregar</button></form>}\n"},
+          {"path": "src/IdeaList.jsx", "language": "jsx", "content": "export default function IdeaList({ideas,onRemove}){return <ul className=\"stack\">{ideas.map((idea)=><li className=\"card row\" key={idea.id}><span>{idea.text}</span><button className=\"secondary\" onClick={()=>onRemove(idea.id)}>Eliminar</button></li>)}</ul>}\n"}
+        ],
+        "verification": ["El formulario es controlado y no recarga.", "El alta conserva las ideas previas y limpia el input.", "Eliminar usa el id de la fila y no modifica las restantes." ]
+      },
+      "explanationPoints": ["Separar borrador y colección evita sincronización innecesaria.", "Los ids no dependen del texto ni de la posición.", "filter expresa una eliminación sin mutar el array anterior."],
+      "fixedVariants": [
+        {"id": "l09-formularios-inmutables-review-7", "reviewIntervalDay": 7, "task": "Repite el banco original; intenta agregar espacios, agrega Prueba rápida y elimina Mapa mental.", "reuse": {"lessonId": "l09-formularios-inmutables", "starterFiles": true, "solutionFiles": true}, "verification": ["Los espacios no crean una fila.", "Prueba rápida aparece al final.", "Quedan Prototipo en papel y Prueba rápida."]}
+      ]
+    },
+    {
+      "lessonId": "l09-estado-derivado",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "tasks y filter son fuentes; visibleTasks es una respuesta calculable y no otra fuente."},
+        {"level": 2, "kind": "structural", "text": "Filtra según pending o done y devuelve todas cuando filter es all."},
+        {"level": 3, "kind": "near_solution", "text": "Para alternar usa current.map y reemplaza la tarea coincidente con {...task, done: !task.done}."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";import FilterBar from \"./FilterBar.jsx\";import TaskList from \"./TaskList.jsx\";\nconst initialTasks=[{id:\"t1\",title:\"Leer requisitos\",done:true},{id:\"t2\",title:\"Construir interfaz\",done:false},{id:\"t3\",title:\"Probar interacciones\",done:false}];\nexport default function App(){const[tasks,setTasks]=useState(initialTasks);const[filter,setFilter]=useState(\"all\");const visibleTasks=tasks.filter((task)=>filter===\"pending\"?!task.done:filter===\"done\"?task.done:true);function toggleTask(id){setTasks((current)=>current.map((task)=>task.id===id?{...task,done:!task.done}:task))}return <main className=\"stack\"><h1>Plan de entrega</h1><FilterBar value={filter} onChange={setFilter}/><TaskList tasks={visibleTasks} onToggle={toggleTask}/></main>}\n"},
+          {"path": "src/FilterBar.jsx", "language": "jsx", "content": "const filters=[[\"all\",\"Todas\"],[\"pending\",\"Pendientes\"],[\"done\",\"Completadas\"]];export default function FilterBar({value,onChange}){return <div className=\"row\" aria-label=\"Filtrar tareas\">{filters.map(([id,label])=><button className={value===id?\"active\":\"secondary\"} key={id} onClick={()=>onChange(id)}>{label}</button>)}</div>}\n"},
+          {"path": "src/TaskList.jsx", "language": "jsx", "content": "export default function TaskList({tasks,onToggle}){return <ul className=\"stack\">{tasks.map((task)=><li className=\"card\" key={task.id}><label className=\"row\"><input type=\"checkbox\" checked={task.done} onChange={()=>onToggle(task.id)}/>{task.title}</label></li>)}</ul>}\n"}
+        ],
+        "verification": ["Cada filtro presenta el subconjunto correcto.", "No existe estado para visibleTasks.", "Alternar una tarea actualiza cualquier filtro activo." ]
+      },
+      "explanationPoints": ["Derivar durante render elimina el riesgo de estado desincronizado.", "El filtro y la colección se elevan porque ambos hijos los necesitan.", "Un checkbox controlado siempre refleja task.done."],
+      "fixedVariants": [
+        {"id": "l09-estado-derivado-review-7", "reviewIntervalDay": 7, "task": "Repite el tablero; abre Pendientes, completa Construir interfaz y revisa los tres filtros.", "reuse": {"lessonId": "l09-estado-derivado", "starterFiles": true, "solutionFiles": true}, "verification": ["Construir interfaz desaparece de Pendientes.", "Completadas muestra dos tareas.", "Todas sigue mostrando tres."]}
+      ]
+    },
+    {
+      "lessonId": "l09-checkpoint-carrito",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "cart solo necesita relacionar cada id con su cantidad; el resto se puede calcular."},
+        {"level": 2, "kind": "structural", "text": "Deriva items uniendo products con cart y usa reduce para unidades y centavos."},
+        {"level": 3, "kind": "near_solution", "text": "Al reducir copia cart, borra el id si vale uno y, en otro caso, resta uno."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";import ProductList from \"./ProductList.jsx\";import CartSummary from \"./CartSummary.jsx\";\nconst products=[{id:\"p1\",name:\"Cuaderno\",priceCents:450},{id:\"p2\",name:\"Lápiz\",priceCents:120}];\nexport default function App(){const[cart,setCart]=useState({});function addProduct(id){setCart((current)=>({...current,[id]:(current[id]??0)+1}))}function decreaseProduct(id){setCart((current)=>{const next={...current};if(next[id]<=1)delete next[id];else next[id]-=1;return next})}const items=products.filter((product)=>cart[product.id]).map((product)=>({...product,quantity:cart[product.id]}));const units=items.reduce((total,item)=>total+item.quantity,0);const totalCents=items.reduce((total,item)=>total+item.priceCents*item.quantity,0);return <main className=\"stack\"><h1>Tienda de aula</h1><ProductList products={products} onAdd={addProduct}/><CartSummary items={items} units={units} totalCents={totalCents} onDecrease={decreaseProduct}/></main>}\n"},
+          {"path": "src/ProductList.jsx", "language": "jsx", "content": "const money=(cents)=>`$${(cents/100).toFixed(2)}`;export default function ProductList({products,onAdd}){return <section className=\"grid\">{products.map((product)=><article className=\"card\" key={product.id}><h2>{product.name}</h2><p>{money(product.priceCents)}</p><button onClick={()=>onAdd(product.id)}>Agregar</button></article>)}</section>}\n"},
+          {"path": "src/CartSummary.jsx", "language": "jsx", "content": "const money=(cents)=>`$${(cents/100).toFixed(2)}`;export default function CartSummary({items,units,totalCents,onDecrease}){return <section className=\"card stack\"><h2>Carrito</h2>{items.length===0?<p>Carrito vacío</p>:items.map((item)=><div className=\"row\" key={item.id}><span>{item.name} × {item.quantity}</span><button className=\"secondary\" onClick={()=>onDecrease(item.id)}>Reducir</button></div>)}<strong aria-live=\"polite\">{units} unidades · {money(totalCents)}</strong></section>}\n"}
+        ],
+        "verification": ["Dos Cuadernos totalizan $9.00.", "Añadir Lápiz produce tres unidades y $10.20.", "Reducir hasta cero elimina la línea y mantiene totales correctos." ]
+      },
+      "explanationPoints": ["Guardar cantidades evita duplicar datos de producto.", "Los totales se recalculan siempre desde la fuente actual.", "Los centavos eliminan errores de aritmética decimal durante el cálculo."],
+      "fixedVariants": [
+        {"id": "l09-checkpoint-carrito-review-7", "reviewIntervalDay": 7, "task": "Repite el carrito; agrega Cuaderno, Lápiz, Cuaderno y reduce Cuaderno una vez.", "reuse": {"lessonId": "l09-checkpoint-carrito", "starterFiles": true, "solutionFiles": true}, "verification": ["Quedan dos unidades.", "Cada línea tiene cantidad uno.", "El total final es $5.70."]}
+      ]
+    },
+    {
+      "lessonId": "l10-efectos-navegador",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "El título y el listener son sistemas externos distintos; usa un efecto para cada responsabilidad."},
+        {"level": 2, "kind": "structural", "text": "El efecto de título depende de session; el de teclado registra una función estable una sola vez."},
+        {"level": 3, "kind": "near_solution", "text": "Guarda previousTitle y devuelve su restauración; en keydown limpia session cuando event.key sea Escape."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useEffect,useState } from \"react\";import FocusControls from \"./FocusControls.jsx\";\nexport default function App(){const[session,setSession]=useState(\"\");useEffect(()=>{const previousTitle=document.title;document.title=session?`En foco: ${session}`:\"Sesiones\";return()=>{document.title=previousTitle}},[session]);useEffect(()=>{function keydown(event){if(event.key===\"Escape\")setSession(\"\")}window.addEventListener(\"keydown\",keydown);return()=>window.removeEventListener(\"keydown\",keydown)},[]);return <main className=\"stack\"><h1>Sesiones</h1><FocusControls value={session} onChange={setSession}/><p aria-live=\"polite\">{session?`En foco: ${session}`:\"Sin sesión activa\"}</p></main>}\n"},
+          {"path": "src/FocusControls.jsx", "language": "jsx", "content": "export default function FocusControls({value,onChange}){return <div className=\"row\">{[\"React\",\"JavaScript\",\"CSS\"].map((name)=><button className={value===name?\"active\":\"secondary\"} key={name} onClick={()=>onChange(name)}>{name}</button>)}</div>}\n"}
+        ],
+        "verification": ["La selección y document.title coinciden.", "Escape limpia la selección.", "Ambos efectos devuelven sus limpiezas correspondientes." ]
+      },
+      "explanationPoints": ["Los efectos sincronizan React con recursos que React no controla.", "Separar responsabilidades produce dependencias precisas.", "Eliminar listeners evita acumulación durante montajes repetidos."],
+      "fixedVariants": [
+        {"id": "l10-efectos-navegador-review-7", "reviewIntervalDay": 7, "task": "Repite la solución; selecciona CSS, después JavaScript y finalmente pulsa Escape.", "reuse": {"lessonId": "l10-efectos-navegador", "starterFiles": true, "solutionFiles": true}, "verification": ["El título pasa por En foco: CSS.", "Después muestra En foco: JavaScript.", "Termina en Sesiones y Sin sesión activa."]}
+      ]
+    },
+    {
+      "lessonId": "l10-fetch-local",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "La solicitud comienza al montar y termina en éxito o error; desmontar es una salida distinta."},
+        {"level": 2, "kind": "structural", "text": "Crea el controlador en el efecto, pasa signal a fetch y devuelve controller.abort."},
+        {"level": 3, "kind": "near_solution", "text": "Tras validar response.ok, espera response.json y asigna status success; ignora únicamente AbortError."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useEffect,useState } from \"react\";import BookList from \"./BookList.jsx\";\nexport default function App(){const[state,setState]=useState({status:\"loading\",books:[],error:\"\"});useEffect(()=>{const controller=new AbortController();async function load(){try{const response=await fetch(\"/api/books.json\",{signal:controller.signal});if(!response.ok)throw new Error(\"No se pudo cargar el catálogo\");const books=await response.json();setState({status:\"success\",books,error:\"\"})}catch(error){if(error.name!==\"AbortError\")setState({status:\"error\",books:[],error:error.message})}}load();return()=>controller.abort()},[]);return <main className=\"stack\"><h1>Catálogo</h1>{state.status===\"loading\"&&<p>Cargando catálogo…</p>}{state.status===\"error\"&&<p className=\"error\">{state.error}</p>}{state.status===\"success\"&&<BookList books={state.books}/>}</main>}\n"},
+          {"path": "src/BookList.jsx", "language": "jsx", "content": "export default function BookList({books}){return <section className=\"grid\">{books.map((book)=><article className=\"card\" key={book.id}><h2>{book.title}</h2><span className=\"badge\">{book.available?\"Disponible\":\"Prestado\"}</span></article>)}</section>}\n"}
+        ],
+        "verification": ["La carga parte de /api/books.json.", "El resultado contiene exactamente tres tarjetas con sus estados.", "El efecto cancela la solicitud y no convierte el aborto en error." ]
+      },
+      "explanationPoints": ["El fixture conserva determinismo sin cambiar el contrato de fetch.", "response.ok debe validarse porque fetch no rechaza todos los HTTP de error.", "AbortController evita actualizar un componente cuya ejecución dejó de ser relevante."],
+      "fixedVariants": [
+        {"id": "l10-fetch-local-review-7", "reviewIntervalDay": 7, "task": "Reconstruye la carga desde el mismo fixture y revisa el resultado después de montar bajo StrictMode.", "reuse": {"lessonId": "l10-fetch-local", "starterFiles": true, "solutionFiles": true}, "verification": ["No queda un error AbortError visible.", "Aparecen tres libros una sola vez.", "Órbita roja conserva Prestado."]}
+      ]
+    },
+    {
+      "lessonId": "l10-api-dependencias",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "App decide cuándo consultar; el cliente decide cómo obtener y validar datos."},
+        {"level": 2, "kind": "structural", "text": "Reinicia loading, llama getForecast con signal y aborta en el cleanup del efecto dependiente de city."},
+        {"level": 3, "kind": "near_solution", "text": "El cliente carga todo el objeto JSON, comprueba forecasts[city] y devuelve ese registro."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useEffect,useState } from \"react\";import { getForecast } from \"./api/forecast.js\";import ForecastCard from \"./ForecastCard.jsx\";\nexport default function App(){const[city,setCity]=useState(\"Quito\");const[state,setState]=useState({status:\"loading\",data:null,error:\"\"});useEffect(()=>{const controller=new AbortController();setState({status:\"loading\",data:null,error:\"\"});getForecast(city,{signal:controller.signal}).then((data)=>setState({status:\"success\",data,error:\"\"})).catch((error)=>{if(error.name!==\"AbortError\")setState({status:\"error\",data:null,error:error.message})});return()=>controller.abort()},[city]);return <main className=\"stack\"><h1>Pronóstico</h1><label>Ciudad <select value={city} onChange={(event)=>setCity(event.target.value)}>{[\"Quito\",\"Lima\",\"Bogotá\"].map((name)=><option key={name}>{name}</option>)}</select></label>{state.status===\"loading\"&&<p>Cargando {city}…</p>}{state.status===\"error\"&&<p className=\"error\">{state.error}</p>}{state.status===\"success\"&&<ForecastCard city={city} forecast={state.data}/>}</main>}\n"},
+          {"path": "src/api/forecast.js", "language": "javascript", "content": "export async function getForecast(city,{signal}={}){const response=await fetch(\"/api/forecast.json\",{signal});if(!response.ok)throw new Error(\"No se pudo cargar el pronóstico\");const forecasts=await response.json();if(!forecasts[city])throw new Error(\"Ciudad no encontrada\");return forecasts[city]}\n"},
+          {"path": "src/ForecastCard.jsx", "language": "jsx", "content": "export default function ForecastCard({city,forecast}){return <article className=\"card\"><h2>{city}</h2><p>{forecast.temperature} °C · {forecast.condition}</p></article>}\n"}
+        ],
+        "verification": ["Quito muestra 18 °C y Lima 22 °C.", "Solo forecast.js llama fetch.", "Cada cambio de city cancela la ejecución anterior y vuelve a loading." ]
+      },
+      "explanationPoints": ["El cliente API es independiente del ciclo de vida del componente.", "La dependencia city expresa cuándo deja de ser válida una consulta.", "Cancelar evita carreras entre respuestas de ciudades distintas."],
+      "fixedVariants": [
+        {"id": "l10-api-dependencias-review-7", "reviewIntervalDay": 7, "task": "Repite el pronóstico; cambia rápidamente Quito, Lima, Bogotá y termina en Lima.", "reuse": {"lessonId": "l10-api-dependencias", "starterFiles": true, "solutionFiles": true}, "verification": ["Cada cambio muestra su loading.", "No se presenta AbortError.", "El resultado final es Lima, 22 °C, Despejado."]}
+      ]
+    },
+    {
+      "lessonId": "l10-checkpoint-biblioteca",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "La red se sincroniza con reloadKey; la búsqueda se calcula con datos que ya están en memoria."},
+        {"level": 2, "kind": "structural", "text": "Usa un efecto para fetch, filter para visibleBooks y otro efecto para document.title."},
+        {"level": 3, "kind": "near_solution", "text": "Normaliza query con trim y toLowerCase; incrementa reloadKey para repetir solo el efecto de carga."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useEffect,useState } from \"react\";import { getBooks } from \"./api/library.js\";import CatalogView from \"./CatalogView.jsx\";\nexport default function App(){const[query,setQuery]=useState(\"\");const[reloadKey,setReloadKey]=useState(0);const[state,setState]=useState({status:\"loading\",books:[],error:\"\"});useEffect(()=>{const controller=new AbortController();setState((current)=>({...current,status:\"loading\",error:\"\"}));getBooks({signal:controller.signal}).then((books)=>setState({status:\"success\",books,error:\"\"})).catch((error)=>{if(error.name!==\"AbortError\")setState({status:\"error\",books:[],error:error.message})});return()=>controller.abort()},[reloadKey]);const normalized=query.trim().toLowerCase();const visibleBooks=state.books.filter((book)=>book.title.toLowerCase().includes(normalized));useEffect(()=>{const previous=document.title;document.title=`Biblioteca (${visibleBooks.length})`;return()=>{document.title=previous}},[visibleBooks.length]);return <main className=\"stack\"><h1>Biblioteca</h1><div className=\"row\"><label>Buscar <input value={query} onChange={(event)=>setQuery(event.target.value)}/></label><button onClick={()=>setReloadKey((key)=>key+1)}>Recargar</button></div><CatalogView state={state} books={visibleBooks}/></main>}\n"},
+          {"path": "src/api/library.js", "language": "javascript", "content": "export async function getBooks({signal}={}){const response=await fetch(\"/api/library.json\",{signal});if(!response.ok)throw new Error(\"No se pudo cargar la biblioteca\");return response.json()}\n"},
+          {"path": "src/CatalogView.jsx", "language": "jsx", "content": "export default function CatalogView({state,books}){if(state.status===\"loading\")return <p>Cargando biblioteca…</p>;if(state.status===\"error\")return <p className=\"error\">{state.error}</p>;if(books.length===0)return <p>Sin resultados</p>;return <section className=\"grid\">{books.map((book)=><article className=\"card\" key={book.id}><h2>{book.title}</h2><p>{book.topic}</p></article>)}</section>}\n"}
+        ],
+        "verification": ["La carga obtiene cuatro registros y tiene cleanup.", "Buscar React deja un libro y el título Biblioteca (1).", "Recargar conserva query y repite la solicitud." ]
+      },
+      "explanationPoints": ["query no pertenece a las dependencias de red porque no cambia el recurso remoto.", "La lista visible es una proyección sin estado propio.", "reloadKey hace explícita una recarga solicitada por el usuario."],
+      "fixedVariants": [
+        {"id": "l10-checkpoint-biblioteca-review-7", "reviewIntervalDay": 7, "task": "Repite el checkpoint; busca css, recarga y después busca una cadena ausente.", "reuse": {"lessonId": "l10-checkpoint-biblioteca", "starterFiles": true, "solutionFiles": true}, "verification": ["css muestra CSS en sistemas y Biblioteca (1).", "La recarga conserva css.", "La consulta ausente muestra Sin resultados y Biblioteca (0)."]}
+      ]
+    },
+    {
+      "lessonId": "l11-reducer",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "Cada acción describe un hecho; el reducer calcula el estado siguiente sin hacer nada externo."},
+        {"level": 2, "kind": "structural", "text": "Usa switch y devuelve una copia con una sola propiedad cambiada para added y removed."},
+        {"level": 3, "kind": "near_solution", "text": "removed usa Math.max(0, state[action.id] - 1), cleared copia initialOrder y default devuelve state."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useReducer } from \"react\";import { initialOrder,orderReducer } from \"./orderReducer.js\";\nconst products=[{id:\"tea\",name:\"Té\"},{id:\"bread\",name:\"Pan\"}];export default function App(){const[order,dispatch]=useReducer(orderReducer,initialOrder);const units=Object.values(order).reduce((sum,quantity)=>sum+quantity,0);return <main className=\"stack\"><h1>Pedido</h1>{products.map((product)=><article className=\"card row\" key={product.id}><strong>{product.name}: {order[product.id]}</strong><button onClick={()=>dispatch({type:\"added\",id:product.id})}>Agregar</button><button className=\"secondary\" onClick={()=>dispatch({type:\"removed\",id:product.id})}>Quitar</button></article>)}<p aria-live=\"polite\">{units} unidades</p><button onClick={()=>dispatch({type:\"cleared\"})}>Vaciar</button></main>}\n"},
+          {"path": "src/orderReducer.js", "language": "javascript", "content": "export const initialOrder={tea:0,bread:0};export function orderReducer(state,action){switch(action.type){case \"added\":return{...state,[action.id]:state[action.id]+1};case \"removed\":return{...state,[action.id]:Math.max(0,state[action.id]-1)};case \"cleared\":return{...initialOrder};default:return state}}\n"}
+        ],
+        "verification": ["Las tres acciones producen el estado esperado.", "El reducer no muta ni causa efectos.", "Quitar en cero conserva cero y una acción desconocida conserva state." ]
+      },
+      "explanationPoints": ["Las acciones forman un vocabulario explícito de cambios.", "Un reducer puro puede probarse sin montar React.", "El total sigue siendo derivado porque no participa en las transiciones."],
+      "fixedVariants": [
+        {"id": "l11-reducer-review-7", "reviewIntervalDay": 7, "task": "Repite el pedido; agrega Té dos veces, Pan una, quita Pan dos veces y vacía.", "reuse": {"lessonId": "l11-reducer", "starterFiles": true, "solutionFiles": true}, "verification": ["Antes de vaciar hay dos unidades.", "Pan nunca baja de cero.", "Vaciar termina con ambos productos en cero."]}
+      ]
+    },
+    {
+      "lessonId": "l11-context",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "El provider reúne la fuente y las operaciones; los hermanos consumen el mismo valor."},
+        {"level": 2, "kind": "structural", "text": "Calcula pending con filter e implementa toggle mediante el setter funcional."},
+        {"level": 3, "kind": "near_solution", "text": "toggle usa map y reemplaza el objeto cuyo id coincide; entrega tasks, pending y toggle al Provider."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { TasksProvider } from \"./TasksContext.jsx\";import TaskHeader from \"./TaskHeader.jsx\";import TaskList from \"./TaskList.jsx\";export default function App(){return <TasksProvider><main className=\"stack\"><TaskHeader/><TaskList/></main></TasksProvider>}\n"},
+          {"path": "src/TasksContext.jsx", "language": "jsx", "content": "import { createContext,useState } from \"react\";export const TasksContext=createContext(null);const initialTasks=[{id:\"t1\",title:\"Preparar demo\",done:false},{id:\"t2\",title:\"Enviar notas\",done:false},{id:\"t3\",title:\"Cerrar tablero\",done:true}];export function TasksProvider({children}){const[tasks,setTasks]=useState(initialTasks);const pending=tasks.filter((task)=>!task.done).length;function toggle(id){setTasks((current)=>current.map((task)=>task.id===id?{...task,done:!task.done}:task))}return <TasksContext.Provider value={{tasks,pending,toggle}}>{children}</TasksContext.Provider>}\n"},
+          {"path": "src/TaskHeader.jsx", "language": "jsx", "content": "import { useContext } from \"react\";import { TasksContext } from \"./TasksContext.jsx\";export default function TaskHeader(){const{pending}=useContext(TasksContext);return <header><h1>Equipo</h1><p>{pending} pendientes</p></header>}\n"},
+          {"path": "src/TaskList.jsx", "language": "jsx", "content": "import { useContext } from \"react\";import { TasksContext } from \"./TasksContext.jsx\";export default function TaskList(){const{tasks,toggle}=useContext(TasksContext);return <ul className=\"stack\">{tasks.map((task)=><li className=\"card\" key={task.id}><label className=\"row\"><input type=\"checkbox\" checked={task.done} onChange={()=>toggle(task.id)}/>{task.title}</label></li>)}</ul>}\n"}
+        ],
+        "verification": ["Provider envuelve ambos consumidores.", "El encabezado inicia en dos pendientes.", "Alternar una fila actualiza lista y encabezado desde una sola fuente." ]
+      },
+      "explanationPoints": ["Context transporta un valor; no sustituye la decisión sobre dónde vive el estado.", "El conteo derivado evita una segunda fuente sincronizada.", "Los consumidores dejan de depender de la estructura intermedia de App."],
+      "fixedVariants": [
+        {"id": "l11-context-review-7", "reviewIntervalDay": 7, "task": "Repite el contexto; completa ambas pendientes y vuelve a abrir Enviar notas.", "reuse": {"lessonId": "l11-context", "starterFiles": true, "solutionFiles": true}, "verification": ["El contador llega a cero.", "Después vuelve a uno.", "Solo Enviar notas queda pendiente."]}
+      ]
+    },
+    {
+      "lessonId": "l11-hook-persistente",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "El hook debe ocultar cuándo se lee y escribe; App solo usa valor y setter."},
+        {"level": 2, "kind": "structural", "text": "Pasa una función a useState y usa try/catch alrededor de JSON.parse."},
+        {"level": 3, "kind": "near_solution", "text": "El efecto llama localStorage.setItem(key, JSON.stringify(value)) con [key, value]."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useLocalStorage } from \"./hooks/useLocalStorage.js\";export default function App(){const[name,setName]=useLocalStorage(\"profile-name\",\"\");const[compact,setCompact]=useLocalStorage(\"compact-mode\",false);return <main className={`stack ${compact?\"compact\":\"\"}`}><h1>Preferencias</h1><section className=\"card stack\"><label>Nombre <input value={name} onChange={(event)=>setName(event.target.value)}/></label><label className=\"row\"><input type=\"checkbox\" checked={compact} onChange={(event)=>setCompact(event.target.checked)}/>Modo compacto</label><p aria-live=\"polite\">Hola, {name||\"visitante\"}</p></section></main>}\n"},
+          {"path": "src/hooks/useLocalStorage.js", "language": "javascript", "content": "import { useEffect,useState } from \"react\";export function useLocalStorage(key,initialValue){const[value,setValue]=useState(()=>{const stored=localStorage.getItem(key);if(stored===null)return initialValue;try{return JSON.parse(stored)}catch{return initialValue}});useEffect(()=>{localStorage.setItem(key,JSON.stringify(value))},[key,value]);return[value,setValue]}\n"}
+        ],
+        "verification": ["Nombre y booleano se leen una sola vez al inicializar.", "Ambos valores se serializan como JSON.", "Una recarga conserva Lia y el modo compacto." ]
+      },
+      "explanationPoints": ["La inicialización perezosa evita leer almacenamiento en cada render.", "JSON preserva el tipo booleano que una cadena simple perdería.", "La misma API de useState hace al hook fácil de adoptar."],
+      "fixedVariants": [
+        {"id": "l11-hook-persistente-review-7", "reviewIntervalDay": 7, "task": "Limpia las dos claves, reconstruye el hook, guarda Lia y compacto, y recarga dos veces.", "reuse": {"lessonId": "l11-hook-persistente", "starterFiles": true, "solutionFiles": true}, "verification": ["La primera carga usa valores iniciales.", "Las dos recargas conservan Lia.", "compact-mode se recupera como booleano true."]}
+      ]
+    },
+    {
+      "lessonId": "l11-checkpoint-planificador",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "El reducer modifica tareas, el contexto las transporta y los hooks ofrecen una API segura y datos derivados."},
+        {"level": 2, "kind": "structural", "text": "Implementa primero las tres acciones, después la guarda de contexto y por último completed y pending."},
+        {"level": 3, "kind": "near_solution", "text": "completedCleared usa filter(!done); completed usa filter(done).length y pending es total menos completed."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { PlannerProvider } from \"./planner/PlannerContext.jsx\";import PlannerBoard from \"./PlannerBoard.jsx\";export default function App(){return <PlannerProvider><PlannerBoard/></PlannerProvider>}\n"},
+          {"path": "src/planner/PlannerContext.jsx", "language": "jsx", "content": "import { createContext,useContext,useReducer } from \"react\";const PlannerContext=createContext(null);const initialTasks=[{id:\"p1\",title:\"Revisar props\",done:true},{id:\"p2\",title:\"Practicar estado\",done:false}];function reducer(state,action){switch(action.type){case \"added\":return[...state,{id:action.id,title:action.title,done:false}];case \"toggled\":return state.map((task)=>task.id===action.id?{...task,done:!task.done}:task);case \"completedCleared\":return state.filter((task)=>!task.done);default:return state}}export function PlannerProvider({children}){const[tasks,dispatch]=useReducer(reducer,initialTasks);return <PlannerContext.Provider value={{tasks,dispatch}}>{children}</PlannerContext.Provider>}export function usePlanner(){const value=useContext(PlannerContext);if(value===null)throw new Error(\"usePlanner requiere PlannerProvider\");return value}\n"},
+          {"path": "src/planner/usePlannerStats.js", "language": "javascript", "content": "import { usePlanner } from \"./PlannerContext.jsx\";export function usePlannerStats(){const{tasks}=usePlanner();const completed=tasks.filter((task)=>task.done).length;return{total:tasks.length,completed,pending:tasks.length-completed}}\n"},
+          {"path": "src/PlannerBoard.jsx", "language": "jsx", "content": "import { useState } from \"react\";import { usePlanner } from \"./planner/PlannerContext.jsx\";import { usePlannerStats } from \"./planner/usePlannerStats.js\";export default function PlannerBoard(){const[title,setTitle]=useState(\"\");const{tasks,dispatch}=usePlanner();const stats=usePlannerStats();function submit(event){event.preventDefault();const clean=title.trim();if(!clean)return;dispatch({type:\"added\",id:crypto.randomUUID(),title:clean});setTitle(\"\")}return <main className=\"stack\"><h1>Planificador</h1><p>{stats.total} total · {stats.completed} completadas · {stats.pending} pendientes</p><form className=\"row\" onSubmit={submit}><input aria-label=\"Actividad\" value={title} onChange={(event)=>setTitle(event.target.value)}/><button>Agregar</button></form><ul className=\"stack\">{tasks.map((task)=><li className=\"card\" key={task.id}><label className=\"row\"><input type=\"checkbox\" checked={task.done} onChange={()=>dispatch({type:\"toggled\",id:task.id})}/>{task.title}</label></li>)}</ul><button onClick={()=>dispatch({type:\"completedCleared\"})}>Limpiar completadas</button></main>}\n"}
+        ],
+        "verification": ["El inicio muestra 2 total, 1 completada y 1 pendiente.", "Las tres acciones modifican solo el reducer.", "Los hooks validan contexto y derivan estadísticas sin estado adicional." ]
+      },
+      "explanationPoints": ["Cada capa tiene una responsabilidad comprobable.", "El hook de acceso evita errores silenciosos fuera del provider.", "El hook de estadísticas reutiliza el contexto sin almacenar resultados derivados."],
+      "fixedVariants": [
+        {"id": "l11-checkpoint-planificador-review-7", "reviewIntervalDay": 7, "task": "Repite el planificador; agrega Practicar reducer, complétala y limpia completadas.", "reuse": {"lessonId": "l11-checkpoint-planificador", "starterFiles": true, "solutionFiles": true}, "verification": ["Antes de limpiar muestra 3 total y 2 completadas.", "Después queda solo Practicar estado.", "Las estadísticas finales son 1 total, 0 completadas, 1 pendiente."]}
+      ]
+    },
+    {
+      "lessonId": "l12-arquitectura-feature",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "El modelo conoce datos y reglas; la página conoce interacción; la cuadrícula conoce presentación."},
+        {"level": 2, "kind": "structural", "text": "Normaliza la consulta en filterProducts y entrega su resultado a ProductGrid."},
+        {"level": 3, "kind": "near_solution", "text": "Compara query con la cadena formada por name y category, todo en minúsculas."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import CatalogPage from \"./features/catalog/CatalogPage.jsx\";export default function App(){return <CatalogPage/>}\n"},
+          {"path": "src/features/catalog/model.js", "language": "javascript", "content": "export const products=[{id:\"p1\",name:\"Lámpara\",category:\"hogar\"},{id:\"p2\",name:\"Cuaderno\",category:\"papelería\"},{id:\"p3\",name:\"Mochila\",category:\"viaje\"}];export function filterProducts(items,query){const normalized=query.trim().toLowerCase();return items.filter((item)=>`${item.name} ${item.category}`.toLowerCase().includes(normalized))}\n"},
+          {"path": "src/features/catalog/CatalogPage.jsx", "language": "jsx", "content": "import { useState } from \"react\";import { filterProducts,products } from \"./model.js\";import ProductGrid from \"./ProductGrid.jsx\";export default function CatalogPage(){const[query,setQuery]=useState(\"\");const visibleProducts=filterProducts(products,query);return <main className=\"stack\"><h1>Catálogo modular</h1><label>Buscar <input value={query} onChange={(event)=>setQuery(event.target.value)}/></label><ProductGrid products={visibleProducts}/></main>}\n"},
+          {"path": "src/features/catalog/ProductGrid.jsx", "language": "jsx", "content": "export default function ProductGrid({products}){if(products.length===0)return <p>Sin resultados</p>;return <section className=\"grid\">{products.map((product)=><article className=\"card\" key={product.id}><h2>{product.name}</h2><p>{product.category}</p></article>)}</section>}\n"}
+        ],
+         "verification": ["model.js no importa React y no modifica products.", "Buscar HOGAR deja Lámpara.", "ProductGrid recibe una colección y no conoce la consulta." ]
+      },
+      "explanationPoints": ["La dirección de imports evita que el dominio dependa de la interfaz.", "Un selector puro puede reutilizarse y probarse aisladamente.", "El componente presentacional se mantiene útil para cualquier colección compatible."],
+      "fixedVariants": [
+         {"id": "l12-arquitectura-feature-review-7", "reviewIntervalDay": 7, "task": "Repite la feature; prueba las consultas HOGAR, papel, viaje y una cadena ausente.", "reuse": {"lessonId": "l12-arquitectura-feature", "starterFiles": true, "solutionFiles": true}, "verification": ["Las tres primeras consultas devuelven una tarjeta distinta.", "La consulta ausente muestra Sin resultados.", "La dirección de imports permanece igual."]}
+      ]
+    },
+    {
+      "lessonId": "l12-routing-history",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "pushState cambia la URL, pero debes notificar a React; popstate solo cubre Atrás y Adelante."},
+        {"level": 2, "kind": "structural", "text": "Usa un evento propio para navigate y escucha ese evento junto con popstate en el hook."},
+        {"level": 3, "kind": "near_solution", "text": "Link evita preventDefault cuando button no es 0 o hay Ctrl, Meta, Shift o Alt."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { usePathname } from \"./routing/router.jsx\";import { HomePage,NotFoundPage,ProjectPage } from \"./pages.jsx\";export default function App(){const pathname=usePathname();if(pathname===\"/\")return <HomePage/>;if(pathname===\"/projects/aula\")return <ProjectPage/>;return <NotFoundPage pathname={pathname}/>}\n"},
+          {"path": "src/routing/router.jsx", "language": "jsx", "content": "import { useEffect,useState } from \"react\";const NAVIGATE_EVENT=\"app:navigate\";export function navigate(to){window.history.pushState({},\"\",to);window.dispatchEvent(new Event(NAVIGATE_EVENT))}export function usePathname(){const[pathname,setPathname]=useState(window.location.pathname);useEffect(()=>{const sync=()=>setPathname(window.location.pathname);window.addEventListener(\"popstate\",sync);window.addEventListener(NAVIGATE_EVENT,sync);return()=>{window.removeEventListener(\"popstate\",sync);window.removeEventListener(NAVIGATE_EVENT,sync)}},[]);return pathname}export function Link({to,children}){function click(event){if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();navigate(to)}return <a href={to} onClick={click}>{children}</a>}\n"},
+          {"path": "src/pages.jsx", "language": "jsx", "content": "import { Link } from \"./routing/router.jsx\";export function HomePage(){return <main className=\"stack\"><h1>Inicio</h1><Link to=\"/projects/aula\">Ver proyecto Aula</Link></main>}export function ProjectPage(){return <main className=\"stack\"><h1>Proyecto Aula</h1><Link to=\"/\">Volver al inicio</Link></main>}export function NotFoundPage({pathname}){return <main className=\"stack\"><h1>Página no encontrada</h1><code>{pathname}</code><Link to=\"/\">Ir al inicio</Link></main>}\n"}
+        ],
+        "verification": ["El enlace cambia pathname sin recargar.", "Atrás y Adelante actualizan la página.", "Los enlaces conservan href y una ruta desconocida muestra fallback." ]
+      },
+      "explanationPoints": ["La URL es estado externo que requiere suscripción.", "El evento propio completa el hueco que pushState no notifica.", "Conservar href mantiene navegación progresiva y acciones del navegador."],
+      "fixedVariants": [
+        {"id": "l12-routing-history-review-7", "reviewIntervalDay": 7, "task": "Repite el router; navega al proyecto, vuelve con Atrás, avanza y visita /desconocida.", "reuse": {"lessonId": "l12-routing-history", "starterFiles": true, "solutionFiles": true}, "verification": ["Atrás muestra Inicio.", "Adelante muestra Proyecto Aula.", "/desconocida muestra Página no encontrada y su pathname."]}
+      ]
+    },
+    {
+      "lessonId": "l12-tabs-compuestos",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "Root comparte el contrato controlado; Tab y Panel interpretan ese contrato sin conocer App."},
+        {"level": 2, "kind": "structural", "text": "Crea useTabs, ids desde baseId y un handler de teclado en List que localice role=tab."},
+        {"level": 3, "kind": "near_solution", "text": "El tab activo usa aria-selected true y tabIndex 0; el panel no activo usa hidden."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { useState } from \"react\";import { Tabs } from \"./ui/Tabs.jsx\";export default function App(){const[tab,setTab]=useState(\"summary\");return <main className=\"stack\"><h1>Ficha del proyecto</h1><Tabs value={tab} onValueChange={setTab}><Tabs.List aria-label=\"Secciones\"><Tabs.Tab value=\"summary\">Resumen</Tabs.Tab><Tabs.Tab value=\"details\">Detalles</Tabs.Tab></Tabs.List><Tabs.Panel value=\"summary\">Proyecto breve de aprendizaje.</Tabs.Panel><Tabs.Panel value=\"details\">Cuatro entregas y un checkpoint.</Tabs.Panel></Tabs><p>Selección: {tab}</p></main>}\n"},
+           {"path": "src/ui/Tabs.jsx", "language": "jsx", "content": "import { createContext,useContext,useId } from \"react\";const TabsContext=createContext(null);function useTabs(){const value=useContext(TabsContext);if(value===null)throw new Error(\"Los componentes Tabs requieren Tabs\");return value}function Root({value,onValueChange,children}){const baseId=useId();return <TabsContext.Provider value={{value,onValueChange,baseId}}>{children}</TabsContext.Provider>}function List({children,...props}){useTabs();function keydown(event){if(![\"ArrowRight\",\"ArrowLeft\",\"Home\",\"End\"].includes(event.key))return;const tabs=[...event.currentTarget.querySelectorAll('[role=\"tab\"]')];const current=tabs.indexOf(document.activeElement);if(current<0)return;event.preventDefault();let next=current;if(event.key===\"ArrowRight\")next=(current+1)%tabs.length;if(event.key===\"ArrowLeft\")next=(current-1+tabs.length)%tabs.length;if(event.key===\"Home\")next=0;if(event.key===\"End\")next=tabs.length-1;tabs[next].focus();tabs[next].click()}return <div role=\"tablist\" className=\"row\" {...props} onKeyDown={keydown}>{children}</div>}function Tab({value,children}){const tabs=useTabs();const selected=tabs.value===value;return <button id={`${tabs.baseId}-tab-${value}`} role=\"tab\" aria-selected={selected} aria-controls={`${tabs.baseId}-panel-${value}`} tabIndex={selected?0:-1} className={selected?\"active\":\"secondary\"} onClick={()=>tabs.onValueChange(value)}>{children}</button>}function Panel({value,children}){const tabs=useTabs();return <section id={`${tabs.baseId}-panel-${value}`} role=\"tabpanel\" aria-labelledby={`${tabs.baseId}-tab-${value}`} hidden={tabs.value!==value} className=\"card\">{children}</section>}export const Tabs=Object.assign(Root,{List,Tab,Panel});\n"}
+        ],
+        "verification": ["La selección pertenece a App y cambia por onValueChange.", "Ids y atributos ARIA conectan cada pareja.", "Clic y las cuatro teclas requeridas cambian foco, selección y panel." ]
+      },
+      "explanationPoints": ["La API compuesta agrupa componentes relacionados sin imponer su disposición exacta.", "Context es un detalle de implementación, no la fuente de selección.", "El patrón de foco itinerante deja un único tab en el orden natural de tabulación."],
+      "fixedVariants": [
+        {"id": "l12-tabs-compuestos-review-7", "reviewIntervalDay": 7, "task": "Repite las tabs; usa End, Home, Flecha derecha y Flecha izquierda sin usar el ratón.", "reuse": {"lessonId": "l12-tabs-compuestos", "starterFiles": true, "solutionFiles": true}, "verification": ["End selecciona Detalles.", "Home selecciona Resumen.", "Las flechas recorren cíclicamente ambas pestañas."]}
+      ]
+    },
+    {
+      "lessonId": "l12-checkpoint-rutas-lazy",
+      "hints": [
+        {"level": 1, "kind": "conceptual", "text": "El layout es estable; solo la página resuelta debe cambiar y suspenderse."},
+        {"level": 2, "kind": "structural", "text": "Resuelve primero /, después extrae el slug de /guides/:slug y termina en NotFoundPage."},
+        {"level": 3, "kind": "near_solution", "text": "Rodea Page con Suspense fallback role=status y agrega tres Link al nav del layout."}
+      ],
+      "solution": {
+        "files": [
+          {"path": "src/App.jsx", "language": "jsx", "content": "import { Suspense } from \"react\";import Layout from \"./Layout.jsx\";import { usePathname } from \"./routing/router.jsx\";import { resolveRoute } from \"./routes.jsx\";export default function App(){const route=resolveRoute(usePathname());const Page=route.Component;return <Layout><Suspense fallback={<p role=\"status\">Cargando página…</p>}><Page {...route.props}/></Suspense></Layout>}\n"},
+          {"path": "src/routes.jsx", "language": "jsx", "content": "import { lazy } from \"react\";const HomePage=lazy(()=>import(\"./pages/HomePage.jsx\"));const GuidePage=lazy(()=>import(\"./pages/GuidePage.jsx\"));const NotFoundPage=lazy(()=>import(\"./pages/NotFoundPage.jsx\"));const guides={state:{title:\"Estado\",summary:\"Datos que cambian durante la interacción.\"},effects:{title:\"Efectos\",summary:\"Sincronización con sistemas externos.\"}};export function resolveRoute(pathname){if(pathname===\"/\")return{Component:HomePage,props:{}};const match=/^\\/guides\\/([^/]+)$/.exec(pathname);const guide=match?guides[match[1]]:undefined;if(guide)return{Component:GuidePage,props:{guide}};return{Component:NotFoundPage,props:{pathname}}}\n"},
+          {"path": "src/Layout.jsx", "language": "jsx", "content": "import { Link } from \"./routing/router.jsx\";export default function Layout({children}){return <><header className=\"card\"><nav className=\"row\" aria-label=\"Principal\"><Link to=\"/\">Inicio</Link><Link to=\"/guides/state\">Estado</Link><Link to=\"/guides/effects\">Efectos</Link></nav></header><main>{children}</main></>}\n"}
+        ],
+        "verification": ["Las tres páginas se importan con lazy y el fallback está dentro del layout.", "Inicio y las dos guías resuelven componente y props correctos.", "Cualquier otro pathname llega completo a NotFoundPage." ]
+      },
+      "explanationPoints": ["La resolución pura concentra las reglas de routing.", "Suspense limita el estado de carga a la parte que realmente cambia.", "Los módulos de página separados crean fronteras reales para carga diferida."],
+      "fixedVariants": [
+        {"id": "l12-checkpoint-rutas-lazy-review-7", "reviewIntervalDay": 7, "task": "Repite el checkpoint; navega Inicio, Estado, Efectos, /guides/unknown y vuelve con Atrás.", "reuse": {"lessonId": "l12-checkpoint-rutas-lazy", "starterFiles": true, "solutionFiles": true}, "verification": ["Las dos guías muestran sus datos correctos.", "unknown muestra 404 con el pathname.", "Atrás restaura Efectos sin desmontar la navegación."]}
+      ]
+    }
+  ]
+}

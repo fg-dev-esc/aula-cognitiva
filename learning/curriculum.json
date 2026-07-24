@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "routeId": "js-arrays-console-v1",
-  "title": "Arrays y métodos de consulta en la consola de JavaScript",
+  "title": "JavaScript y React: de la consola al frontend",
   "language": "es",
   "runtime": {
     "language": "javascript",

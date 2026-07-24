@@ -589,6 +589,12 @@ select {
   border: 1px solid var(--color-border)
 }
 
+.msg[data-message-type="attempt"] .msg-bubble {
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
 .msg.user .msg-bubble:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
 }
@@ -1993,7 +1999,7 @@ select {
   border-left: 2px solid var(--learning-accent)
 }
 
-/* Cronologia educativa */
+/* Secciones del drawer */
 .drawer-section {
   padding: var(--space-3) 0;
   border-bottom: 1px solid var(--color-divider)
@@ -2012,77 +2018,6 @@ select {
   font-weight: 500;
   letter-spacing: .05em;
   text-transform: uppercase
-}
-
-.timeline-day+.timeline-day {
-  margin-top: var(--space-3)
-}
-
-.timeline-date {
-  margin-bottom: var(--space-1);
-  padding: 0 var(--space-1);
-  color: var(--color-text-faint);
-  font-family: var(--font-mono);
-  font-size: .7rem;
-  text-transform: capitalize
-}
-
-.lesson-run-item {
-  display: flex;
-  width: 100%;
-  align-items: flex-start;
-  gap: var(--space-2);
-  padding: var(--space-3);
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  text-align: left;
-  transition: all var(--tr)
-}
-
-.lesson-run-item:hover,
-.lesson-run-item.active {
-  border-color: var(--color-border);
-  background: var(--color-surface-offset)
-}
-
-.lesson-run-order {
-  min-width: 1.5rem;
-  color: var(--learning-accent);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs)
-}
-
-.lesson-run-content {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--space-1)
-}
-
-.lesson-run-title {
-  overflow: hidden;
-  color: var(--color-text);
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  font-weight: 500;
-  text-overflow: ellipsis;
-  white-space: nowrap
-}
-
-.lesson-run-meta {
-  overflow: hidden;
-  color: var(--color-text-faint);
-  font-family: var(--font-mono);
-  font-size: .7rem;
-  text-overflow: ellipsis;
-  white-space: nowrap
-}
-
-.drawer-section-empty {
-  padding: var(--space-3);
-  color: var(--color-text-faint);
-  font-size: var(--text-xs)
 }
 
 .drawer-empty-compact {

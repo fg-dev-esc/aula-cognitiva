@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import * as engine from '../scripts/learning-engine.mjs';
+import { mergeLearningContent } from '../scripts/learning-content.mjs';
 
 const {
   LEARNING_SCHEMA_VERSION,
@@ -19,9 +20,20 @@ const {
   validateLearningState,
 } = engine;
 
-const curriculum = JSON.parse(
-  await readFile(new URL('../learning/curriculum.json', import.meta.url), 'utf8'),
-);
+async function readJson(path) {
+  return JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
+}
+
+const [baseCurriculum, baseSupport, advancedConsole, projectCourses] = await Promise.all([
+  readJson('../learning/curriculum.json'),
+  readJson('../learning/support.json'),
+  readJson('../learning/advanced-console.json'),
+  readJson('../learning/project-courses.json'),
+]);
+const { curriculum } = mergeLearningContent(baseCurriculum, baseSupport, [
+  advancedConsole,
+  projectCourses,
+]);
 const baseTime = '2026-07-20T09:00:00.000Z';
 
 function initial(selectedLevelId = 'nivel-0') {
@@ -122,7 +134,7 @@ test('exports only the MVP API and creates a minimal valid state', () => {
 test('loads the real curriculum and advances from nivel-0 into nivel-1', () => {
   assert.equal(curriculum.schemaVersion, 1);
   assert.equal(curriculum.routeId, 'js-arrays-console-v1');
-  assert.equal(curriculum.lessons.length, 13);
+  assert.equal(curriculum.lessons.length, 53);
 
   let state = initial();
   const levelZeroIds = curriculum.levels[0].lessonIds;
@@ -173,6 +185,26 @@ test('manual level is the starting level and an active run resumes first', () =>
   ]);
   assert.equal('starterCode' in started.lessonRuns[0].lessonSnapshot, false);
   assert.equal('task' in started.lessonRuns[0].lessonSnapshot, false);
+});
+
+test('a project lesson keeps a complete multi-file submission without copying starters to state', () => {
+  const state = initial('nivel-7');
+  const selection = selectNextLesson(curriculum, state, { skipReviews: true, now: baseTime });
+  assert.equal(selection.lesson.id, 'l08-semantica-vite');
+  assert.equal(selection.lesson.modality, 'project_files');
+
+  let next = start(state, selection, 'project-run');
+  const submission = '<!doctype html>\n...\n\nimport "./styles.css";\n\nbody { margin: 0; }';
+  next = submitAttempt(next, 'project-run', submission, {
+    id: 'project-attempt',
+    messageId: 'project-message',
+    now: baseTime,
+  });
+
+  assert.equal(next.lessonRuns[0].attempts[0].submission, submission);
+  assert.equal('starterFiles' in next.lessonRuns[0].lessonSnapshot, false);
+  assert.equal('submissionFiles' in next.lessonRuns[0].lessonSnapshot, false);
+  assert.deepEqual(validateLearningState(next), { valid: true, errors: [] });
 });
 
 test('messages and submissions append immutably before evaluation', () => {
@@ -431,12 +463,12 @@ test('summary is compact and chronology is grouped without mutating state', () =
 
   const summary = getLearningSummary(curriculum, state, '2026-07-21T12:00:00.000Z');
   assert.deepEqual(summary.counts, {
-    totalLessons: 13,
+    totalLessons: 53,
     completedLessons: 2,
     masteredLessons: 2,
     supportedLessons: 0,
   });
-  assert.deepEqual(summary.progress, { completed: 2, total: 13, percent: 15 });
+  assert.deepEqual(summary.progress, { completed: 2, total: 53, percent: 4 });
   assert.deepEqual(summary.level, { selectedId: 'nivel-0', currentId: 'nivel-0' });
   assert.equal(summary.today.runsStarted, 1);
   assert.equal(summary.today.attemptsSubmitted, 1);

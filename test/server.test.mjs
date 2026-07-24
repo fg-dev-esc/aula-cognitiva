@@ -6,6 +6,7 @@ import {
   learningRecordsFromState,
   learningStateFromRecords,
   parseEvaluationResponse,
+  validateEvaluationContext,
   validateLearningPayload,
 } from '../scripts/server.mjs';
 
@@ -164,4 +165,112 @@ test('evaluation evidence is restricted to the lesson skills', () => {
   });
   assert.equal(parseEvaluationResponse(raw, 80, ['filter-simple']).score, 90);
   assert.throws(() => parseEvaluationResponse(raw, 80, ['otra-habilidad']), /no coincide/);
+});
+
+test('evaluation context supports project files and keeps console payloads compatible', () => {
+  const base = {
+    lessonId: 'lesson',
+    title: 'Lección',
+    type: 'lesson',
+    task: { instructions: ['Completa el ejercicio.'] },
+    dataset: null,
+    acceptanceCriteria: ['Cumple el resultado.'],
+    rubric: [{ id: 'resultado', points: 100 }],
+    criticalChecks: [{ id: 'completo', description: 'Está completo.' }],
+    reference: { executableCode: 'console.log(true);' },
+    submission: 'console.log(true);',
+    skills: ['codigo'],
+  };
+
+  const consoleContext = validateEvaluationContext(base);
+  assert.equal(consoleContext.modality, 'console');
+  assert.deepEqual(consoleContext.submissionFiles, []);
+
+  const projectContext = validateEvaluationContext({
+    ...base,
+    modality: 'project_files',
+    runtime: { environment: 'browser', framework: 'react' },
+    workspace: { projectId: 'vite-react', url: 'http://localhost:5173' },
+    submissionFiles: ['src/App.jsx', 'src/App.css'],
+    expectedBrowserResult: ['Muestra el resultado solicitado.'],
+    reference: {
+      files: [
+        { path: 'src/App.jsx', content: 'export default function App() {}' },
+        { path: 'src/App.css', content: 'main {}' },
+      ],
+    },
+    submission: 'export default function App() {}\n\nmain {}',
+  });
+  assert.equal(projectContext.modality, 'project_files');
+  assert.deepEqual(projectContext.submissionFiles, ['src/App.jsx', 'src/App.css']);
+
+  assert.throws(
+    () => validateEvaluationContext({ ...base, modality: 'project_files' }),
+    /requiere runtime y workspace/,
+  );
+});
+
+test('project evaluation prompt accepts ordered files without mandatory headers', async () => {
+  const originalFetch = globalThis.fetch;
+  const originalKey = process.env.GROQ_API_KEY;
+  let providerBody;
+  process.env.GROQ_API_KEY = 'test-key';
+  globalThis.fetch = async (_url, options) => {
+    providerBody = JSON.parse(options.body);
+    return new Response(JSON.stringify({
+      choices: [{
+        message: {
+          content: JSON.stringify({
+            verdict: 'passed',
+            score: 90,
+            criticalChecksPassed: true,
+            feedback: 'Los archivos cumplen la consigna.',
+            skillEvidence: [{ skillId: 'react-state', score: 90 }],
+            nextAction: 'complete',
+          }),
+        },
+        finish_reason: 'stop',
+      }],
+      usage: {},
+    }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  };
+
+  try {
+    const response = responseRecorder();
+    await handleChat({
+      method: 'POST',
+      body: {
+        provider: 'groq',
+        model: 'test-model',
+        intent: 'lesson_evaluate',
+        evaluationContext: {
+          lessonId: 'react-project',
+          title: 'Estado en React',
+          type: 'lesson',
+          modality: 'project_files',
+          skills: ['react-state'],
+          task: { instructions: ['Completa App y Counter.'] },
+          dataset: null,
+          runtime: { environment: 'browser', framework: 'react' },
+          workspace: { projectId: 'vite-react', url: 'http://localhost:5173' },
+          submissionFiles: ['src/App.jsx', 'src/Counter.jsx'],
+          expectedBrowserResult: ['El contador aumenta.'],
+          acceptanceCriteria: ['Usa estado local.'],
+          rubric: [{ id: 'resultado', points: 100 }],
+          criticalChecks: [{ id: 'estado', description: 'El estado vive en App.' }],
+          reference: { files: [{ path: 'src/App.jsx', content: 'referencia' }] },
+          submission: 'export default function App() {}\n\nexport default function Counter() {}',
+        },
+      },
+    }, response);
+
+    assert.equal(response.status, 200);
+    assert.match(providerBody.messages[0].content, /encabezados de ruta son opcionales/);
+    assert.match(providerBody.messages[0].content, /no afirmes que ejecutaste el proyecto/);
+    assert.match(providerBody.messages[1].content, /"modality":"project_files"/);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (originalKey === undefined) delete process.env.GROQ_API_KEY;
+    else process.env.GROQ_API_KEY = originalKey;
+  }
 });

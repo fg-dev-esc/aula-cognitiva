@@ -1,0 +1,3303 @@
+{
+  "schemaVersion": 1,
+  "routeId": "js-arrays-console-v1",
+  "levels": [
+    {
+      "id": "nivel-2",
+      "order": 2,
+      "title": "Transformar colecciones",
+      "description": "Cambia la forma de los datos con map y flatMap y combina transformaciones en cadenas legibles.",
+      "prerequisiteLevelIds": [
+        "nivel-1"
+      ],
+      "prerequisiteSkills": [
+        "filter",
+        "callbacks",
+        "arrays anidados"
+      ],
+      "manualStartAllowed": true,
+      "lessonIds": [
+        "l02-map-proyeccion",
+        "l02-flatmap-expansion",
+        "l02-chaining",
+        "l02-checkpoint"
+      ]
+    },
+    {
+      "id": "nivel-3",
+      "order": 3,
+      "title": "Agregar, agrupar y ordenar",
+      "description": "Resume colecciones con reduce, representa agrupaciones con Set y Map y ordena sin alterar el origen.",
+      "prerequisiteLevelIds": [
+        "nivel-2"
+      ],
+      "prerequisiteSkills": [
+        "map",
+        "flatMap",
+        "chaining"
+      ],
+      "manualStartAllowed": true,
+      "lessonIds": [
+        "l03-reduce-acumulador",
+        "l03-set-map-agrupacion",
+        "l03-sort-copia",
+        "l03-checkpoint"
+      ]
+    },
+    {
+      "id": "nivel-4",
+      "order": 4,
+      "title": "JavaScript moderno e inmutabilidad",
+      "description": "Usa destructuring, parametros por defecto, template literals, funciones flecha y spread para producir copias seguras.",
+      "prerequisiteLevelIds": [
+        "nivel-3"
+      ],
+      "prerequisiteSkills": [
+        "reduce",
+        "Set",
+        "Map",
+        "sort"
+      ],
+      "manualStartAllowed": true,
+      "lessonIds": [
+        "l04-sintaxis-moderna",
+        "l04-copia-anidada",
+        "l04-arrays-inmutables",
+        "l04-checkpoint"
+      ]
+    },
+    {
+      "id": "nivel-5",
+      "order": 5,
+      "title": "Funciones, alcance y composicion",
+      "description": "Disena funciones con contratos claros, comprende el alcance lexico, crea closures y compone transformaciones.",
+      "prerequisiteLevelIds": [
+        "nivel-4"
+      ],
+      "prerequisiteSkills": [
+        "funciones flecha",
+        "destructuring",
+        "spread",
+        "inmutabilidad"
+      ],
+      "manualStartAllowed": true,
+      "lessonIds": [
+        "l05-scope-parametros",
+        "l05-closures",
+        "l05-composicion",
+        "l05-checkpoint"
+      ]
+    },
+    {
+      "id": "nivel-6",
+      "order": 6,
+      "title": "Asincronia y concurrencia",
+      "description": "Encadena promesas, usa async/await, interpreta el orden del event loop y coordina operaciones concurrentes.",
+      "prerequisiteLevelIds": [
+        "nivel-5"
+      ],
+      "prerequisiteSkills": [
+        "funciones",
+        "closures",
+        "composicion",
+        "manejo de errores"
+      ],
+      "manualStartAllowed": true,
+      "lessonIds": [
+        "l06-promesas",
+        "l06-async-event-loop",
+        "l06-concurrencia",
+        "l06-checkpoint"
+      ]
+    }
+  ],
+  "lessons": [
+    {
+      "id": "l02-map-proyeccion",
+      "levelId": "nivel-2",
+      "order": 1,
+      "title": "Proyectar valores con map",
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Transformar cada objeto de una coleccion en un valor nuevo.",
+        "Comprobar que map conserva la cardinalidad y el orden."
+      ],
+      "primarySkills": [
+        "map-proyeccion",
+        "transformacion-uno-a-uno"
+      ],
+      "prerequisiteSkills": [
+        "filter",
+        "callbacks",
+        "arrays de objetos"
+      ],
+      "prerequisiteLessonIds": [
+        "l01-checkpoint"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda necesita fichas de texto para mostrar el inventario sin modificar sus productos.",
+        "instructions": [
+          "Crea fichas con map.",
+          "Cada ficha debe contener id, nombre y stock separados por ' | '.",
+          "Imprime el total y las fichas en el orden original."
+        ],
+        "constraints": [
+          "Usa map exactamente una vez para construir fichas.",
+          "No uses un bucle para construir el array.",
+          "No modifiques productos ni sus registros."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nconst fichas = productos.map(function (producto) {\n  // TODO: devuelve id, nombre y stock\n});\n\nconsole.log(\"TOTAL | \" + fichas.length);\nfor (const ficha of fichas) {\n  console.log(ficha);\n}",
+      "acceptanceCriteria": [
+        "fichas contiene un string por cada producto.",
+        "Cada string usa datos del registro correspondiente y el separador solicitado.",
+        "El resultado conserva cardinalidad y orden y productos permanece intacto."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-map",
+          "description": "Construye fichas mediante productos.map."
+        },
+        {
+          "id": "return-por-elemento",
+          "description": "El callback devuelve exactamente un string por producto."
+        },
+        {
+          "id": "origen-intacto",
+          "description": "No reasigna productos ni modifica sus objetos."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l02-flatmap-expansion"
+    },
+    {
+      "id": "l02-flatmap-expansion",
+      "levelId": "nivel-2",
+      "order": 2,
+      "title": "Expandir relaciones con flatMap",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Producir varias salidas por cada registro de entrada.",
+        "Distinguir el resultado anidado de map del resultado plano de flatMap."
+      ],
+      "primarySkills": [
+        "flatmap",
+        "transformacion-uno-a-muchos"
+      ],
+      "prerequisiteSkills": [
+        "map-proyeccion",
+        "arrays anidados"
+      ],
+      "prerequisiteLessonIds": [
+        "l02-map-proyeccion"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo necesita una linea independiente por cada combinacion de tarea y etiqueta.",
+        "instructions": [
+          "Usa flatMap sobre tareas.",
+          "Usa map sobre las etiquetas de cada tarea.",
+          "Produce lineas con id y etiqueta separados por ' | '."
+        ],
+        "constraints": [
+          "Usa un flatMap exterior y un map interior.",
+          "No uses flat ni codifiques etiquetas manualmente.",
+          "Conserva el orden de tareas y etiquetas."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nconst pares = tareas.flatMap(function (tarea) {\n  return tarea.etiquetas.map(function (etiqueta) {\n    // TODO\n  });\n});\n\nconsole.log(\"TOTAL | \" + pares.length);\nfor (const par of pares) {\n  console.log(par);\n}",
+      "acceptanceCriteria": [
+        "pares contiene doce strings y ningun array anidado.",
+        "Cada tarea produce una linea por cada una de sus etiquetas.",
+        "Los ids, etiquetas y su orden proceden del dataset."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-flatmap",
+          "description": "La expansion exterior se realiza con tareas.flatMap."
+        },
+        {
+          "id": "map-interior",
+          "description": "El callback exterior devuelve tarea.etiquetas.map."
+        },
+        {
+          "id": "resultado-plano",
+          "description": "El resultado final no conserva arrays anidados."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l02-chaining"
+    },
+    {
+      "id": "l02-chaining",
+      "levelId": "nivel-2",
+      "order": 3,
+      "title": "Encadenar seleccion y transformacion",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Encadenar filter y map segun la forma de cada resultado.",
+        "Leer la forma intermedia y final de una cadena."
+      ],
+      "primarySkills": [
+        "chaining",
+        "filter-map"
+      ],
+      "prerequisiteSkills": [
+        "filter",
+        "map-proyeccion"
+      ],
+      "prerequisiteLessonIds": [
+        "l02-flatmap-expansion"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "biblioteca",
+      "datasetId": "biblioteca-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La biblioteca necesita fichas de libros disponibles de hasta 250 paginas.",
+        "instructions": [
+          "Filtra libros disponibles con 250 paginas o menos.",
+          "Transforma cada coincidencia en 'id | titulo'.",
+          "Imprime el total y las fichas en orden."
+        ],
+        "constraints": [
+          "Usa una sola cadena libros.filter(...).map(...).",
+          "No crees un array intermedio ni ordenes el resultado.",
+          "No modifiques libros."
+        ]
+      },
+      "starterCode": "// libros contiene biblioteca-base-v1.\nconst fichasBreves = libros\n  .filter(function (libro) {\n    // TODO: disponible y hasta 250 paginas\n  })\n  .map(function (libro) {\n    // TODO: id y titulo\n  });\n\nconsole.log(\"TOTAL | \" + fichasBreves.length);\nfor (const ficha of fichasBreves) {\n  console.log(ficha);\n}",
+      "acceptanceCriteria": [
+        "La seleccion contiene exactamente L-201, L-203 y L-204.",
+        "El resultado final contiene strings y no objetos libro.",
+        "La cadena conserva el orden relativo del catalogo."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "orden-metodos",
+          "description": "filter se ejecuta antes de map en una sola cadena."
+        },
+        {
+          "id": "regla-completa",
+          "description": "El filtro exige disponible y paginas menor o igual que 250."
+        },
+        {
+          "id": "proyeccion-final",
+          "description": "map devuelve el string solicitado para cada coincidencia."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l02-checkpoint"
+    },
+    {
+      "id": "l02-checkpoint",
+      "levelId": "nivel-2",
+      "order": 4,
+      "title": "Checkpoint de transformaciones",
+      "estimatedMinutes": 28,
+      "objectives": [
+        "Integrar seleccion y expansion en una sola cadena.",
+        "Justificar map y flatMap por la forma de salida requerida."
+      ],
+      "primarySkills": [
+        "integracion-nivel-2",
+        "filter-flatmap-map"
+      ],
+      "prerequisiteSkills": [
+        "map",
+        "flatMap",
+        "chaining"
+      ],
+      "prerequisiteLessonIds": [
+        "l02-chaining"
+      ],
+      "lessonType": "level_checkpoint",
+      "placementEffect": "none",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-revision-3-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo necesita una linea por etiqueta de cada tarea pendiente y no bloqueada.",
+        "instructions": [
+          "Filtra tareas pendientes y no bloqueadas.",
+          "Expande las etiquetas de cada tarea seleccionada.",
+          "Produce 'id | etiqueta | Pprioridad' e imprime las lineas."
+        ],
+        "constraints": [
+          "Usa una cadena desde tareas con filter y flatMap.",
+          "Usa map para transformar las etiquetas.",
+          "No uses flat, bucles de construccion ni mutacion."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-revision-3-v1.\nconst etiquetasAtendibles = tareas\n  .filter(function (tarea) {\n    // TODO\n  })\n  .flatMap(function (tarea) {\n    // TODO\n  });\n\nconsole.log(\"TOTAL | \" + etiquetasAtendibles.length);\nfor (const linea of etiquetasAtendibles) {\n  console.log(linea);\n}",
+      "acceptanceCriteria": [
+        "Solo T-501 y T-504 intervienen en el resultado.",
+        "Se producen cuatro lineas en el orden del dataset.",
+        "Cada etiqueta y prioridad se deriva de su tarea."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "filtro-completo",
+          "description": "El predicado exige estado pendiente y ausencia de bloqueo."
+        },
+        {
+          "id": "expansion-correcta",
+          "description": "flatMap contiene un map sobre tarea.etiquetas."
+        },
+        {
+          "id": "sin-colocacion-automatica",
+          "description": "El checkpoint solo resuelve la transformacion solicitada."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l03-reduce-acumulador"
+    },
+    {
+      "id": "l03-reduce-acumulador",
+      "levelId": "nivel-3",
+      "order": 1,
+      "title": "Acumular totales con reduce",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Seguir el valor del acumulador durante reduce.",
+        "Calcular varias metricas en una sola pasada."
+      ],
+      "primarySkills": [
+        "reduce",
+        "acumulador-compuesto"
+      ],
+      "prerequisiteSkills": [
+        "callbacks",
+        "transformaciones"
+      ],
+      "prerequisiteLessonIds": [
+        "l02-checkpoint"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda necesita conocer las unidades y el valor total de sus existencias.",
+        "instructions": [
+          "Usa reduce para sumar stock en unidades.",
+          "Acumula tambien stock por precioCentavos.",
+          "Imprime ambas propiedades del resumen."
+        ],
+        "constraints": [
+          "Usa reduce exactamente una vez.",
+          "Proporciona un valor inicial con ambas propiedades en cero.",
+          "Devuelve el acumulador en cada iteracion y no modifiques productos."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nconst resumen = productos.reduce(function (acumulador, producto) {\n  // TODO\n}, {\n  unidades: 0,\n  valorCentavos: 0\n});\n\nconsole.log(\"UNIDADES | \" + resumen.unidades);\nconsole.log(\"VALOR_CENTAVOS | \" + resumen.valorCentavos);",
+      "acceptanceCriteria": [
+        "resumen.unidades es 31.",
+        "resumen.valorCentavos es 28760.",
+        "Los dos totales se calculan recorriendo todos los registros."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "usa-reduce",
+          "description": "El resumen se construye con productos.reduce."
+        },
+        {
+          "id": "valor-inicial",
+          "description": "El valor inicial contiene unidades y valorCentavos en cero."
+        },
+        {
+          "id": "formula-valor",
+          "description": "El valor suma producto.stock por producto.precioCentavos."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l03-set-map-agrupacion"
+    },
+    {
+      "id": "l03-set-map-agrupacion",
+      "levelId": "nivel-3",
+      "order": 2,
+      "title": "Representar unicidad y agrupaciones",
+      "estimatedMinutes": 24,
+      "objectives": [
+        "Elegir Set para representar valores unicos.",
+        "Usar Map para acumular una metrica por clave."
+      ],
+      "primarySkills": [
+        "set-valores-unicos",
+        "map-agrupacion"
+      ],
+      "prerequisiteSkills": [
+        "reduce",
+        "for...of"
+      ],
+      "prerequisiteLessonIds": [
+        "l03-reduce-acumulador"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo necesita los responsables unicos y los minutos asignados a cada uno.",
+        "instructions": [
+          "Registra nombres unicos en un Set.",
+          "Acumula estimacionMinutos por nombre en un Map.",
+          "Imprime nombres y acumulaciones en orden de primera aparicion."
+        ],
+        "constraints": [
+          "Usa Set.add y Map.has, Map.get y Map.set.",
+          "Recorre tareas una sola vez para construir ambas estructuras.",
+          "No sustituyas Map por un objeto."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nconst responsables = new Set();\nconst minutosPorResponsable = new Map();\n\nfor (const tarea of tareas) {\n  const nombre = tarea.responsable.nombre;\n  // TODO: registra el nombre y acumula minutos\n}\n\nconsole.log(\"RESPONSABLES | \" + Array.from(responsables).join(\",\"));\nfor (const entrada of minutosPorResponsable.entries()) {\n  console.log(entrada[0] + \" | \" + entrada[1]);\n}",
+      "acceptanceCriteria": [
+        "responsables contiene Lia, Omar y Noa una vez y en ese orden.",
+        "El Map asocia Lia con 55, Omar con 45 y Noa con 80.",
+        "Las estructuras se derivan en un unico recorrido."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "set-unicidad",
+          "description": "Cada nombre se agrega al Set durante el recorrido."
+        },
+        {
+          "id": "map-acumulacion",
+          "description": "El Map consulta el total anterior antes de guardar el nuevo."
+        },
+        {
+          "id": "una-pasada",
+          "description": "Un solo for...of construye Set y Map."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l03-sort-copia"
+    },
+    {
+      "id": "l03-sort-copia",
+      "levelId": "nivel-3",
+      "order": 3,
+      "title": "Ordenar una copia con varios criterios",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Escribir un comparador numerico con desempates.",
+        "Evitar la mutacion que sort produciria sobre el array original."
+      ],
+      "primarySkills": [
+        "sort-comparador",
+        "orden-multicriterio"
+      ],
+      "prerequisiteSkills": [
+        "map",
+        "comparaciones"
+      ],
+      "prerequisiteLessonIds": [
+        "l03-set-map-agrupacion"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo quiere priorizar el tablero sin perder su orden original.",
+        "instructions": [
+          "Copia tareas con slice antes de ordenar.",
+          "Ordena por prioridad descendente y estimacion ascendente.",
+          "Usa id ascendente como desempate final."
+        ],
+        "constraints": [
+          "No llames sort directamente sobre tareas.",
+          "El comparador debe devolver numeros y no booleanos.",
+          "No codifiques un orden de ids."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nconst ordenOriginal = tareas.map(function (tarea) {\n  return tarea.id;\n}).join(\",\");\n\nconst ordenadas = tareas.slice().sort(function (a, b) {\n  // TODO: prioridad, estimacion e id\n});\n\nconsole.log(\"ORIGINAL | \" + ordenOriginal);\nconsole.log(\"ORDENADO | \" + ordenadas.map(function (tarea) {\n  return tarea.id;\n}).join(\",\"));",
+      "acceptanceCriteria": [
+        "ordenadas contiene todos los registros una sola vez en el orden solicitado.",
+        "tareas conserva su secuencia original.",
+        "El comparador resuelve los tres criterios en orden."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "copia-antes-sort",
+          "description": "sort se llama sobre tareas.slice()."
+        },
+        {
+          "id": "criterios-ordenados",
+          "description": "Prioridad, estimacion e id se aplican en ese orden."
+        },
+        {
+          "id": "origen-intacto",
+          "description": "La linea ORIGINAL conserva el orden del fixture."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l03-checkpoint"
+    },
+    {
+      "id": "l03-checkpoint",
+      "levelId": "nivel-3",
+      "order": 4,
+      "title": "Checkpoint de agregacion y orden",
+      "estimatedMinutes": 30,
+      "objectives": [
+        "Integrar reduce, Set, Map y sort en un resumen.",
+        "Separar la coleccion original de las estructuras derivadas."
+      ],
+      "primarySkills": [
+        "integracion-nivel-3",
+        "reduce-map-set-sort"
+      ],
+      "prerequisiteSkills": [
+        "reduce",
+        "Set",
+        "Map",
+        "sort"
+      ],
+      "prerequisiteLessonIds": [
+        "l03-sort-copia"
+      ],
+      "lessonType": "level_checkpoint",
+      "placementEffect": "none",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda necesita paises proveedores unicos y un resumen de existencias por categoria.",
+        "instructions": [
+          "Obtiene un Set de paises.",
+          "Agrupa con reduce y un Map para contar productos y sumar stock.",
+          "Ordena los grupos por stock descendente y categoria ascendente."
+        ],
+        "constraints": [
+          "Usa new Set, reduce iniciado con new Map y Array.from.",
+          "Ordena solo el array generado desde el Map.",
+          "No modifiques ni ordenes productos."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nconst paises = /* TODO: Set de paises */;\n\nconst porCategoria = productos.reduce(function (mapa, producto) {\n  // TODO\n}, new Map());\n\nconst resumen = Array.from(porCategoria.values());\n// TODO: ordena resumen\n\nconsole.log(\"PAISES | \" + Array.from(paises).sort().join(\",\"));\nfor (const grupo of resumen) {\n  console.log(grupo.categoria + \" | \" + grupo.productos + \" | \" + grupo.stock);\n}",
+      "acceptanceCriteria": [
+        "Los paises unicos ordenados son AR, CL y UY.",
+        "papeleria agrupa cuatro productos y 25 unidades y accesorios dos productos y 6 unidades.",
+        "Los grupos se ordenan sin alterar productos."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "set-paises",
+          "description": "Los paises se deduplican con Set."
+        },
+        {
+          "id": "reduce-map",
+          "description": "La agrupacion usa reduce con un Map como valor inicial."
+        },
+        {
+          "id": "sort-resumen",
+          "description": "Solo se ordena el array de valores derivados del Map."
+        },
+        {
+          "id": "sin-colocacion-automatica",
+          "description": "El checkpoint se limita a producir el resumen solicitado."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l04-sintaxis-moderna"
+    },
+    {
+      "id": "l04-sintaxis-moderna",
+      "levelId": "nivel-4",
+      "order": 1,
+      "title": "Desestructurar y formatear datos",
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Extraer campos simples y anidados mediante destructuring.",
+        "Usar parametros por defecto y template literals."
+      ],
+      "primarySkills": [
+        "destructuring-parametros",
+        "template-literals"
+      ],
+      "prerequisiteSkills": [
+        "objetos anidados",
+        "funciones"
+      ],
+      "prerequisiteLessonIds": [
+        "l03-checkpoint"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda necesita un formateador breve con un prefijo configurable.",
+        "instructions": [
+          "Desestructura id, nombre, stock y proveedor.nombre en el parametro.",
+          "Usa PRODUCTO como prefijo por defecto.",
+          "Devuelve la ficha mediante un template literal."
+        ],
+        "constraints": [
+          "No accedas a producto.propiedad dentro del cuerpo.",
+          "No uses concatenacion con el operador + para construir la ficha.",
+          "La segunda llamada debe aceptar un prefijo explicito."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nfunction crearFicha(\n  /* TODO: destructuring del producto */,\n  prefijo = \"PRODUCTO\"\n) {\n  // TODO: template literal\n}\n\nconsole.log(crearFicha(productos[0]));\nconsole.log(crearFicha(productos[1], \"AGOTADO\"));",
+      "acceptanceCriteria": [
+        "La primera llamada usa PRODUCTO y la segunda AGOTADO.",
+        "El nombre del proveedor se obtiene del objeto anidado.",
+        "La funcion produce las cinco partes en el orden solicitado."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "destructuring-parametro",
+          "description": "El primer parametro desestructura los campos usados."
+        },
+        {
+          "id": "destructuring-anidado",
+          "description": "proveedor.nombre se renombra durante destructuring."
+        },
+        {
+          "id": "default-template",
+          "description": "La funcion usa el parametro por defecto y un template literal."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l04-copia-anidada"
+    },
+    {
+      "id": "l04-copia-anidada",
+      "levelId": "nivel-4",
+      "order": 2,
+      "title": "Actualizar una copia anidada",
+      "estimatedMinutes": 24,
+      "objectives": [
+        "Reconocer que el spread de objetos realiza una copia superficial.",
+        "Copiar explicitamente cada nivel que debe cambiar."
+      ],
+      "primarySkills": [
+        "spread-objetos",
+        "copia-anidada"
+      ],
+      "prerequisiteSkills": [
+        "destructuring",
+        "objetos anidados"
+      ],
+      "prerequisiteLessonIds": [
+        "l04-sintaxis-moderna"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El tablero necesita ensayar una actualizacion sin cambiar la tarea original.",
+        "instructions": [
+          "Copia T-304 con estado en_progreso y bloqueada false.",
+          "Copia responsable y agrega ' / guardia' a su nombre.",
+          "Compara valores y referencias de original y copia."
+        ],
+        "constraints": [
+          "Usa spread en la tarea y en responsable.",
+          "No asignes propiedades de original.",
+          "No recrees manualmente los campos que no cambian."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nconst original = tareas.find(({ id }) => id === \"T-304\");\n\nconst copia = {\n  // TODO\n};\n\nconsole.log(`ORIGINAL | ${original.id} | ${original.estado} | ${original.bloqueada} | ${original.responsable.nombre}`);\nconsole.log(`COPIA | ${copia.id} | ${copia.estado} | ${copia.bloqueada} | ${copia.responsable.nombre}`);\nconsole.log(\"MISMO_OBJETO | \" + (original === copia));\nconsole.log(\"MISMO_RESPONSABLE | \" + (original.responsable === copia.responsable));",
+      "acceptanceCriteria": [
+        "La tarea original conserva estado, bloqueo y responsable.",
+        "La copia contiene los tres cambios solicitados.",
+        "Las comparaciones de tarea y responsable devuelven false."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "spread-raiz",
+          "description": "La copia raiz incluye ...original."
+        },
+        {
+          "id": "spread-anidado",
+          "description": "responsable se copia con ...original.responsable."
+        },
+        {
+          "id": "referencias-distintas",
+          "description": "Original y copia no comparten las referencias modificadas."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l04-arrays-inmutables"
+    },
+    {
+      "id": "l04-arrays-inmutables",
+      "levelId": "nivel-4",
+      "order": 3,
+      "title": "Actualizar y ampliar arrays sin mutarlos",
+      "estimatedMinutes": 24,
+      "objectives": [
+        "Actualizar un elemento mediante map y spread.",
+        "Agregar un elemento creando un array nuevo."
+      ],
+      "primarySkills": [
+        "map-actualizacion-inmutable",
+        "spread-arrays"
+      ],
+      "prerequisiteSkills": [
+        "map",
+        "spread-objetos"
+      ],
+      "prerequisiteLessonIds": [
+        "l04-copia-anidada"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda simula una reposicion y un alta sin alterar el inventario cargado.",
+        "instructions": [
+          "Crea actualizados con stock 6 para P-102.",
+          "Crea P-107 a partir de P-101 con nombre Bloc y stock 3.",
+          "Crea ampliados agregando el nuevo producto con spread."
+        ],
+        "constraints": [
+          "Usa map, spread de objeto y spread de array.",
+          "No uses push, splice ni asignaciones por indice.",
+          "productos debe conservar longitud y stock originales."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nconst actualizados = productos.map((producto) => {\n  // TODO: copia P-102 con stock 6\n});\n\nconst nuevoProducto = {\n  // TODO: copia P-101 como P-107, Bloc, stock 3\n};\n\nconst ampliados = /* TODO */;\n\nconst originalAgotado = productos.find(({ id }) => id === \"P-102\");\nconst copiaRepuesta = actualizados.find(({ id }) => id === \"P-102\");\nconsole.log(\"LONGITUD_ORIGINAL | \" + productos.length);\nconsole.log(\"LONGITUD_ACTUALIZADA | \" + actualizados.length);\nconsole.log(\"LONGITUD_AMPLIADA | \" + ampliados.length);\nconsole.log(\"STOCK_ORIGINAL_P-102 | \" + originalAgotado.stock);\nconsole.log(\"STOCK_COPIA_P-102 | \" + copiaRepuesta.stock);\nconst ultimo = ampliados[ampliados.length - 1];\nconsole.log(`ULTIMO | ${ultimo.id} | ${ultimo.nombre} | ${ultimo.stock}`);",
+      "acceptanceCriteria": [
+        "Las longitudes son 6, 6 y 7.",
+        "P-102 conserva stock 0 en productos y tiene stock 6 en actualizados.",
+        "El ultimo registro de ampliados es P-107, Bloc, stock 3."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "map-actualizacion",
+          "description": "actualizados se construye con map y copia solo P-102."
+        },
+        {
+          "id": "spread-array",
+          "description": "ampliados se crea con spread sin usar push."
+        },
+        {
+          "id": "origen-intacto",
+          "description": "productos conserva seis registros y stock 0 para P-102."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l04-checkpoint"
+    },
+    {
+      "id": "l04-checkpoint",
+      "levelId": "nivel-4",
+      "order": 4,
+      "title": "Checkpoint de sintaxis moderna e inmutabilidad",
+      "estimatedMinutes": 30,
+      "objectives": [
+        "Integrar funciones flecha, destructuring y parametros por defecto.",
+        "Actualizar y consultar una coleccion sin mutarla."
+      ],
+      "primarySkills": [
+        "integracion-nivel-4",
+        "spread-inmutable"
+      ],
+      "prerequisiteSkills": [
+        "funciones flecha",
+        "destructuring",
+        "spread"
+      ],
+      "prerequisiteLessonIds": [
+        "l04-arrays-inmutables"
+      ],
+      "lessonType": "level_checkpoint",
+      "placementEffect": "none",
+      "scenarioId": "biblioteca",
+      "datasetId": "biblioteca-revision-3-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La biblioteca simula prestamos nuevos y prepara fichas del catalogo disponible.",
+        "instructions": [
+          "Implementa incrementarPrestamos con incremento por defecto 1.",
+          "Incrementa L-402 en 3 sin modificar libros.",
+          "Genera fichas de libros disponibles con id, titulo y prestamos."
+        ],
+        "constraints": [
+          "Usa una funcion flecha, map, destructuring y spread.",
+          "Usa template literals en las fichas.",
+          "No reasignes ni modifiques libros."
+        ]
+      },
+      "starterCode": "// libros contiene biblioteca-revision-3-v1.\nconst incrementarPrestamos = (coleccion, idBuscado, incremento = 1) => /* TODO */;\n\nconst actualizados = incrementarPrestamos(libros, \"L-402\", 3);\nconst original = libros.find(({ id }) => id === \"L-402\");\nconst copia = actualizados.find(({ id }) => id === \"L-402\");\n\nconst fichas = actualizados\n  .filter(({ disponible }) => /* TODO */)\n  .map(({ id, titulo, prestamos }) => /* TODO */);\n\nconsole.log(\"ORIGINAL_L-402 | \" + original.prestamos);\nconsole.log(\"COPIA_L-402 | \" + copia.prestamos);\nconsole.log(\"MISMO_ARRAY | \" + (libros === actualizados));\nconsole.log(\"TOTAL_DISPONIBLES | \" + fichas.length);\nfor (const ficha of fichas) {\n  console.log(ficha);\n}",
+      "acceptanceCriteria": [
+        "L-402 conserva 2 prestamos en libros y tiene 5 en actualizados.",
+        "actualizados es una referencia distinta de libros.",
+        "Las cuatro fichas disponibles conservan el orden del dataset."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "arrow-default",
+          "description": "incrementarPrestamos es una funcion flecha con incremento por defecto."
+        },
+        {
+          "id": "map-spread",
+          "description": "La actualizacion usa map y una copia spread del libro coincidente."
+        },
+        {
+          "id": "origen-intacto",
+          "description": "El catalogo original conserva prestamos y referencias."
+        },
+        {
+          "id": "sin-colocacion-automatica",
+          "description": "El checkpoint solo ejecuta la actualizacion y consulta solicitadas."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l05-scope-parametros"
+    },
+    {
+      "id": "l05-scope-parametros",
+      "levelId": "nivel-5",
+      "order": 1,
+      "title": "Separar parametros y alcance local",
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Mantener los calculos temporales dentro del alcance de una funcion.",
+        "Pasar dependencias como parametros en lugar de leer datos globales."
+      ],
+      "primarySkills": [
+        "scope-local",
+        "contrato-de-funcion"
+      ],
+      "prerequisiteSkills": [
+        "funciones",
+        "const"
+      ],
+      "prerequisiteLessonIds": [
+        "l04-checkpoint"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda necesita calcular subtotales sin compartir estado entre llamadas.",
+        "instructions": [
+          "Declara un subtotal local dentro de calcularSubtotal.",
+          "Multiplica precioCentavos por cantidad y devuelve el resultado.",
+          "Comprueba que el subtotal exterior conserva su valor."
+        ],
+        "constraints": [
+          "La funcion debe usar solo sus parametros.",
+          "No accedas a productos dentro de calcularSubtotal.",
+          "No reasignes el subtotal exterior."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nconst subtotal = \"FUERA\";\n\nfunction calcularSubtotal(producto, cantidad) {\n  // TODO: subtotal local\n}\n\nconsole.log(\"P-101 | \" + calcularSubtotal(productos[0], 3));\nconsole.log(\"P-103 | \" + calcularSubtotal(productos[2], 2));\nconsole.log(\"EXTERNO | \" + subtotal);",
+      "acceptanceCriteria": [
+        "Las dos llamadas devuelven 1350 y 6500.",
+        "La funcion no depende del binding productos.",
+        "La variable exterior conserva el valor FUERA."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "parametros-completos",
+          "description": "Producto y cantidad llegan como parametros."
+        },
+        {
+          "id": "const-local",
+          "description": "El subtotal calculado se declara dentro de la funcion."
+        },
+        {
+          "id": "scope-externo-intacto",
+          "description": "El subtotal exterior no se reasigna."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l05-closures"
+    },
+    {
+      "id": "l05-closures",
+      "levelId": "nivel-5",
+      "order": 2,
+      "title": "Configurar predicados con closures",
+      "estimatedMinutes": 24,
+      "objectives": [
+        "Devolver una funcion que conserva parametros de su contexto.",
+        "Crear closures independientes desde una misma fabrica."
+      ],
+      "primarySkills": [
+        "closures",
+        "function-factory"
+      ],
+      "prerequisiteSkills": [
+        "scope-local",
+        "predicados"
+      ],
+      "prerequisiteLessonIds": [
+        "l05-scope-parametros"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo necesita reutilizar selectores con reglas de prioridad y bloqueo diferentes.",
+        "instructions": [
+          "Haz que crearSelector devuelva un predicado.",
+          "Captura prioridadMinima y permitirBloqueadas.",
+          "Filtra el tablero con dos configuraciones independientes."
+        ],
+        "constraints": [
+          "No uses variables globales de configuracion.",
+          "No dupliques la logica de los predicados.",
+          "El parametro permitirBloqueadas debe tener false por defecto."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-base-v1.\nfunction crearSelector(prioridadMinima, permitirBloqueadas = false) {\n  // TODO: devuelve un predicado\n}\n\nconst prioridad3Libre = crearSelector(3);\nconst prioridad2OMas = crearSelector(2, true);\nconst libres = tareas.filter(prioridad3Libre);\nconst amplias = tareas.filter(prioridad2OMas);\n\nconsole.log(\"PRIORIDAD_3_LIBRES | \" + libres.map(({ id }) => id).join(\",\"));\nconsole.log(\"PRIORIDAD_2_MAS | \" + amplias.map(({ id }) => id).join(\",\"));",
+      "acceptanceCriteria": [
+        "El primer closure selecciona solo T-301.",
+        "El segundo selecciona T-301, T-302, T-304 y T-305.",
+        "Cada closure conserva su propia configuracion."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "devuelve-funcion",
+          "description": "crearSelector devuelve un callback que recibe tarea."
+        },
+        {
+          "id": "captura-configuracion",
+          "description": "El callback usa prioridadMinima y permitirBloqueadas del scope exterior."
+        },
+        {
+          "id": "closures-independientes",
+          "description": "Las dos configuraciones se crean mediante llamadas separadas."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l05-composicion"
+    },
+    {
+      "id": "l05-composicion",
+      "levelId": "nivel-5",
+      "order": 3,
+      "title": "Componer funciones puras",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Implementar una composicion de izquierda a derecha.",
+        "Seguir el valor producido entre funciones pequenas y puras."
+      ],
+      "primarySkills": [
+        "composicion",
+        "pipeline-funcional"
+      ],
+      "prerequisiteSkills": [
+        "reduce",
+        "funciones flecha",
+        "rest parameters"
+      ],
+      "prerequisiteLessonIds": [
+        "l05-closures"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "biblioteca",
+      "datasetId": "biblioteca-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La biblioteca quiere construir etiquetas combinando transformaciones reutilizables.",
+        "instructions": [
+          "Implementa encadenar para aplicar funciones de izquierda a derecha.",
+          "Compone extraccion de titulo, mayusculas y prefijo.",
+          "Aplica la funcion resultante a todos los libros."
+        ],
+        "constraints": [
+          "encadenar debe aceptar cualquier cantidad de funciones.",
+          "Usa reduce y no casos especiales por posicion.",
+          "Las funciones de la composicion no deben tener efectos laterales."
+        ]
+      },
+      "starterCode": "// libros contiene biblioteca-base-v1.\nconst obtenerTitulo = ({ titulo }) => titulo;\nconst aMayusculas = (texto) => texto.toUpperCase();\nconst agregarPrefijo = (texto) => `LIBRO | ${texto}`;\n\nfunction encadenar(...funciones) {\n  // TODO\n}\n\nconst crearEtiqueta = encadenar(obtenerTitulo, aMayusculas, agregarPrefijo);\nconst etiquetas = libros.map(crearEtiqueta);\nconsole.log(\"TOTAL | \" + etiquetas.length);\nfor (const etiqueta of etiquetas) {\n  console.log(etiqueta);\n}",
+      "acceptanceCriteria": [
+        "encadenar devuelve una funcion reutilizable.",
+        "Las funciones se aplican en el orden declarado.",
+        "Se producen seis etiquetas sin modificar libros."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "rest-funciones",
+          "description": "encadenar recibe las funciones mediante rest parameters."
+        },
+        {
+          "id": "reduce-pipeline",
+          "description": "La salida de cada funcion alimenta la siguiente mediante reduce."
+        },
+        {
+          "id": "sin-casos-especiales",
+          "description": "La implementacion no depende de tres funciones concretas."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l05-checkpoint"
+    },
+    {
+      "id": "l05-checkpoint",
+      "levelId": "nivel-5",
+      "order": 4,
+      "title": "Checkpoint de closures y composicion",
+      "estimatedMinutes": 30,
+      "objectives": [
+        "Integrar closures configurados y composicion de funciones.",
+        "Mantener seleccion y formato sin estado global."
+      ],
+      "primarySkills": [
+        "integracion-nivel-5",
+        "closure-composicion"
+      ],
+      "prerequisiteSkills": [
+        "scope",
+        "closures",
+        "composicion"
+      ],
+      "prerequisiteLessonIds": [
+        "l05-composicion"
+      ],
+      "lessonType": "level_checkpoint",
+      "placementEffect": "none",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-revision-3-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo necesita seleccionar y formatear tareas breves sin compartir configuracion global.",
+        "instructions": [
+          "Crea un closure para tareas no bloqueadas de hasta un limite.",
+          "Crea un closure que componga extraccion, formato y prefijo.",
+          "Usa limite 30 y prefijo BREVE."
+        ],
+        "constraints": [
+          "Las configuraciones deben quedar capturadas por closures.",
+          "encadenar debe ser generica y usar reduce.",
+          "Los callbacks no deben modificar tareas."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-revision-3-v1.\nfunction encadenar(...funciones) {\n  // TODO\n}\n\nfunction crearPredicado(limiteMinutos) {\n  // TODO\n}\n\nfunction crearFormateador(prefijo) {\n  // TODO: devuelve una composicion\n}\n\nconst esBreveLibre = crearPredicado(30);\nconst formatear = crearFormateador(\"BREVE\");\nconst salida = tareas.filter(esBreveLibre).map(formatear);\nconsole.log(\"TOTAL | \" + salida.length);\nfor (const linea of salida) {\n  console.log(linea);\n}",
+      "acceptanceCriteria": [
+        "La seleccion contiene T-503, T-504 y T-506.",
+        "Cada linea usa el prefijo BREVE y los minutos de la tarea.",
+        "Predicado y formateador conservan sus configuraciones sin globales."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "closure-limite",
+          "description": "El predicado captura limiteMinutos."
+        },
+        {
+          "id": "closure-prefijo",
+          "description": "El formateador captura prefijo."
+        },
+        {
+          "id": "pipeline-tres-etapas",
+          "description": "El formato compone extraccion, texto y prefijo."
+        },
+        {
+          "id": "sin-colocacion-automatica",
+          "description": "El checkpoint se limita a seleccionar y formatear."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l06-promesas"
+    },
+    {
+      "id": "l06-promesas",
+      "levelId": "nivel-6",
+      "order": 1,
+      "title": "Encadenar promesas y errores",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Propagar valores y errores por una cadena de promesas.",
+        "Distinguir resolucion, rechazo y manejo terminal."
+      ],
+      "primarySkills": [
+        "promise-chain",
+        "then-catch"
+      ],
+      "prerequisiteSkills": [
+        "funciones",
+        "manejo de errores"
+      ],
+      "prerequisiteLessonIds": [
+        "l05-checkpoint"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "biblioteca",
+      "datasetId": "biblioteca-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La biblioteca simula consultas asincronas sin usar red ni temporizadores.",
+        "instructions": [
+          "Haz que buscarLibroAsync devuelva una promesa.",
+          "Resuelve con un libro existente y rechaza ids ausentes mediante Error.",
+          "Consulta L-204 y despues L-999 en una cadena."
+        ],
+        "constraints": [
+          "Usa Promise.resolve y microtareas, sin timers.",
+          "Devuelve la segunda busqueda desde el primer then.",
+          "Usa un unico catch terminal."
+        ]
+      },
+      "starterCode": "// libros contiene biblioteca-base-v1.\nfunction buscarLibroAsync(idBuscado) {\n  // TODO: devuelve una Promise\n}\n\nconst ejecucion = buscarLibroAsync(\"L-204\")\n  .then(function (libro) {\n    console.log(\"OK | \" + libro.id + \" | \" + libro.titulo);\n    return buscarLibroAsync(\"L-999\");\n  })\n  .then(function (libro) {\n    console.log(\"OK | \" + libro.id + \" | \" + libro.titulo);\n  })\n  .catch(function (error) {\n    console.log(\"ERROR | \" + error.message);\n  });\n\nejecucion;",
+      "acceptanceCriteria": [
+        "L-204 resuelve y produce una linea OK.",
+        "L-999 rechaza con el mensaje solicitado.",
+        "El catch maneja el rechazo sin producir un error no controlado."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "retorna-promise",
+          "description": "buscarLibroAsync devuelve la cadena iniciada con Promise.resolve."
+        },
+        {
+          "id": "rechazo-ausente",
+          "description": "La ausencia lanza Error dentro de la cadena."
+        },
+        {
+          "id": "catch-terminal",
+          "description": "El rechazo termina en un catch que imprime error.message."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l06-async-event-loop"
+    },
+    {
+      "id": "l06-async-event-loop",
+      "levelId": "nivel-6",
+      "order": 2,
+      "title": "Observar async, await y el event loop",
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Reconocer la ejecucion sincrona anterior al primer await.",
+        "Predecir la reanudacion de una funcion async en una microtarea."
+      ],
+      "primarySkills": [
+        "async-await",
+        "orden-event-loop"
+      ],
+      "prerequisiteSkills": [
+        "promesas",
+        "funciones"
+      ],
+      "prerequisiteLessonIds": [
+        "l06-promesas"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "inventario",
+      "datasetId": "inventario-base-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La tienda observa el orden de ejecucion de una consulta asincrona determinista.",
+        "instructions": [
+          "Espera la busqueda de P-103 dentro de ejecutar.",
+          "Conserva los cuatro marcadores en su posicion.",
+          "Deja ejecucion como ultima expresion."
+        ],
+        "constraints": [
+          "Usa async y await sin temporizadores.",
+          "No muevas ni dupliques los console.log.",
+          "await debe aplicarse a buscarProductoAsync."
+        ]
+      },
+      "starterCode": "// productos contiene inventario-base-v1.\nfunction buscarProductoAsync(idBuscado) {\n  return Promise.resolve(productos.find(({ id }) => id === idBuscado));\n}\n\nasync function ejecutar() {\n  console.log(\"2 | INICIO_ASYNC\");\n  const producto = /* TODO: await P-103 */;\n  console.log(`4 | ${producto.id} | ${producto.nombre}`);\n}\n\nconsole.log(\"1 | INICIO_SYNC\");\nconst ejecucion = ejecutar();\nconsole.log(\"3 | FIN_SYNC\");\n\nejecucion;",
+      "acceptanceCriteria": [
+        "Los marcadores se imprimen en orden 1, 2, 3 y 4.",
+        "La ultima linea contiene P-103 y Mochila.",
+        "ejecutar devuelve una promesa que puede esperar el runner."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "funcion-async",
+          "description": "ejecutar se declara con async."
+        },
+        {
+          "id": "usa-await",
+          "description": "La consulta de P-103 se espera con await."
+        },
+        {
+          "id": "orden-marcadores",
+          "description": "La salida demuestra que FIN_SYNC precede a la continuacion."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l06-concurrencia"
+    },
+    {
+      "id": "l06-concurrencia",
+      "levelId": "nivel-6",
+      "order": 3,
+      "title": "Coordinar operaciones concurrentes",
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Iniciar varias promesas antes de esperar sus resultados.",
+        "Manejar exitos y fallos independientes con Promise.allSettled."
+      ],
+      "primarySkills": [
+        "inicio-concurrente",
+        "promise-allsettled"
+      ],
+      "prerequisiteSkills": [
+        "async-await",
+        "map"
+      ],
+      "prerequisiteLessonIds": [
+        "l06-async-event-loop"
+      ],
+      "lessonType": "guided_practice",
+      "scenarioId": "biblioteca",
+      "datasetId": "biblioteca-revision-3-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "La biblioteca debe consultar varios ids sin perder los exitos cuando uno no existe.",
+        "instructions": [
+          "Inicia solicitudes para L-402, L-999 y L-404 con map.",
+          "Espera todas con Promise.allSettled.",
+          "Imprime cada resultado en el orden de los ids."
+        ],
+        "constraints": [
+          "Crea todas las promesas antes del await.",
+          "No uses await dentro de un bucle.",
+          "Una ausencia no debe cancelar los otros resultados."
+        ]
+      },
+      "starterCode": "// libros contiene biblioteca-revision-3-v1.\nfunction cargarLibro(idBuscado) {\n  return Promise.resolve().then(() => {\n    const libro = libros.find(({ id }) => id === idBuscado);\n    if (libro === undefined) {\n      throw new Error(\"NO_ENCONTRADO\");\n    }\n    return libro;\n  });\n}\n\nasync function ejecutar() {\n  const ids = [\"L-402\", \"L-999\", \"L-404\"];\n  const solicitudes = /* TODO: inicia todas */;\n  const resultados = /* TODO: espera todas */;\n\n  resultados.forEach((resultado, indice) => {\n    // TODO: fulfilled o rejected\n  });\n}\n\nconst ejecucion = ejecutar();\nejecucion;",
+      "acceptanceCriteria": [
+        "Las tres solicitudes se crean antes de esperar.",
+        "La salida contiene dos exitos y un error en el orden de entrada.",
+        "El rechazo de L-999 no oculta los libros encontrados."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "map-solicitudes",
+          "description": "ids.map inicia todas las operaciones antes del await."
+        },
+        {
+          "id": "allsettled",
+          "description": "Los resultados se esperan con Promise.allSettled."
+        },
+        {
+          "id": "orden-entrada",
+          "description": "La salida relaciona cada resultado con el id de su indice."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ],
+      "nextLessonId": "l06-checkpoint"
+    },
+    {
+      "id": "l06-checkpoint",
+      "levelId": "nivel-6",
+      "order": 4,
+      "title": "Checkpoint de asincronia y concurrencia",
+      "estimatedMinutes": 30,
+      "objectives": [
+        "Integrar promesas, async/await, event loop y concurrencia.",
+        "Aislar un rechazo sin perder resultados correctos."
+      ],
+      "primarySkills": [
+        "integracion-nivel-6",
+        "async-event-loop-concurrencia"
+      ],
+      "prerequisiteSkills": [
+        "promesas",
+        "async-await",
+        "Promise.allSettled"
+      ],
+      "prerequisiteLessonIds": [
+        "l06-concurrencia"
+      ],
+      "lessonType": "level_checkpoint",
+      "placementEffect": "none",
+      "scenarioId": "tareas",
+      "datasetId": "tareas-revision-7-v1",
+      "datasetVersion": 1,
+      "task": {
+        "context": "El equipo consulta tres tareas y observa cuando se despachan y cuando llegan los resultados.",
+        "instructions": [
+          "Implementa cargarTarea para resolver o rechazar por id.",
+          "Consulta T-601, T-999 y T-603 concurrentemente.",
+          "Conserva los marcadores 1 a 4 y muestra cada resultado."
+        ],
+        "constraints": [
+          "Usa microtareas y no temporizadores.",
+          "Usa map y Promise.allSettled sin awaits secuenciales.",
+          "Deja ejecucion como ultima expresion."
+        ]
+      },
+      "starterCode": "// tareas contiene tareas-revision-7-v1.\nfunction cargarTarea(idBuscado) {\n  // TODO: Promise que resuelve o rechaza\n}\n\nasync function ejecutar(ids) {\n  console.log(\"2 | INICIO\");\n  const solicitudes = /* TODO */;\n  const resultados = /* TODO */;\n\n  console.log(\"4 | RESULTADOS\");\n  resultados.forEach((resultado, indice) => {\n    // TODO\n  });\n}\n\nconsole.log(\"1 | PREPARAR\");\nconst ejecucion = ejecutar([\"T-601\", \"T-999\", \"T-603\"]);\nconsole.log(\"3 | DESPACHADO\");\n\nejecucion;",
+      "acceptanceCriteria": [
+        "Los marcadores aparecen en orden 1, 2, 3 y 4.",
+        "Los tres resultados mantienen el orden T-601, T-999 y T-603.",
+        "El rechazo ausente queda representado sin cancelar los exitos."
+      ],
+      "requiredSubmissionSections": [
+        "CODIGO"
+      ],
+      "rubric": [
+        {
+          "id": "resultado-correccion",
+          "criterion": "El codigo produce el resultado solicitado correctamente al ejecutarse con el dataset de la leccion.",
+          "points": 60
+        },
+        {
+          "id": "requisitos-criticos",
+          "criterion": "El codigo cumple los requisitos tecnicos y todas las comprobaciones criticas de la leccion.",
+          "points": 30
+        },
+        {
+          "id": "claridad",
+          "criterion": "El codigo es claro, legible y evita complejidad innecesaria.",
+          "points": 10
+        }
+      ],
+      "criticalChecks": [
+        {
+          "id": "promise-por-id",
+          "description": "cargarTarea devuelve una promesa que resuelve o lanza Error."
+        },
+        {
+          "id": "concurrencia-allsettled",
+          "description": "Las solicitudes se inician con map y se esperan juntas."
+        },
+        {
+          "id": "event-loop-order",
+          "description": "DESPACHADO aparece antes de RESULTADOS."
+        },
+        {
+          "id": "sin-colocacion-automatica",
+          "description": "El checkpoint solo ejecuta y muestra las consultas solicitadas."
+        }
+      ],
+      "reviewIntervals": [
+        1,
+        3,
+        7
+      ]
+    }
+  ],
+  "supportLessons": [
+    {
+      "lessonId": "l02-map-proyeccion",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "map produce exactamente un valor nuevo por cada elemento del array original."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "El callback debe construir y devolver una ficha usando la variable singular producto."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Devuelve producto.id + ' | ' + producto.nombre + ' | ' + producto.stock."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "const fichas = productos.map(function (producto) {\n  return producto.id + \" | \" + producto.nombre + \" | \" + producto.stock;\n});\n\nconsole.log(\"TOTAL | \" + fichas.length);\nfor (const ficha of fichas) {\n  console.log(ficha);\n}",
+        "referenceOutput": [
+          "TOTAL | 6",
+          "P-101 | Cuaderno | 12",
+          "P-102 | Lapiz | 0",
+          "P-103 | Mochila | 4",
+          "P-104 | Regla | 8",
+          "P-105 | Botella | 2",
+          "P-106 | Agenda | 5"
+        ],
+        "referenceResults": {
+          "sourceCount": 6,
+          "mappedCount": 6,
+          "firstValue": "P-101 | Cuaderno | 12"
+        }
+      },
+      "explanationPoints": [
+        "map conserva la cantidad y el orden de los productos.",
+        "El return del callback determina el valor guardado en cada posicion de fichas."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l02-map-proyeccion-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-1-v1",
+          "bindingName": "productos",
+          "task": "Crea una ficha id, nombre y stock por cada producto del dataset de revision.",
+          "executableCode": "const fichas = productos.map(function (producto) {\n  return producto.id + \" | \" + producto.nombre + \" | \" + producto.stock;\n});\n\nconsole.log(\"TOTAL | \" + fichas.length);\nfor (const ficha of fichas) {\n  console.log(ficha);\n}",
+          "referenceOutput": [
+            "TOTAL | 5",
+            "P-201 | Marcador | 3",
+            "P-202 | Cartuchera | 0",
+            "P-203 | Calculadora | 2",
+            "P-204 | Carpeta | 9",
+            "P-205 | Termo | 1"
+          ],
+          "referenceResults": {
+            "sourceCount": 5,
+            "mappedCount": 5,
+            "firstValue": "P-201 | Marcador | 3"
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l02-flatmap-expansion",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Cada tarea produce varias lineas y flatMap elimina el nivel de array creado por cada callback."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Devuelve tarea.etiquetas.map desde el callback exterior."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "El callback interior devuelve tarea.id + ' | ' + etiqueta."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "const pares = tareas.flatMap(function (tarea) {\n  return tarea.etiquetas.map(function (etiqueta) {\n    return tarea.id + \" | \" + etiqueta;\n  });\n});\n\nconsole.log(\"TOTAL | \" + pares.length);\nfor (const par of pares) {\n  console.log(par);\n}",
+        "referenceOutput": [
+          "TOTAL | 12",
+          "T-301 | trabajo",
+          "T-301 | urgente",
+          "T-302 | trabajo",
+          "T-302 | tienda",
+          "T-303 | personal",
+          "T-303 | agenda",
+          "T-304 | trabajo",
+          "T-304 | datos",
+          "T-305 | trabajo",
+          "T-305 | comunicacion",
+          "T-306 | personal",
+          "T-306 | organizacion"
+        ],
+        "referenceResults": {
+          "taskCount": 6,
+          "pairCount": 12,
+          "nestedArraysRemaining": 0
+        }
+      },
+      "explanationPoints": [
+        "El map interior produce dos strings para cada tarea de este fixture.",
+        "flatMap concatena esos arrays manteniendo el orden de tareas y etiquetas."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l02-flatmap-expansion-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-3-v1",
+          "bindingName": "tareas",
+          "task": "Produce una linea id-etiqueta por cada etiqueta del tablero de revision.",
+          "executableCode": "const pares = tareas.flatMap(function (tarea) {\n  return tarea.etiquetas.map(function (etiqueta) {\n    return tarea.id + \" | \" + etiqueta;\n  });\n});\n\nconsole.log(\"TOTAL | \" + pares.length);\nfor (const par of pares) {\n  console.log(par);\n}",
+          "referenceOutput": [
+            "TOTAL | 12",
+            "T-501 | trabajo",
+            "T-501 | datos",
+            "T-502 | trabajo",
+            "T-502 | documentos",
+            "T-503 | trabajo",
+            "T-503 | organizacion",
+            "T-504 | trabajo",
+            "T-504 | compras",
+            "T-505 | trabajo",
+            "T-505 | seguridad",
+            "T-506 | trabajo",
+            "T-506 | comunicacion"
+          ],
+          "referenceResults": {
+            "taskCount": 6,
+            "pairCount": 12,
+            "nestedArraysRemaining": 0
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l02-chaining",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Primero selecciona objetos y despues transforma cada objeto seleccionado en un string."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "El primer callback devuelve un booleano y el segundo devuelve la ficha."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "El filtro usa libro.disponible && libro.paginas <= 250."
+        }
+      ],
+      "solution": {
+        "scenarioId": "biblioteca",
+        "datasetId": "biblioteca-base-v1",
+        "bindingName": "libros",
+        "executableCode": "const fichasBreves = libros\n  .filter(function (libro) {\n    return libro.disponible && libro.paginas <= 250;\n  })\n  .map(function (libro) {\n    return libro.id + \" | \" + libro.titulo;\n  });\n\nconsole.log(\"TOTAL | \" + fichasBreves.length);\nfor (const ficha of fichasBreves) {\n  console.log(ficha);\n}",
+        "referenceOutput": [
+          "TOTAL | 3",
+          "L-201 | El faro",
+          "L-203 | Cocina diaria",
+          "L-204 | Atlas minimo"
+        ],
+        "referenceResults": {
+          "selectedIds": [
+            "L-201",
+            "L-203",
+            "L-204"
+          ],
+          "resultType": "array<string>"
+        }
+      },
+      "explanationPoints": [
+        "filter conserva objetos que cumplen ambas reglas.",
+        "map transforma solamente esos objetos y no vuelve a evaluar la seleccion."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l02-chaining-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "biblioteca",
+          "datasetId": "biblioteca-revision-7-v1",
+          "bindingName": "libros",
+          "task": "Genera fichas para libros disponibles de hasta 250 paginas en el catalogo de revision.",
+          "executableCode": "const fichasBreves = libros\n  .filter(function (libro) {\n    return libro.disponible && libro.paginas <= 250;\n  })\n  .map(function (libro) {\n    return libro.id + \" | \" + libro.titulo;\n  });\n\nconsole.log(\"TOTAL | \" + fichasBreves.length);\nfor (const ficha of fichasBreves) {\n  console.log(ficha);\n}",
+          "referenceOutput": [
+            "TOTAL | 1",
+            "L-504 | Taller de ideas"
+          ],
+          "referenceResults": {
+            "selectedIds": [
+              "L-504"
+            ],
+            "resultType": "array<string>"
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l02-checkpoint",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "La cadena pasa de todas las tareas a algunas tareas y despues a varias lineas por tarea."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Usa filter(...).flatMap(...) y devuelve un map de etiquetas desde flatMap."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Filtra estado pendiente y !tarea.bloqueada; concatena id, etiqueta y 'P' + prioridad."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-revision-3-v1",
+        "bindingName": "tareas",
+        "executableCode": "const etiquetasAtendibles = tareas\n  .filter(function (tarea) {\n    return tarea.estado === \"pendiente\" && !tarea.bloqueada;\n  })\n  .flatMap(function (tarea) {\n    return tarea.etiquetas.map(function (etiqueta) {\n      return tarea.id + \" | \" + etiqueta + \" | P\" + tarea.prioridad;\n    });\n  });\n\nconsole.log(\"TOTAL | \" + etiquetasAtendibles.length);\nfor (const linea of etiquetasAtendibles) {\n  console.log(linea);\n}",
+        "referenceOutput": [
+          "TOTAL | 4",
+          "T-501 | trabajo | P3",
+          "T-501 | datos | P3",
+          "T-504 | trabajo | P3",
+          "T-504 | compras | P3"
+        ],
+        "referenceResults": {
+          "selectedIds": [
+            "T-501",
+            "T-504"
+          ],
+          "lineCount": 4
+        }
+      },
+      "explanationPoints": [
+        "T-505 queda fuera por estar bloqueada aunque este pendiente.",
+        "Cada una de las dos tareas seleccionadas aporta sus dos etiquetas."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l02-checkpoint-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-7-v1",
+          "bindingName": "tareas",
+          "task": "Expande las etiquetas de tareas pendientes y no bloqueadas del tablero de revision.",
+          "executableCode": "const etiquetasAtendibles = tareas\n  .filter(function (tarea) {\n    return tarea.estado === \"pendiente\" && !tarea.bloqueada;\n  })\n  .flatMap(function (tarea) {\n    return tarea.etiquetas.map(function (etiqueta) {\n      return tarea.id + \" | \" + etiqueta + \" | P\" + tarea.prioridad;\n    });\n  });\n\nconsole.log(\"TOTAL | \" + etiquetasAtendibles.length);\nfor (const linea of etiquetasAtendibles) {\n  console.log(linea);\n}",
+          "referenceOutput": [
+            "TOTAL | 2",
+            "T-604 | trabajo | P2",
+            "T-604 | comunicacion | P2"
+          ],
+          "referenceResults": {
+            "selectedIds": [
+              "T-604"
+            ],
+            "lineCount": 2
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l03-reduce-acumulador",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "El acumulador guarda los dos totales parciales entre una iteracion y la siguiente."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Suma a ambas propiedades y devuelve acumulador antes de terminar el callback."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "valorCentavos aumenta en producto.stock * producto.precioCentavos."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "const resumen = productos.reduce(function (acumulador, producto) {\n  acumulador.unidades += producto.stock;\n  acumulador.valorCentavos += producto.stock * producto.precioCentavos;\n  return acumulador;\n}, {\n  unidades: 0,\n  valorCentavos: 0\n});\n\nconsole.log(\"UNIDADES | \" + resumen.unidades);\nconsole.log(\"VALOR_CENTAVOS | \" + resumen.valorCentavos);",
+        "referenceOutput": [
+          "UNIDADES | 31",
+          "VALOR_CENTAVOS | 28760"
+        ],
+        "referenceResults": {
+          "recordCount": 6,
+          "units": 31,
+          "valueCents": 28760
+        }
+      },
+      "explanationPoints": [
+        "El valor inicial permite leer y sumar ambas propiedades desde el primer producto.",
+        "El valor monetario representa existencias, por lo que multiplica precio por stock."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l03-reduce-acumulador-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-3-v1",
+          "bindingName": "productos",
+          "task": "Calcula unidades y valor de existencias con el inventario de revision.",
+          "executableCode": "const resumen = productos.reduce(function (acumulador, producto) {\n  acumulador.unidades += producto.stock;\n  acumulador.valorCentavos += producto.stock * producto.precioCentavos;\n  return acumulador;\n}, {\n  unidades: 0,\n  valorCentavos: 0\n});\n\nconsole.log(\"UNIDADES | \" + resumen.unidades);\nconsole.log(\"VALOR_CENTAVOS | \" + resumen.valorCentavos);",
+          "referenceOutput": [
+            "UNIDADES | 16",
+            "VALOR_CENTAVOS | 9460"
+          ],
+          "referenceResults": {
+            "recordCount": 6,
+            "units": 16,
+            "valueCents": 9460
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l03-set-map-agrupacion",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Set responde que nombres existen y Map conserva un total asociado a cada nombre."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Agrega nombre al Set y consulta si el Map ya tiene esa clave."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Guarda acumulado + tarea.estimacionMinutos mediante minutosPorResponsable.set."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "const responsables = new Set();\nconst minutosPorResponsable = new Map();\n\nfor (const tarea of tareas) {\n  const nombre = tarea.responsable.nombre;\n  responsables.add(nombre);\n  const acumulado = minutosPorResponsable.has(nombre)\n    ? minutosPorResponsable.get(nombre)\n    : 0;\n  minutosPorResponsable.set(nombre, acumulado + tarea.estimacionMinutos);\n}\n\nconsole.log(\"RESPONSABLES | \" + Array.from(responsables).join(\",\"));\nfor (const entrada of minutosPorResponsable.entries()) {\n  console.log(entrada[0] + \" | \" + entrada[1]);\n}",
+        "referenceOutput": [
+          "RESPONSABLES | Lia,Omar,Noa",
+          "Lia | 55",
+          "Omar | 45",
+          "Noa | 80"
+        ],
+        "referenceResults": {
+          "uniqueNames": [
+            "Lia",
+            "Omar",
+            "Noa"
+          ],
+          "minutesByName": [
+            [
+              "Lia",
+              55
+            ],
+            [
+              "Omar",
+              45
+            ],
+            [
+              "Noa",
+              80
+            ]
+          ]
+        }
+      },
+      "explanationPoints": [
+        "Set y Map conservan el orden en que aparece por primera vez cada responsable.",
+        "Map.has distingue la primera tarea de las siguientes tareas del mismo responsable."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l03-set-map-agrupacion-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-1-v1",
+          "bindingName": "tareas",
+          "task": "Obtiene responsables unicos y minutos acumulados en el tablero de revision.",
+          "executableCode": "const responsables = new Set();\nconst minutosPorResponsable = new Map();\n\nfor (const tarea of tareas) {\n  const nombre = tarea.responsable.nombre;\n  responsables.add(nombre);\n  const acumulado = minutosPorResponsable.has(nombre)\n    ? minutosPorResponsable.get(nombre)\n    : 0;\n  minutosPorResponsable.set(nombre, acumulado + tarea.estimacionMinutos);\n}\n\nconsole.log(\"RESPONSABLES | \" + Array.from(responsables).join(\",\"));\nfor (const entrada of minutosPorResponsable.entries()) {\n  console.log(entrada[0] + \" | \" + entrada[1]);\n}",
+          "referenceOutput": [
+            "RESPONSABLES | Omar,Lia,Noa",
+            "Omar | 25",
+            "Lia | 60",
+            "Noa | 25"
+          ],
+          "referenceResults": {
+            "uniqueNames": [
+              "Omar",
+              "Lia",
+              "Noa"
+            ],
+            "minutesByName": [
+              [
+                "Omar",
+                25
+              ],
+              [
+                "Lia",
+                60
+              ],
+              [
+                "Noa",
+                25
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l03-sort-copia",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "sort modifica el array receptor; por eso debe recibir una copia creada con slice."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Resuelve cada criterio y continua al siguiente solo cuando los valores empatan."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Usa b.prioridad - a.prioridad y despues a.estimacionMinutos - b.estimacionMinutos."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "const ordenOriginal = tareas.map(function (tarea) {\n  return tarea.id;\n}).join(\",\");\n\nconst ordenadas = tareas.slice().sort(function (a, b) {\n  if (a.prioridad !== b.prioridad) {\n    return b.prioridad - a.prioridad;\n  }\n  if (a.estimacionMinutos !== b.estimacionMinutos) {\n    return a.estimacionMinutos - b.estimacionMinutos;\n  }\n  if (a.id < b.id) {\n    return -1;\n  }\n  if (a.id > b.id) {\n    return 1;\n  }\n  return 0;\n});\n\nconsole.log(\"ORIGINAL | \" + ordenOriginal);\nconsole.log(\"ORDENADO | \" + ordenadas.map(function (tarea) {\n  return tarea.id;\n}).join(\",\"));",
+        "referenceOutput": [
+          "ORIGINAL | T-301,T-302,T-303,T-304,T-305,T-306",
+          "ORDENADO | T-301,T-304,T-305,T-302,T-303,T-306"
+        ],
+        "referenceResults": {
+          "originalIds": [
+            "T-301",
+            "T-302",
+            "T-303",
+            "T-304",
+            "T-305",
+            "T-306"
+          ],
+          "sortedIds": [
+            "T-301",
+            "T-304",
+            "T-305",
+            "T-302",
+            "T-303",
+            "T-306"
+          ]
+        }
+      },
+      "explanationPoints": [
+        "slice crea un array nuevo pero conserva las referencias de registros, que no se modifican.",
+        "La resta produce el signo que sort necesita para decidir el orden."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l03-sort-copia-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-3-v1",
+          "bindingName": "tareas",
+          "task": "Ordena una copia del tablero por prioridad, estimacion e id.",
+          "executableCode": "const ordenOriginal = tareas.map(function (tarea) {\n  return tarea.id;\n}).join(\",\");\n\nconst ordenadas = tareas.slice().sort(function (a, b) {\n  if (a.prioridad !== b.prioridad) {\n    return b.prioridad - a.prioridad;\n  }\n  if (a.estimacionMinutos !== b.estimacionMinutos) {\n    return a.estimacionMinutos - b.estimacionMinutos;\n  }\n  if (a.id < b.id) {\n    return -1;\n  }\n  if (a.id > b.id) {\n    return 1;\n  }\n  return 0;\n});\n\nconsole.log(\"ORIGINAL | \" + ordenOriginal);\nconsole.log(\"ORDENADO | \" + ordenadas.map(function (tarea) {\n  return tarea.id;\n}).join(\",\"));",
+          "referenceOutput": [
+            "ORIGINAL | T-501,T-502,T-503,T-504,T-505,T-506",
+            "ORDENADO | T-504,T-501,T-505,T-506,T-502,T-503"
+          ],
+          "referenceResults": {
+            "originalIds": [
+              "T-501",
+              "T-502",
+              "T-503",
+              "T-504",
+              "T-505",
+              "T-506"
+            ],
+            "sortedIds": [
+              "T-504",
+              "T-501",
+              "T-505",
+              "T-506",
+              "T-502",
+              "T-503"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l03-checkpoint",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Set representa paises unicos y el Map representa una fila de resumen por categoria."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "En reduce lee el grupo anterior o usa un objeto con productos y stock en cero."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Convierte porCategoria.values() con Array.from y ordena por stock descendente."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "const paises = new Set(productos.map(function (producto) {\n  return producto.proveedor.pais;\n}));\n\nconst porCategoria = productos.reduce(function (mapa, producto) {\n  const anterior = mapa.has(producto.categoria)\n    ? mapa.get(producto.categoria)\n    : { categoria: producto.categoria, productos: 0, stock: 0 };\n  mapa.set(producto.categoria, {\n    categoria: producto.categoria,\n    productos: anterior.productos + 1,\n    stock: anterior.stock + producto.stock\n  });\n  return mapa;\n}, new Map());\n\nconst resumen = Array.from(porCategoria.values()).sort(function (a, b) {\n  if (a.stock !== b.stock) {\n    return b.stock - a.stock;\n  }\n  if (a.categoria < b.categoria) {\n    return -1;\n  }\n  if (a.categoria > b.categoria) {\n    return 1;\n  }\n  return 0;\n});\n\nconsole.log(\"PAISES | \" + Array.from(paises).sort().join(\",\"));\nfor (const grupo of resumen) {\n  console.log(grupo.categoria + \" | \" + grupo.productos + \" | \" + grupo.stock);\n}",
+        "referenceOutput": [
+          "PAISES | AR,CL,UY",
+          "papeleria | 4 | 25",
+          "accesorios | 2 | 6"
+        ],
+        "referenceResults": {
+          "countries": [
+            "AR",
+            "CL",
+            "UY"
+          ],
+          "groups": [
+            {
+              "category": "papeleria",
+              "productCount": 4,
+              "stock": 25
+            },
+            {
+              "category": "accesorios",
+              "productCount": 2,
+              "stock": 6
+            }
+          ]
+        }
+      },
+      "explanationPoints": [
+        "Set elimina paises repetidos antes de ordenar una copia de sus valores.",
+        "El Map permite leer y reemplazar el resumen asociado a cada categoria."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l03-checkpoint-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-7-v1",
+          "bindingName": "productos",
+          "task": "Repite el resumen de paises y categorias con el inventario de revision.",
+          "executableCode": "const paises = new Set(productos.map(function (producto) {\n  return producto.proveedor.pais;\n}));\n\nconst porCategoria = productos.reduce(function (mapa, producto) {\n  const anterior = mapa.has(producto.categoria)\n    ? mapa.get(producto.categoria)\n    : { categoria: producto.categoria, productos: 0, stock: 0 };\n  mapa.set(producto.categoria, {\n    categoria: producto.categoria,\n    productos: anterior.productos + 1,\n    stock: anterior.stock + producto.stock\n  });\n  return mapa;\n}, new Map());\n\nconst resumen = Array.from(porCategoria.values()).sort(function (a, b) {\n  if (a.stock !== b.stock) {\n    return b.stock - a.stock;\n  }\n  if (a.categoria < b.categoria) {\n    return -1;\n  }\n  if (a.categoria > b.categoria) {\n    return 1;\n  }\n  return 0;\n});\n\nconsole.log(\"PAISES | \" + Array.from(paises).sort().join(\",\"));\nfor (const grupo of resumen) {\n  console.log(grupo.categoria + \" | \" + grupo.productos + \" | \" + grupo.stock);\n}",
+          "referenceOutput": [
+            "PAISES | AR,CL,MX,UY",
+            "papeleria | 3 | 14",
+            "electronica | 1 | 6",
+            "accesorios | 1 | 3"
+          ],
+          "referenceResults": {
+            "countries": [
+              "AR",
+              "CL",
+              "MX",
+              "UY"
+            ],
+            "groups": [
+              {
+                "category": "papeleria",
+                "productCount": 3,
+                "stock": 14
+              },
+              {
+                "category": "electronica",
+                "productCount": 1,
+                "stock": 6
+              },
+              {
+                "category": "accesorios",
+                "productCount": 1,
+                "stock": 3
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l04-sintaxis-moderna",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "El parametro puede describir directamente las propiedades que la funcion necesita."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Desestructura proveedor dentro del mismo parametro y renombra su propiedad nombre."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Usa proveedor: { nombre: proveedor } y devuelve `${prefijo} | ${id} | ...`."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "function crearFicha(\n  { id, nombre, stock, proveedor: { nombre: proveedor } },\n  prefijo = \"PRODUCTO\"\n) {\n  return `${prefijo} | ${id} | ${nombre} | ${stock} | ${proveedor}`;\n}\n\nconsole.log(crearFicha(productos[0]));\nconsole.log(crearFicha(productos[1], \"AGOTADO\"));",
+        "referenceOutput": [
+          "PRODUCTO | P-101 | Cuaderno | 12 | Norte",
+          "AGOTADO | P-102 | Lapiz | 0 | Sur"
+        ],
+        "referenceResults": {
+          "defaultPrefix": "PRODUCTO",
+          "customPrefix": "AGOTADO",
+          "recordIds": [
+            "P-101",
+            "P-102"
+          ]
+        }
+      },
+      "explanationPoints": [
+        "El destructuring anidado extrae proveedor.nombre sin accesos adicionales en el cuerpo.",
+        "El valor por defecto solo se usa cuando no se proporciona el segundo argumento."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l04-sintaxis-moderna-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-3-v1",
+          "bindingName": "productos",
+          "task": "Formatea los dos primeros productos usando prefijo por defecto y AGOTADO.",
+          "executableCode": "function crearFicha(\n  { id, nombre, stock, proveedor: { nombre: proveedor } },\n  prefijo = \"PRODUCTO\"\n) {\n  return `${prefijo} | ${id} | ${nombre} | ${stock} | ${proveedor}`;\n}\n\nconsole.log(crearFicha(productos[0]));\nconsole.log(crearFicha(productos[1], \"AGOTADO\"));",
+          "referenceOutput": [
+            "PRODUCTO | P-301 | Goma | 7 | Norte",
+            "AGOTADO | P-302 | Tijera | 0 | Centro"
+          ],
+          "referenceResults": {
+            "defaultPrefix": "PRODUCTO",
+            "customPrefix": "AGOTADO",
+            "recordIds": [
+              "P-301",
+              "P-302"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l04-copia-anidada",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Copiar la tarea con spread no crea por si solo una copia del objeto responsable."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Incluye ...original y despues sobrescribe estado, bloqueada y responsable."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "responsable debe incluir ...original.responsable y un nombre nuevo."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "const original = tareas.find(({ id }) => id === \"T-304\");\n\nconst copia = {\n  ...original,\n  estado: \"en_progreso\",\n  bloqueada: false,\n  responsable: {\n    ...original.responsable,\n    nombre: `${original.responsable.nombre} / guardia`\n  }\n};\n\nconsole.log(`ORIGINAL | ${original.id} | ${original.estado} | ${original.bloqueada} | ${original.responsable.nombre}`);\nconsole.log(`COPIA | ${copia.id} | ${copia.estado} | ${copia.bloqueada} | ${copia.responsable.nombre}`);\nconsole.log(\"MISMO_OBJETO | \" + (original === copia));\nconsole.log(\"MISMO_RESPONSABLE | \" + (original.responsable === copia.responsable));",
+        "referenceOutput": [
+          "ORIGINAL | T-304 | pendiente | true | Noa",
+          "COPIA | T-304 | en_progreso | false | Noa / guardia",
+          "MISMO_OBJETO | false",
+          "MISMO_RESPONSABLE | false"
+        ],
+        "referenceResults": {
+          "recordId": "T-304",
+          "originalUnchanged": true,
+          "sameRootReference": false,
+          "sameNestedReference": false
+        }
+      },
+      "explanationPoints": [
+        "Los campos no modificados se conservan mediante ...original.",
+        "Copiar responsable evita que un cambio posterior en la copia afecte al objeto anidado original."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l04-copia-anidada-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-1-v1",
+          "bindingName": "tareas",
+          "task": "Crea una copia actualizada y una copia del responsable para T-403.",
+          "executableCode": "const original = tareas.find(({ id }) => id === \"T-403\");\n\nconst copia = {\n  ...original,\n  estado: \"en_progreso\",\n  bloqueada: false,\n  responsable: {\n    ...original.responsable,\n    nombre: `${original.responsable.nombre} / guardia`\n  }\n};\n\nconsole.log(`ORIGINAL | ${original.id} | ${original.estado} | ${original.bloqueada} | ${original.responsable.nombre}`);\nconsole.log(`COPIA | ${copia.id} | ${copia.estado} | ${copia.bloqueada} | ${copia.responsable.nombre}`);\nconsole.log(\"MISMO_OBJETO | \" + (original === copia));\nconsole.log(\"MISMO_RESPONSABLE | \" + (original.responsable === copia.responsable));",
+          "referenceOutput": [
+            "ORIGINAL | T-403 | pendiente | true | Noa",
+            "COPIA | T-403 | en_progreso | false | Noa / guardia",
+            "MISMO_OBJETO | false",
+            "MISMO_RESPONSABLE | false"
+          ],
+          "referenceResults": {
+            "recordId": "T-403",
+            "originalUnchanged": true,
+            "sameRootReference": false,
+            "sameNestedReference": false
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l04-arrays-inmutables",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "map puede reutilizar los elementos que no cambian y sustituir solo el registro objetivo."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Usa un ternario por id y crea el producto adicional con spread desde productos[0]."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "La ampliacion tiene la forma [...actualizados, nuevoProducto]."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "const actualizados = productos.map((producto) =>\n  producto.id === \"P-102\"\n    ? { ...producto, stock: 6 }\n    : producto\n);\n\nconst nuevoProducto = {\n  ...productos[0],\n  id: \"P-107\",\n  nombre: \"Bloc\",\n  stock: 3\n};\n\nconst ampliados = [...actualizados, nuevoProducto];\nconst originalAgotado = productos.find(({ id }) => id === \"P-102\");\nconst copiaRepuesta = actualizados.find(({ id }) => id === \"P-102\");\nconsole.log(\"LONGITUD_ORIGINAL | \" + productos.length);\nconsole.log(\"LONGITUD_ACTUALIZADA | \" + actualizados.length);\nconsole.log(\"LONGITUD_AMPLIADA | \" + ampliados.length);\nconsole.log(\"STOCK_ORIGINAL_P-102 | \" + originalAgotado.stock);\nconsole.log(\"STOCK_COPIA_P-102 | \" + copiaRepuesta.stock);\nconst ultimo = ampliados[ampliados.length - 1];\nconsole.log(`ULTIMO | ${ultimo.id} | ${ultimo.nombre} | ${ultimo.stock}`);",
+        "referenceOutput": [
+          "LONGITUD_ORIGINAL | 6",
+          "LONGITUD_ACTUALIZADA | 6",
+          "LONGITUD_AMPLIADA | 7",
+          "STOCK_ORIGINAL_P-102 | 0",
+          "STOCK_COPIA_P-102 | 6",
+          "ULTIMO | P-107 | Bloc | 3"
+        ],
+        "referenceResults": {
+          "sourceCount": 6,
+          "updatedCount": 6,
+          "expandedCount": 7,
+          "originalStock": 0,
+          "updatedStock": 6,
+          "appendedId": "P-107"
+        }
+      },
+      "explanationPoints": [
+        "El ternario crea una copia solo para P-102 y deja intacto el registro original.",
+        "El spread de array agrega el nuevo valor sin llamar a push."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l04-arrays-inmutables-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-3-v1",
+          "bindingName": "productos",
+          "task": "Actualiza P-302 a stock 4 y agrega P-307, Notas adhesivas, stock 5 sin mutar el inventario.",
+          "executableCode": "const actualizados = productos.map((producto) =>\n  producto.id === \"P-302\"\n    ? { ...producto, stock: 4 }\n    : producto\n);\n\nconst nuevoProducto = {\n  ...productos[0],\n  id: \"P-307\",\n  nombre: \"Notas adhesivas\",\n  stock: 5\n};\n\nconst ampliados = [...actualizados, nuevoProducto];\nconst originalAgotado = productos.find(({ id }) => id === \"P-302\");\nconst copiaRepuesta = actualizados.find(({ id }) => id === \"P-302\");\nconsole.log(\"LONGITUD_ORIGINAL | \" + productos.length);\nconsole.log(\"LONGITUD_ACTUALIZADA | \" + actualizados.length);\nconsole.log(\"LONGITUD_AMPLIADA | \" + ampliados.length);\nconsole.log(\"STOCK_ORIGINAL_P-302 | \" + originalAgotado.stock);\nconsole.log(\"STOCK_COPIA_P-302 | \" + copiaRepuesta.stock);\nconst ultimo = ampliados[ampliados.length - 1];\nconsole.log(`ULTIMO | ${ultimo.id} | ${ultimo.nombre} | ${ultimo.stock}`);",
+          "referenceOutput": [
+            "LONGITUD_ORIGINAL | 6",
+            "LONGITUD_ACTUALIZADA | 6",
+            "LONGITUD_AMPLIADA | 7",
+            "STOCK_ORIGINAL_P-302 | 0",
+            "STOCK_COPIA_P-302 | 4",
+            "ULTIMO | P-307 | Notas adhesivas | 5"
+          ],
+          "referenceResults": {
+            "sourceCount": 6,
+            "updatedCount": 6,
+            "expandedCount": 7,
+            "originalStock": 0,
+            "updatedStock": 4,
+            "appendedId": "P-307"
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l04-checkpoint",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "La funcion debe devolver un array nuevo y copiar solamente el libro cuyo id coincide."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Usa map con un ternario, despues filter por disponible y map a fichas."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "La copia cambia prestamos a libro.prestamos + incremento."
+        }
+      ],
+      "solution": {
+        "scenarioId": "biblioteca",
+        "datasetId": "biblioteca-revision-3-v1",
+        "bindingName": "libros",
+        "executableCode": "const incrementarPrestamos = (coleccion, idBuscado, incremento = 1) =>\n  coleccion.map((libro) =>\n    libro.id === idBuscado\n      ? { ...libro, prestamos: libro.prestamos + incremento }\n      : libro\n  );\n\nconst actualizados = incrementarPrestamos(libros, \"L-402\", 3);\nconst original = libros.find(({ id }) => id === \"L-402\");\nconst copia = actualizados.find(({ id }) => id === \"L-402\");\nconst fichas = actualizados\n  .filter(({ disponible }) => disponible)\n  .map(({ id, titulo, prestamos }) => `${id} | ${titulo} | ${prestamos}`);\n\nconsole.log(\"ORIGINAL_L-402 | \" + original.prestamos);\nconsole.log(\"COPIA_L-402 | \" + copia.prestamos);\nconsole.log(\"MISMO_ARRAY | \" + (libros === actualizados));\nconsole.log(\"TOTAL_DISPONIBLES | \" + fichas.length);\nfor (const ficha of fichas) {\n  console.log(ficha);\n}",
+        "referenceOutput": [
+          "ORIGINAL_L-402 | 2",
+          "COPIA_L-402 | 5",
+          "MISMO_ARRAY | false",
+          "TOTAL_DISPONIBLES | 4",
+          "L-401 | Camino norte | 4",
+          "L-402 | Laboratorio cero | 5",
+          "L-404 | Planeta seco | 5",
+          "L-405 | Redes humanas | 7"
+        ],
+        "referenceResults": {
+          "recordId": "L-402",
+          "originalLoans": 2,
+          "updatedLoans": 5,
+          "sameArrayReference": false,
+          "availableCount": 4
+        }
+      },
+      "explanationPoints": [
+        "El parametro por defecto hace que la funcion tambien sea util cuando no se indica incremento.",
+        "Las fichas se calculan desde actualizados, por lo que reflejan el nuevo valor sin tocar libros."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l04-checkpoint-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "biblioteca",
+          "datasetId": "biblioteca-revision-7-v1",
+          "bindingName": "libros",
+          "task": "Incrementa L-503 en 2 y genera fichas de libros disponibles sin mutar el catalogo.",
+          "executableCode": "const incrementarPrestamos = (coleccion, idBuscado, incremento = 1) =>\n  coleccion.map((libro) =>\n    libro.id === idBuscado\n      ? { ...libro, prestamos: libro.prestamos + incremento }\n      : libro\n  );\n\nconst actualizados = incrementarPrestamos(libros, \"L-503\", 2);\nconst original = libros.find(({ id }) => id === \"L-503\");\nconst copia = actualizados.find(({ id }) => id === \"L-503\");\nconst fichas = actualizados\n  .filter(({ disponible }) => disponible)\n  .map(({ id, titulo, prestamos }) => `${id} | ${titulo} | ${prestamos}`);\n\nconsole.log(\"ORIGINAL_L-503 | \" + original.prestamos);\nconsole.log(\"COPIA_L-503 | \" + copia.prestamos);\nconsole.log(\"MISMO_ARRAY | \" + (libros === actualizados));\nconsole.log(\"TOTAL_DISPONIBLES | \" + fichas.length);\nfor (const ficha of fichas) {\n  console.log(ficha);\n}",
+          "referenceOutput": [
+            "ORIGINAL_L-503 | 3",
+            "COPIA_L-503 | 5",
+            "MISMO_ARRAY | false",
+            "TOTAL_DISPONIBLES | 3",
+            "L-501 | Rio adentro | 6",
+            "L-503 | Mapas del tiempo | 5",
+            "L-504 | Taller de ideas | 1"
+          ],
+          "referenceResults": {
+            "recordId": "L-503",
+            "originalLoans": 3,
+            "updatedLoans": 5,
+            "sameArrayReference": false,
+            "availableCount": 3
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l05-scope-parametros",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Una variable declarada dentro de la funcion pertenece a un alcance distinto de la variable exterior."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Declara subtotal con const dentro de calcularSubtotal y devuelve esa variable."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "El calculo local es producto.precioCentavos * cantidad."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "const subtotal = \"FUERA\";\n\nfunction calcularSubtotal(producto, cantidad) {\n  const subtotal = producto.precioCentavos * cantidad;\n  return subtotal;\n}\n\nconsole.log(\"P-101 | \" + calcularSubtotal(productos[0], 3));\nconsole.log(\"P-103 | \" + calcularSubtotal(productos[2], 2));\nconsole.log(\"EXTERNO | \" + subtotal);",
+        "referenceOutput": [
+          "P-101 | 1350",
+          "P-103 | 6500",
+          "EXTERNO | FUERA"
+        ],
+        "referenceResults": {
+          "firstSubtotal": 1350,
+          "secondSubtotal": 6500,
+          "outerValue": "FUERA"
+        }
+      },
+      "explanationPoints": [
+        "La variable local oculta temporalmente el nombre exterior solo dentro de la funcion.",
+        "Recibir producto y cantidad hace que la funcion no dependa del array global."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l05-scope-parametros-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-1-v1",
+          "bindingName": "productos",
+          "task": "Calcula P-201 por cuatro unidades y P-203 por una unidad preservando el scope exterior.",
+          "executableCode": "const subtotal = \"FUERA\";\n\nfunction calcularSubtotal(producto, cantidad) {\n  const subtotal = producto.precioCentavos * cantidad;\n  return subtotal;\n}\n\nconsole.log(\"P-201 | \" + calcularSubtotal(productos[0], 4));\nconsole.log(\"P-203 | \" + calcularSubtotal(productos[2], 1));\nconsole.log(\"EXTERNO | \" + subtotal);",
+          "referenceOutput": [
+            "P-201 | 1000",
+            "P-203 | 4990",
+            "EXTERNO | FUERA"
+          ],
+          "referenceResults": {
+            "firstSubtotal": 1000,
+            "secondSubtotal": 4990,
+            "outerValue": "FUERA"
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l05-closures",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "La funcion interior conserva prioridadMinima y permitirBloqueadas despues de finalizar crearSelector."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Devuelve una funcion que recibe tarea y produce un booleano."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Combina prioridad suficiente con (permitirBloqueadas || !tarea.bloqueada)."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-base-v1",
+        "bindingName": "tareas",
+        "executableCode": "function crearSelector(prioridadMinima, permitirBloqueadas = false) {\n  return function (tarea) {\n    return tarea.prioridad >= prioridadMinima &&\n      (permitirBloqueadas || !tarea.bloqueada);\n  };\n}\n\nconst prioridad3Libre = crearSelector(3);\nconst prioridad2OMas = crearSelector(2, true);\nconst libres = tareas.filter(prioridad3Libre);\nconst amplias = tareas.filter(prioridad2OMas);\n\nconsole.log(\"PRIORIDAD_3_LIBRES | \" + libres.map(({ id }) => id).join(\",\"));\nconsole.log(\"PRIORIDAD_2_MAS | \" + amplias.map(({ id }) => id).join(\",\"));",
+        "referenceOutput": [
+          "PRIORIDAD_3_LIBRES | T-301",
+          "PRIORIDAD_2_MAS | T-301,T-302,T-304,T-305"
+        ],
+        "referenceResults": {
+          "priority3FreeIds": [
+            "T-301"
+          ],
+          "priority2AnyIds": [
+            "T-301",
+            "T-302",
+            "T-304",
+            "T-305"
+          ]
+        }
+      },
+      "explanationPoints": [
+        "Cada llamada a crearSelector crea un entorno lexico nuevo con sus propios valores.",
+        "filter puede usar directamente cada funcion devuelta como predicado."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l05-closures-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-7-v1",
+          "bindingName": "tareas",
+          "task": "Aplica los mismos closures de prioridad al tablero de revision.",
+          "executableCode": "function crearSelector(prioridadMinima, permitirBloqueadas = false) {\n  return function (tarea) {\n    return tarea.prioridad >= prioridadMinima &&\n      (permitirBloqueadas || !tarea.bloqueada);\n  };\n}\n\nconst prioridad3Libre = crearSelector(3);\nconst prioridad2OMas = crearSelector(2, true);\nconst libres = tareas.filter(prioridad3Libre);\nconst amplias = tareas.filter(prioridad2OMas);\n\nconsole.log(\"PRIORIDAD_3_LIBRES | \" + libres.map(({ id }) => id).join(\",\"));\nconsole.log(\"PRIORIDAD_2_MAS | \" + amplias.map(({ id }) => id).join(\",\"));",
+          "referenceOutput": [
+            "PRIORIDAD_3_LIBRES | T-601",
+            "PRIORIDAD_2_MAS | T-601,T-602,T-603,T-604"
+          ],
+          "referenceResults": {
+            "priority3FreeIds": [
+              "T-601"
+            ],
+            "priority2AnyIds": [
+              "T-601",
+              "T-602",
+              "T-603",
+              "T-604"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l05-composicion",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "La salida de cada funcion debe convertirse en la entrada de la funcion siguiente."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "encadenar devuelve otra funcion que recibe el valor inicial."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Reduce funciones con (resultado, funcion) => funcion(resultado)."
+        }
+      ],
+      "solution": {
+        "scenarioId": "biblioteca",
+        "datasetId": "biblioteca-base-v1",
+        "bindingName": "libros",
+        "executableCode": "const obtenerTitulo = ({ titulo }) => titulo;\nconst aMayusculas = (texto) => texto.toUpperCase();\nconst agregarPrefijo = (texto) => `LIBRO | ${texto}`;\n\nfunction encadenar(...funciones) {\n  return function (valor) {\n    return funciones.reduce(\n      (resultado, funcion) => funcion(resultado),\n      valor\n    );\n  };\n}\n\nconst crearEtiqueta = encadenar(obtenerTitulo, aMayusculas, agregarPrefijo);\nconst etiquetas = libros.map(crearEtiqueta);\nconsole.log(\"TOTAL | \" + etiquetas.length);\nfor (const etiqueta of etiquetas) {\n  console.log(etiqueta);\n}",
+        "referenceOutput": [
+          "TOTAL | 6",
+          "LIBRO | EL FARO",
+          "LIBRO | ORBITA ROJA",
+          "LIBRO | COCINA DIARIA",
+          "LIBRO | ATLAS MINIMO",
+          "LIBRO | CODIGO CLARO",
+          "LIBRO | BOSQUE AZUL"
+        ],
+        "referenceResults": {
+          "functionCount": 3,
+          "labelCount": 6,
+          "firstLabel": "LIBRO | EL FARO"
+        }
+      },
+      "explanationPoints": [
+        "obtenerTitulo cambia objeto a string; las funciones siguientes siguen trabajando con strings.",
+        "La implementacion acepta cualquier cantidad de funciones compatibles."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l05-composicion-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "biblioteca",
+          "datasetId": "biblioteca-revision-1-v1",
+          "bindingName": "libros",
+          "task": "Aplica la composicion de titulo, mayusculas y prefijo al catalogo de revision.",
+          "executableCode": "const obtenerTitulo = ({ titulo }) => titulo;\nconst aMayusculas = (texto) => texto.toUpperCase();\nconst agregarPrefijo = (texto) => `LIBRO | ${texto}`;\n\nfunction encadenar(...funciones) {\n  return function (valor) {\n    return funciones.reduce(\n      (resultado, funcion) => funcion(resultado),\n      valor\n    );\n  };\n}\n\nconst crearEtiqueta = encadenar(obtenerTitulo, aMayusculas, agregarPrefijo);\nconst etiquetas = libros.map(crearEtiqueta);\nconsole.log(\"TOTAL | \" + etiquetas.length);\nfor (const etiqueta of etiquetas) {\n  console.log(etiqueta);\n}",
+          "referenceOutput": [
+            "TOTAL | 5",
+            "LIBRO | MAR ABIERTO",
+            "LIBRO | CIENCIA EN CASA",
+            "LIBRO | HISTORIA BREVE",
+            "LIBRO | NOCHE POLAR",
+            "LIBRO | DATOS SIMPLES"
+          ],
+          "referenceResults": {
+            "functionCount": 3,
+            "labelCount": 5,
+            "firstLabel": "LIBRO | MAR ABIERTO"
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l05-checkpoint",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "La seleccion captura un limite y el formato captura un prefijo; son closures independientes."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "El formateador compone extraer datos, convertir a texto y agregar prefijo."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "El predicado devuelve !bloqueada && estimacionMinutos <= limiteMinutos."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-revision-3-v1",
+        "bindingName": "tareas",
+        "executableCode": "function encadenar(...funciones) {\n  return (valor) => funciones.reduce(\n    (resultado, funcion) => funcion(resultado),\n    valor\n  );\n}\n\nfunction crearPredicado(limiteMinutos) {\n  return ({ bloqueada, estimacionMinutos }) =>\n    !bloqueada && estimacionMinutos <= limiteMinutos;\n}\n\nfunction crearFormateador(prefijo) {\n  const extraer = ({ id, estimacionMinutos }) => ({\n    id,\n    minutos: estimacionMinutos\n  });\n  const aTexto = ({ id, minutos }) => `${id} | ${minutos} min`;\n  const agregarPrefijo = (texto) => `${prefijo} | ${texto}`;\n  return encadenar(extraer, aTexto, agregarPrefijo);\n}\n\nconst esBreveLibre = crearPredicado(30);\nconst formatear = crearFormateador(\"BREVE\");\nconst salida = tareas.filter(esBreveLibre).map(formatear);\nconsole.log(\"TOTAL | \" + salida.length);\nfor (const linea of salida) {\n  console.log(linea);\n}",
+        "referenceOutput": [
+          "TOTAL | 3",
+          "BREVE | T-503 | 15 min",
+          "BREVE | T-504 | 20 min",
+          "BREVE | T-506 | 30 min"
+        ],
+        "referenceResults": {
+          "limitMinutes": 30,
+          "prefix": "BREVE",
+          "selectedIds": [
+            "T-503",
+            "T-504",
+            "T-506"
+          ]
+        }
+      },
+      "explanationPoints": [
+        "T-505 cumple el limite pero queda fuera porque esta bloqueada.",
+        "La composicion conserva el prefijo sin leer una variable global."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l05-checkpoint-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-1-v1",
+          "bindingName": "tareas",
+          "task": "Selecciona tareas no bloqueadas de hasta 20 minutos y formatealas con el prefijo RAPIDA.",
+          "executableCode": "function encadenar(...funciones) {\n  return (valor) => funciones.reduce(\n    (resultado, funcion) => funcion(resultado),\n    valor\n  );\n}\n\nfunction crearPredicado(limiteMinutos) {\n  return ({ bloqueada, estimacionMinutos }) =>\n    !bloqueada && estimacionMinutos <= limiteMinutos;\n}\n\nfunction crearFormateador(prefijo) {\n  const extraer = ({ id, estimacionMinutos }) => ({\n    id,\n    minutos: estimacionMinutos\n  });\n  const aTexto = ({ id, minutos }) => `${id} | ${minutos} min`;\n  const agregarPrefijo = (texto) => `${prefijo} | ${texto}`;\n  return encadenar(extraer, aTexto, agregarPrefijo);\n}\n\nconst esBreveLibre = crearPredicado(20);\nconst formatear = crearFormateador(\"RAPIDA\");\nconst salida = tareas.filter(esBreveLibre).map(formatear);\nconsole.log(\"TOTAL | \" + salida.length);\nfor (const linea of salida) {\n  console.log(linea);\n}",
+          "referenceOutput": [
+            "TOTAL | 2",
+            "RAPIDA | T-404 | 20 min",
+            "RAPIDA | T-405 | 10 min"
+          ],
+          "referenceResults": {
+            "limitMinutes": 20,
+            "prefix": "RAPIDA",
+            "selectedIds": [
+              "T-404",
+              "T-405"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l06-promesas",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Lanzar un Error dentro de then rechaza automaticamente la promesa resultante."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Comienza con Promise.resolve().then, busca el libro y decide antes de devolverlo."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Si find devuelve undefined, lanza new Error('NO_ENCONTRADO | ' + idBuscado)."
+        }
+      ],
+      "solution": {
+        "scenarioId": "biblioteca",
+        "datasetId": "biblioteca-base-v1",
+        "bindingName": "libros",
+        "executableCode": "function buscarLibroAsync(idBuscado) {\n  return Promise.resolve().then(function () {\n    const libro = libros.find(function (candidato) {\n      return candidato.id === idBuscado;\n    });\n    if (libro === undefined) {\n      throw new Error(\"NO_ENCONTRADO | \" + idBuscado);\n    }\n    return libro;\n  });\n}\n\nconst ejecucion = buscarLibroAsync(\"L-204\")\n  .then(function (libro) {\n    console.log(\"OK | \" + libro.id + \" | \" + libro.titulo);\n    return buscarLibroAsync(\"L-999\");\n  })\n  .then(function (libro) {\n    console.log(\"OK | \" + libro.id + \" | \" + libro.titulo);\n  })\n  .catch(function (error) {\n    console.log(\"ERROR | \" + error.message);\n  });\n\nejecucion;",
+        "referenceOutput": [
+          "OK | L-204 | Atlas minimo",
+          "ERROR | NO_ENCONTRADO | L-999"
+        ],
+        "referenceResults": {
+          "firstStatus": "fulfilled",
+          "secondStatus": "rejected",
+          "handled": true
+        }
+      },
+      "explanationPoints": [
+        "Devolver la segunda busqueda hace que forme parte de la misma cadena.",
+        "El catch recibe el rechazo producido por cualquier etapa anterior."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l06-promesas-review-1",
+          "reviewIntervalDay": 1,
+          "scenarioId": "biblioteca",
+          "datasetId": "biblioteca-revision-1-v1",
+          "bindingName": "libros",
+          "task": "Consulta L-302 y despues L-999, manejando el rechazo en un catch terminal.",
+          "executableCode": "function buscarLibroAsync(idBuscado) {\n  return Promise.resolve().then(function () {\n    const libro = libros.find(function (candidato) {\n      return candidato.id === idBuscado;\n    });\n    if (libro === undefined) {\n      throw new Error(\"NO_ENCONTRADO | \" + idBuscado);\n    }\n    return libro;\n  });\n}\n\nconst ejecucion = buscarLibroAsync(\"L-302\")\n  .then(function (libro) {\n    console.log(\"OK | \" + libro.id + \" | \" + libro.titulo);\n    return buscarLibroAsync(\"L-999\");\n  })\n  .then(function (libro) {\n    console.log(\"OK | \" + libro.id + \" | \" + libro.titulo);\n  })\n  .catch(function (error) {\n    console.log(\"ERROR | \" + error.message);\n  });\n\nejecucion;",
+          "referenceOutput": [
+            "OK | L-302 | Ciencia en casa",
+            "ERROR | NO_ENCONTRADO | L-999"
+          ],
+          "referenceResults": {
+            "firstStatus": "fulfilled",
+            "secondStatus": "rejected",
+            "handled": true
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l06-async-event-loop",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "La llamada a ejecutar avanza de inmediato hasta await; su continuacion queda en la cola de microtareas."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Asigna dentro de ejecutar el resultado de esperar buscarProductoAsync."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Completa con await buscarProductoAsync('P-103')."
+        }
+      ],
+      "solution": {
+        "scenarioId": "inventario",
+        "datasetId": "inventario-base-v1",
+        "bindingName": "productos",
+        "executableCode": "function buscarProductoAsync(idBuscado) {\n  return Promise.resolve(productos.find(({ id }) => id === idBuscado));\n}\n\nasync function ejecutar() {\n  console.log(\"2 | INICIO_ASYNC\");\n  const producto = await buscarProductoAsync(\"P-103\");\n  console.log(`4 | ${producto.id} | ${producto.nombre}`);\n}\n\nconsole.log(\"1 | INICIO_SYNC\");\nconst ejecucion = ejecutar();\nconsole.log(\"3 | FIN_SYNC\");\n\nejecucion;",
+        "referenceOutput": [
+          "1 | INICIO_SYNC",
+          "2 | INICIO_ASYNC",
+          "3 | FIN_SYNC",
+          "4 | P-103 | Mochila"
+        ],
+        "referenceResults": {
+          "markerOrder": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "recordId": "P-103",
+          "continuationQueue": "microtask"
+        }
+      },
+      "explanationPoints": [
+        "INICIO_ASYNC se imprime durante la llamada sincrona a ejecutar.",
+        "FIN_SYNC se imprime antes de que la funcion async continue despues de await."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l06-async-event-loop-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "inventario",
+          "datasetId": "inventario-revision-3-v1",
+          "bindingName": "productos",
+          "task": "Observa el mismo orden del event loop consultando P-304.",
+          "executableCode": "function buscarProductoAsync(idBuscado) {\n  return Promise.resolve(productos.find(({ id }) => id === idBuscado));\n}\n\nasync function ejecutar() {\n  console.log(\"2 | INICIO_ASYNC\");\n  const producto = await buscarProductoAsync(\"P-304\");\n  console.log(`4 | ${producto.id} | ${producto.nombre}`);\n}\n\nconsole.log(\"1 | INICIO_SYNC\");\nconst ejecucion = ejecutar();\nconsole.log(\"3 | FIN_SYNC\");\n\nejecucion;",
+          "referenceOutput": [
+            "1 | INICIO_SYNC",
+            "2 | INICIO_ASYNC",
+            "3 | FIN_SYNC",
+            "4 | P-304 | Lonchera"
+          ],
+          "referenceResults": {
+            "markerOrder": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "recordId": "P-304",
+            "continuationQueue": "microtask"
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l06-concurrencia",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "Promise.allSettled espera todas las operaciones y representa cada exito o fallo por separado."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "Crea solicitudes con ids.map antes de usar await."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Espera Promise.allSettled(solicitudes) y comprueba resultado.status."
+        }
+      ],
+      "solution": {
+        "scenarioId": "biblioteca",
+        "datasetId": "biblioteca-revision-3-v1",
+        "bindingName": "libros",
+        "executableCode": "function cargarLibro(idBuscado) {\n  return Promise.resolve().then(() => {\n    const libro = libros.find(({ id }) => id === idBuscado);\n    if (libro === undefined) {\n      throw new Error(\"NO_ENCONTRADO\");\n    }\n    return libro;\n  });\n}\n\nasync function ejecutar() {\n  const ids = [\"L-402\", \"L-999\", \"L-404\"];\n  const solicitudes = ids.map(cargarLibro);\n  const resultados = await Promise.allSettled(solicitudes);\n  resultados.forEach((resultado, indice) => {\n    if (resultado.status === \"fulfilled\") {\n      const libro = resultado.value;\n      console.log(`OK | ${libro.id} | ${libro.titulo}`);\n    } else {\n      console.log(`ERROR | ${ids[indice]} | ${resultado.reason.message}`);\n    }\n  });\n}\n\nconst ejecucion = ejecutar();\nejecucion;",
+        "referenceOutput": [
+          "OK | L-402 | Laboratorio cero",
+          "ERROR | L-999 | NO_ENCONTRADO",
+          "OK | L-404 | Planeta seco"
+        ],
+        "referenceResults": {
+          "statuses": [
+            "fulfilled",
+            "rejected",
+            "fulfilled"
+          ],
+          "inputOrderPreserved": true,
+          "requestCount": 3
+        }
+      },
+      "explanationPoints": [
+        "map llama cargarLibro tres veces antes de que ejecutar llegue al await.",
+        "allSettled conserva el orden de las promesas de entrada aunque una se rechace."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l06-concurrencia-review-7",
+          "reviewIntervalDay": 7,
+          "scenarioId": "biblioteca",
+          "datasetId": "biblioteca-revision-7-v1",
+          "bindingName": "libros",
+          "task": "Consulta concurrentemente L-503, L-999 y L-501 y conserva todos los resultados.",
+          "executableCode": "function cargarLibro(idBuscado) {\n  return Promise.resolve().then(() => {\n    const libro = libros.find(({ id }) => id === idBuscado);\n    if (libro === undefined) {\n      throw new Error(\"NO_ENCONTRADO\");\n    }\n    return libro;\n  });\n}\n\nasync function ejecutar() {\n  const ids = [\"L-503\", \"L-999\", \"L-501\"];\n  const solicitudes = ids.map(cargarLibro);\n  const resultados = await Promise.allSettled(solicitudes);\n  resultados.forEach((resultado, indice) => {\n    if (resultado.status === \"fulfilled\") {\n      const libro = resultado.value;\n      console.log(`OK | ${libro.id} | ${libro.titulo}`);\n    } else {\n      console.log(`ERROR | ${ids[indice]} | ${resultado.reason.message}`);\n    }\n  });\n}\n\nconst ejecucion = ejecutar();\nejecucion;",
+          "referenceOutput": [
+            "OK | L-503 | Mapas del tiempo",
+            "ERROR | L-999 | NO_ENCONTRADO",
+            "OK | L-501 | Rio adentro"
+          ],
+          "referenceResults": {
+            "statuses": [
+              "fulfilled",
+              "rejected",
+              "fulfilled"
+            ],
+            "inputOrderPreserved": true,
+            "requestCount": 3
+          }
+        }
+      ]
+    },
+    {
+      "lessonId": "l06-checkpoint",
+      "hints": [
+        {
+          "level": 1,
+          "kind": "conceptual",
+          "text": "ejecutar imprime INICIO antes de detenerse en await; el codigo exterior puede imprimir DESPACHADO mientras espera."
+        },
+        {
+          "level": 2,
+          "kind": "structural",
+          "text": "cargarTarea busca dentro de una microtarea; ejecutar usa map y allSettled."
+        },
+        {
+          "level": 3,
+          "kind": "near_solution",
+          "text": "Lanza Error('NO_ENCONTRADA') para undefined y separa fulfilled de rejected por status."
+        }
+      ],
+      "solution": {
+        "scenarioId": "tareas",
+        "datasetId": "tareas-revision-7-v1",
+        "bindingName": "tareas",
+        "executableCode": "function cargarTarea(idBuscado) {\n  return Promise.resolve().then(() => {\n    const tarea = tareas.find(({ id }) => id === idBuscado);\n    if (tarea === undefined) {\n      throw new Error(\"NO_ENCONTRADA\");\n    }\n    return tarea;\n  });\n}\n\nasync function ejecutar(ids) {\n  console.log(\"2 | INICIO\");\n  const solicitudes = ids.map(cargarTarea);\n  const resultados = await Promise.allSettled(solicitudes);\n  console.log(\"4 | RESULTADOS\");\n  resultados.forEach((resultado, indice) => {\n    if (resultado.status === \"fulfilled\") {\n      const tarea = resultado.value;\n      console.log(`OK | ${tarea.id} | ${tarea.estado}`);\n    } else {\n      console.log(`ERROR | ${ids[indice]} | ${resultado.reason.message}`);\n    }\n  });\n}\n\nconsole.log(\"1 | PREPARAR\");\nconst ejecucion = ejecutar([\"T-601\", \"T-999\", \"T-603\"]);\nconsole.log(\"3 | DESPACHADO\");\n\nejecucion;",
+        "referenceOutput": [
+          "1 | PREPARAR",
+          "2 | INICIO",
+          "3 | DESPACHADO",
+          "4 | RESULTADOS",
+          "OK | T-601 | en_progreso",
+          "ERROR | T-999 | NO_ENCONTRADA",
+          "OK | T-603 | completada"
+        ],
+        "referenceResults": {
+          "markerOrder": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "statuses": [
+            "fulfilled",
+            "rejected",
+            "fulfilled"
+          ],
+          "requestIds": [
+            "T-601",
+            "T-999",
+            "T-603"
+          ]
+        }
+      },
+      "explanationPoints": [
+        "INICIO se ejecuta durante la llamada y RESULTADOS despues de la resolucion de allSettled.",
+        "Cada posicion de resultados corresponde al id de la misma posicion en la entrada."
+      ],
+      "fixedVariants": [
+        {
+          "id": "l06-checkpoint-review-3",
+          "reviewIntervalDay": 3,
+          "scenarioId": "tareas",
+          "datasetId": "tareas-revision-3-v1",
+          "bindingName": "tareas",
+          "task": "Consulta T-504, T-999 y T-503 observando el event loop y conservando exitos y error.",
+          "executableCode": "function cargarTarea(idBuscado) {\n  return Promise.resolve().then(() => {\n    const tarea = tareas.find(({ id }) => id === idBuscado);\n    if (tarea === undefined) {\n      throw new Error(\"NO_ENCONTRADA\");\n    }\n    return tarea;\n  });\n}\n\nasync function ejecutar(ids) {\n  console.log(\"2 | INICIO\");\n  const solicitudes = ids.map(cargarTarea);\n  const resultados = await Promise.allSettled(solicitudes);\n  console.log(\"4 | RESULTADOS\");\n  resultados.forEach((resultado, indice) => {\n    if (resultado.status === \"fulfilled\") {\n      const tarea = resultado.value;\n      console.log(`OK | ${tarea.id} | ${tarea.estado}`);\n    } else {\n      console.log(`ERROR | ${ids[indice]} | ${resultado.reason.message}`);\n    }\n  });\n}\n\nconsole.log(\"1 | PREPARAR\");\nconst ejecucion = ejecutar([\"T-504\", \"T-999\", \"T-503\"]);\nconsole.log(\"3 | DESPACHADO\");\n\nejecucion;",
+          "referenceOutput": [
+            "1 | PREPARAR",
+            "2 | INICIO",
+            "3 | DESPACHADO",
+            "4 | RESULTADOS",
+            "OK | T-504 | pendiente",
+            "ERROR | T-999 | NO_ENCONTRADA",
+            "OK | T-503 | completada"
+          ],
+          "referenceResults": {
+            "markerOrder": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "statuses": [
+              "fulfilled",
+              "rejected",
+              "fulfilled"
+            ],
+            "requestIds": [
+              "T-504",
+              "T-999",
+              "T-503"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
