@@ -266,11 +266,18 @@ select {
 }
 
 .openrouter-model-control {
-  position: relative
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md)
 }
 
 .dropdown-search input {
+  display: block;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   background: transparent;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -278,6 +285,7 @@ select {
   font-size: var(--text-sm);
   color: var(--color-text);
   font-family: var(--font-mono);
+  text-overflow: ellipsis;
   transition: border-color var(--tr)
 }
 
@@ -1699,6 +1707,20 @@ select {
     left: var(--space-3);
     right: var(--space-3);
     width: auto
+  }
+
+  .dropdown-search input {
+    padding-right: 52px;
+    font-size: 16px
+  }
+
+  .openrouter-model-arrows {
+    width: 44px
+  }
+
+  .openrouter-model-arrows button {
+    font-size: 12px;
+    touch-action: manipulation
   }
 
 }
