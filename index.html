@@ -867,7 +867,6 @@
         ? (direction > 0 ? 0 : openRouterFreeModelIds.length - 1)
         : (currentIndex + direction + openRouterFreeModelIds.length) % openRouterFreeModelIds.length;
       openRouterModelInput.value = openRouterFreeModelIds[nextIndex];
-      openRouterModelInput.select();
     }
 
     function selectModel(m) {
