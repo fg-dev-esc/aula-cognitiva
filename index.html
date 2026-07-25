@@ -52,11 +52,17 @@
             </svg>
           </button>
           <div class="model-dropdown" id="modelDropdown" role="listbox">
-            <div class="dropdown-search">
-              <input type="text" id="modelSearch" placeholder="Buscar modelo…" autocomplete="off"
-                aria-label="Buscar modelo">
-            </div>
             <div class="dropdown-body" id="dropdownBody"></div>
+            <div class="dropdown-search">
+              <div class="openrouter-model-control">
+                <input type="text" id="openRouterModelInput" value="inclusionai/ling-3.0-flash:free" placeholder="ID de modelo OpenRouter..." autocomplete="off"
+                  aria-label="ID de modelo OpenRouter">
+                <div class="openrouter-model-arrows">
+                  <button type="button" id="previousOpenRouterModel" aria-label="Modelo OpenRouter anterior">↑</button>
+                  <button type="button" id="nextOpenRouterModel" aria-label="Modelo OpenRouter siguiente">↓</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -225,15 +231,16 @@
     ];
 
     const MODELS = [
-      { id: 'gpt-oss-120b', label: 'GPT OSS 120B', provider: 'cerebras', tag: 'Cerebras' },
       { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
       { id: 'north-mini-code-1-0', label: 'North Mini Code 1.0', provider: 'cohere', tag: 'Cohere' },
+      { id: 'gpt-oss-120b', label: 'GPT OSS 120B', provider: 'cerebras', tag: 'Cerebras' },
       { id: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B', provider: 'groq', tag: 'Groq' },
       { id: 'gemini-3.6-flash', label: 'Gemini 3.6 Flash', provider: 'google', tag: 'Google' },
-      { id: 'openrouter/free', label: 'Auto Router', provider: 'openrouter', tag: 'OpenRouter' },
     ];
 
     const MAX_IMAGES = 5;
+    const DEFAULT_OPENROUTER_MODEL = 'inclusionai/ling-3.0-flash:free';
+    const OPENROUTER_MODELS_URL = 'https://openrouter.ai/api/v1/models';
     const PROMPTS_FILE = '/prompts.json';
     const SOLUTION_UNLOCK_SCORE = 70;
     const API_RETRY_DELAY_MS = 70_000;
@@ -266,7 +273,9 @@
     const modelIcon = document.getElementById('modelIcon');
     const modelLabel = document.getElementById('modelLabel');
     const modelDropdown = document.getElementById('modelDropdown');
-    const modelSearch = document.getElementById('modelSearch');
+    const openRouterModelInput = document.getElementById('openRouterModelInput');
+    const previousOpenRouterModel = document.getElementById('previousOpenRouterModel');
+    const nextOpenRouterModel = document.getElementById('nextOpenRouterModel');
     const dropdownBody = document.getElementById('dropdownBody');
     const kataToggle = document.getElementById('kataToggle');
     const promptTree = document.getElementById('promptTree');
@@ -305,8 +314,7 @@
     let pendingDeleteId = null;
     let keyboardConversationIndex = -1;
     let keyboardConversationAction = null;
-    let keyboardModelIndex = -1;
-    let isKeyboardModelNavigation = false;
+    let openRouterFreeModelIds = [DEFAULT_OPENROUTER_MODEL];
     let selectedHarness = 'normal';
     let tutorRunId = null;
     let tutorMessages = [];
@@ -797,11 +805,6 @@
         : selectedModel.label;
     }
 
-    function updateModelSearchMode() {
-      const isOpenRouter = selectedModel.provider === 'openrouter';
-      modelSearch.placeholder = isOpenRouter ? 'ID de modelo OpenRouter...' : 'Buscar modelo...';
-    }
-
     function buildDropdown() {
       dropdownBody.innerHTML = '';
       MODELS.forEach(m => {
@@ -818,45 +821,47 @@
           event.stopPropagation();
           selectModel(m);
         });
-        opt.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectModel(m); } });
+        opt.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            selectModel(m);
+          } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            const options = [...dropdownBody.querySelectorAll('.model-option')];
+            const direction = e.key === 'ArrowDown' ? 1 : -1;
+            const nextIndex = (options.indexOf(opt) + direction + options.length) % options.length;
+            options[nextIndex].focus();
+          }
+        });
         dropdownBody.appendChild(opt);
       });
     }
 
-    function visibleModelOptions() {
-      return [...dropdownBody.querySelectorAll('.model-option:not(.hidden)')];
-    }
+    async function loadOpenRouterFreeModels() {
+      try {
+        const response = await fetch(OPENROUTER_MODELS_URL);
+        if (!response.ok) throw new Error(`OpenRouter respondio con ${response.status}`);
 
-    function highlightKeyboardModel() {
-      const options = visibleModelOptions();
-      dropdownBody.querySelectorAll('.model-option.focused').forEach(opt => opt.classList.remove('focused'));
-      if (options.length === 0) {
-        keyboardModelIndex = -1;
-        return;
+        const payload = await response.json();
+        const ids = payload.data
+          .map(model => model.id)
+          .filter(id => id.endsWith(':free') && id !== 'openrouter/free')
+          .sort((a, b) => a.localeCompare(b));
+
+        if (ids.length > 0) openRouterFreeModelIds = ids;
+      } catch (error) {
+        console.warn('No se pudieron cargar los modelos gratuitos de OpenRouter:', error);
       }
-
-      keyboardModelIndex = Math.max(0, Math.min(keyboardModelIndex, options.length - 1));
-      const option = options[keyboardModelIndex];
-      option.classList.add('focused');
-      option.scrollIntoView({ block: 'nearest' });
     }
 
-    function resetKeyboardModel() {
-      const options = visibleModelOptions();
-      isKeyboardModelNavigation = false;
-      keyboardModelIndex = options.findIndex(opt =>
-        opt.dataset.provider === selectedModel.provider && opt.dataset.model === selectedModel.id
-      );
-      if (keyboardModelIndex < 0 && options.length > 0) keyboardModelIndex = 0;
-      highlightKeyboardModel();
-    }
-
-    function navigateModels(direction) {
-      const options = visibleModelOptions();
-      if (options.length === 0) return;
-      isKeyboardModelNavigation = true;
-      keyboardModelIndex = Math.max(0, Math.min(keyboardModelIndex + direction, options.length - 1));
-      highlightKeyboardModel();
+    function cycleOpenRouterModel(direction) {
+      const currentId = openRouterModelInput.value.trim();
+      const currentIndex = openRouterFreeModelIds.indexOf(currentId);
+      const nextIndex = currentIndex < 0
+        ? (direction > 0 ? 0 : openRouterFreeModelIds.length - 1)
+        : (currentIndex + direction + openRouterFreeModelIds.length) % openRouterFreeModelIds.length;
+      openRouterModelInput.value = openRouterFreeModelIds[nextIndex];
+      openRouterModelInput.select();
     }
 
     function selectModel(m) {
@@ -870,25 +875,15 @@
     function openDropdown() {
       modelDropdown.classList.add('open');
       modelBtn.setAttribute('aria-expanded', 'true');
-      if (selectedModel.provider === 'openrouter') {
-        modelSearch.value = selectedModel.id;
-        updateModelSearchMode();
-      } else {
-        modelSearch.value = '';
-        updateModelSearchMode();
-        filterModels('');
-      }
-      resetKeyboardModel();
+      openRouterModelInput.value = selectedModel.provider === 'openrouter' ? selectedModel.id : DEFAULT_OPENROUTER_MODEL;
       setTimeout(() => {
-        modelSearch.focus();
-        if (selectedModel.provider === 'openrouter') modelSearch.select();
+        const selectedOption = dropdownBody.querySelector('.model-option.selected');
+        (selectedOption || dropdownBody.querySelector('.model-option'))?.focus();
       }, 60);
     }
     function closeDropdown() {
       modelDropdown.classList.remove('open');
       modelBtn.setAttribute('aria-expanded', 'false');
-      keyboardModelIndex = -1;
-      isKeyboardModelNavigation = false;
     }
 
     modelBtn.addEventListener('click', () => {
@@ -896,46 +891,28 @@
     });
     document.addEventListener('click', e => { if (!modelBtn.contains(e.target) && !modelDropdown.contains(e.target)) closeDropdown(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDropdown(); });
-    modelSearch.addEventListener('input', () => {
-      if (selectedModel.provider !== 'openrouter') {
-        filterModels(modelSearch.value.trim().toLowerCase());
-        return;
-      }
-
-      const id = modelSearch.value.trim();
-      selectedModel = id
-        ? { id, label: id, provider: 'openrouter', tag: 'OpenRouter' }
-        : MODELS.find(m => m.id === 'openrouter/free');
-      updateModelDisplay();
-      buildDropdown();
-      resetKeyboardModel();
-      updateSendBtn();
-    });
-    modelSearch.addEventListener('keydown', e => {
+    openRouterModelInput.addEventListener('keydown', e => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        navigateModels(1);
+        cycleOpenRouterModel(1);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        navigateModels(-1);
+        cycleOpenRouterModel(-1);
       } else if (e.key === 'Enter') {
-        const option = visibleModelOptions()[keyboardModelIndex];
-        if (option && (selectedModel.provider !== 'openrouter' || isKeyboardModelNavigation)) {
-          e.preventDefault();
-          selectModel(MODELS.find(m => m.provider === option.dataset.provider && m.id === option.dataset.model));
-        } else if (selectedModel.provider === 'openrouter') {
-          closeDropdown();
-        }
+        const id = openRouterModelInput.value.trim();
+        if (!id) return;
+        e.preventDefault();
+        selectModel({ id, label: id, provider: 'openrouter', tag: 'OpenRouter' });
       }
     });
-
-    function filterModels(q) {
-      dropdownBody.querySelectorAll('.model-option').forEach(opt => {
-        const match = !q || opt.dataset.label.includes(q) || opt.dataset.provider.includes(q);
-        opt.classList.toggle('hidden', !match);
-      });
-      resetKeyboardModel();
-    }
+    previousOpenRouterModel.addEventListener('click', () => {
+      cycleOpenRouterModel(-1);
+      openRouterModelInput.focus();
+    });
+    nextOpenRouterModel.addEventListener('click', () => {
+      cycleOpenRouterModel(1);
+      openRouterModelInput.focus();
+    });
 
     function updateKataToggle() {
       const isKata = selectedHarness === 'kata';
@@ -2966,6 +2943,7 @@
 
     updateModelDisplay();
     buildDropdown();
+    loadOpenRouterFreeModels();
     updateSendBtn();
     updateKataToggle();
     syncLessonTutorOffset();
