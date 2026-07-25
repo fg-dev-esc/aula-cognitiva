@@ -314,7 +314,7 @@
     let pendingDeleteId = null;
     let keyboardConversationIndex = -1;
     let keyboardConversationAction = null;
-    let openRouterFreeModelIds = [DEFAULT_OPENROUTER_MODEL];
+    let openRouterFreeModelIds = [];
     let selectedHarness = 'normal';
     let tutorRunId = null;
     let tutorMessages = [];
@@ -848,13 +848,19 @@
           .filter(id => id.endsWith(':free') && id !== 'openrouter/free')
           .sort((a, b) => a.localeCompare(b));
 
-        if (ids.length > 0) openRouterFreeModelIds = ids;
+        if (ids.length > 0) {
+          openRouterFreeModelIds = ids;
+          if (selectedModel.provider !== 'openrouter' && !openRouterModelInput.value.trim()) {
+            openRouterModelInput.value = ids[0];
+          }
+        }
       } catch (error) {
         console.warn('No se pudieron cargar los modelos gratuitos de OpenRouter:', error);
       }
     }
 
     function cycleOpenRouterModel(direction) {
+      if (openRouterFreeModelIds.length === 0) return;
       const currentId = openRouterModelInput.value.trim();
       const currentIndex = openRouterFreeModelIds.indexOf(currentId);
       const nextIndex = currentIndex < 0
@@ -875,7 +881,9 @@
     function openDropdown() {
       modelDropdown.classList.add('open');
       modelBtn.setAttribute('aria-expanded', 'true');
-      openRouterModelInput.value = selectedModel.provider === 'openrouter' ? selectedModel.id : DEFAULT_OPENROUTER_MODEL;
+      openRouterModelInput.value = selectedModel.provider === 'openrouter'
+        ? selectedModel.id
+        : DEFAULT_OPENROUTER_MODEL;
       setTimeout(() => {
         const selectedOption = dropdownBody.querySelector('.model-option.selected');
         (selectedOption || dropdownBody.querySelector('.model-option'))?.focus();
