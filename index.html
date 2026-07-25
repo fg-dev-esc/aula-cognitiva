@@ -229,7 +229,7 @@
       { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
       { id: 'north-mini-code-1-0', label: 'North Mini Code 1.0', provider: 'cohere', tag: 'Cohere' },
       { id: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B', provider: 'groq', tag: 'Groq' },
-      { id: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash', provider: 'google', tag: 'Google' },
+      { id: 'gemini-3.6-flash', label: 'Gemini 3.6 Flash', provider: 'google', tag: 'Google' },
       { id: 'openrouter/free', label: 'Auto Router', provider: 'openrouter', tag: 'OpenRouter' },
     ];
 
@@ -241,7 +241,7 @@
     const COMPLETED_LESSON_STATUSES = new Set(['mastered', 'completed_supported']);
     const FORK_LESSON_MESSAGE_TYPES = new Set(['challenge', 'attempt', 'evaluation', 'solution']);
 
-    let selectedModel = MODELS.find(m => m.id === 'gpt-oss-120b');
+    let selectedModel = MODELS.find(m => m.id === 'codestral-latest');
     let messages = [];
     const undoneTurns = new Map();
     let attachedImages = [];
@@ -249,7 +249,7 @@
     let currentTheme = 'dark';
     window.dbReady = false;
 
-    // Estado de los cursos. Neon es la unica fuente de verdad para este estado.
+    // Estado de los cursos
     let learningEngine = null;
     let learningContent = null;
     let curriculum = null;

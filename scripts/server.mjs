@@ -12,12 +12,12 @@ const port = process.env.PORT || 5174;
 let sql;
 
 const PROVIDERS = {
+  cerebras: { url: 'https://api.cerebras.ai/v1/chat/completions', key: 'CEREBRAS_API_KEY' },
   groq: { url: 'https://api.groq.com/openai/v1/chat/completions', key: 'GROQ_API_KEY' },
-  openrouter: { url: 'https://openrouter.ai/api/v1/chat/completions', key: 'OPENROUTER_API_KEY' },
   google: { url: 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions', key: 'GOOGLE_API_KEY' },
   mistral: { url: 'https://api.mistral.ai/v1/chat/completions', key: 'MISTRAL_API_KEY' },
   cohere: { url: 'https://api.cohere.com/compatibility/v1/chat/completions', key: 'COHERE_API_KEY' },
-  cerebras: { url: 'https://api.cerebras.ai/v1/chat/completions', key: 'CEREBRAS_API_KEY' },
+  openrouter: { url: 'https://openrouter.ai/api/v1/chat/completions', key: 'OPENROUTER_API_KEY' },
 };
 
 const IMAGE_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
