@@ -231,10 +231,10 @@
     ];
 
     const MODELS = [
-      { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
-      { id: 'north-mini-code-1-0', label: 'North Mini Code 1.0', provider: 'cohere', tag: 'Cohere' },
       { id: 'gpt-oss-120b', label: 'GPT OSS 120B', provider: 'cerebras', tag: 'Cerebras' },
+      { id: 'codestral-latest', label: 'Codestral', provider: 'mistral', tag: 'Mistral' },
       { id: 'qwen/qwen3.6-27b', label: 'Qwen 3.6 27B', provider: 'groq', tag: 'Groq' },
+      { id: 'north-mini-code-1-0', label: 'North Mini Code 1.0', provider: 'cohere', tag: 'Cohere' },
       { id: 'gemini-3.6-flash', label: 'Gemini 3.6 Flash', provider: 'google', tag: 'Google' },
     ];
 
@@ -248,7 +248,7 @@
     const COMPLETED_LESSON_STATUSES = new Set(['mastered', 'completed_supported']);
     const FORK_LESSON_MESSAGE_TYPES = new Set(['challenge', 'attempt', 'evaluation', 'solution']);
 
-    let selectedModel = MODELS.find(m => m.id === 'codestral-latest');
+    let selectedModel = MODELS.find(m => m.id === 'gpt-oss-120b');
     let messages = [];
     const undoneTurns = new Map();
     let attachedImages = [];
