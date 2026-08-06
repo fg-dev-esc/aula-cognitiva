@@ -3,6 +3,7 @@ import test from 'node:test';
 
 import {
   handleChat,
+  OPENCODE_FREE_MODELS,
   learningRecordsFromState,
   learningStateFromRecords,
   parseEvaluationResponse,
@@ -84,6 +85,66 @@ test('chat also forwards a plain-text provider rate limit', async () => {
     globalThis.fetch = originalFetch;
     if (originalKey === undefined) delete process.env.GROQ_API_KEY;
     else process.env.GROQ_API_KEY = originalKey;
+  }
+});
+
+test('OpenCode Zen sends free models to its OpenAI-compatible endpoint', async () => {
+  const originalFetch = globalThis.fetch;
+  const originalKey = process.env.OPENCODE_API_KEY;
+  let request;
+  process.env.OPENCODE_API_KEY = 'test-key';
+  globalThis.fetch = async (url, options) => {
+    request = { url, options };
+    return new Response(JSON.stringify({
+      choices: [{ message: { content: 'respuesta' }, finish_reason: 'stop' }],
+    }), { headers: { 'Content-Type': 'application/json' } });
+  };
+
+  try {
+    const response = responseRecorder();
+    await handleChat({
+      method: 'POST',
+      body: {
+        provider: 'opencode',
+        model: 'big-pickle',
+        harness: 'normal',
+        messages: [{ role: 'user', content: 'hola' }],
+      },
+    }, response);
+
+    assert.equal(response.status, 200);
+    assert.equal(request.url, 'https://opencode.ai/zen/v1/chat/completions');
+    assert.equal(request.options.headers.Authorization, 'Bearer test-key');
+    assert.equal(JSON.parse(request.options.body).model, 'big-pickle');
+    assert.equal(JSON.parse(response.body).content, 'respuesta');
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (originalKey === undefined) delete process.env.OPENCODE_API_KEY;
+    else process.env.OPENCODE_API_KEY = originalKey;
+  }
+});
+
+test('OpenCode Zen rejects models outside the documented free list', async () => {
+  const originalKey = process.env.OPENCODE_API_KEY;
+  process.env.OPENCODE_API_KEY = 'test-key';
+
+  try {
+    assert.equal(OPENCODE_FREE_MODELS.has('big-pickle'), true);
+    const response = responseRecorder();
+    await handleChat({
+      method: 'POST',
+      body: {
+        provider: 'opencode',
+        model: 'gpt-5.6-sol',
+        harness: 'normal',
+        messages: [{ role: 'user', content: 'hola' }],
+      },
+    }, response);
+    assert.equal(response.status, 400);
+    assert.match(JSON.parse(response.body).error, /no permitido/);
+  } finally {
+    if (originalKey === undefined) delete process.env.OPENCODE_API_KEY;
+    else process.env.OPENCODE_API_KEY = originalKey;
   }
 });
 

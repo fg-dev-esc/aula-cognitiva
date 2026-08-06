@@ -62,6 +62,14 @@
                   <button type="button" id="nextOpenRouterModel" aria-label="Modelo OpenRouter siguiente">↓</button>
                 </div>
               </div>
+              <div class="openrouter-model-control">
+                <input type="text" id="openCodeModelInput" value="big-pickle" readonly
+                  aria-label="Modelo gratuito de OpenCode Zen">
+                <div class="openrouter-model-arrows">
+                  <button type="button" id="previousOpenCodeModel" aria-label="Modelo OpenCode anterior">↑</button>
+                  <button type="button" id="nextOpenCodeModel" aria-label="Modelo OpenCode siguiente">↓</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -224,6 +232,7 @@
     const PROVIDERS = [
       { id: 'groq', name: 'Groq', color: '#a8b4f0' },
       { id: 'openrouter', name: 'OpenRouter', color: '#b4a0d4' },
+      { id: 'opencode', name: 'OpenCode Zen', color: '#f2f2f2' },
       { id: 'google', name: 'Google', color: '#8ab4f8' },
       { id: 'mistral', name: 'Mistral', color: '#ffab91' },
       { id: 'cohere', name: 'Cohere', color: '#a5d6a7' },
@@ -241,6 +250,17 @@
     const MAX_IMAGES = 5;
     const DEFAULT_OPENROUTER_MODEL = 'inclusionai/ling-3.0-flash:free';
     const OPENROUTER_MODELS_URL = 'https://openrouter.ai/api/v1/models';
+    const OPENCODE_MODELS_URL = 'https://opencode.ai/zen/v1/models';
+    const OPENCODE_FREE_MODELS = [
+      'big-pickle',
+      'deepseek-v4-flash-free',
+      'mimo-v2.5-free',
+      'laguna-s-2.1-free',
+      'ling-3.0-flash-free',
+      'longcat-2.0-free',
+      'north-mini-code-free',
+      'nemotron-3-ultra-free',
+    ];
     const PROMPTS_FILE = '/prompts.json';
     const SOLUTION_UNLOCK_SCORE = 70;
     const API_RETRY_DELAY_MS = 70_000;
@@ -276,6 +296,9 @@
     const openRouterModelInput = document.getElementById('openRouterModelInput');
     const previousOpenRouterModel = document.getElementById('previousOpenRouterModel');
     const nextOpenRouterModel = document.getElementById('nextOpenRouterModel');
+    const openCodeModelInput = document.getElementById('openCodeModelInput');
+    const previousOpenCodeModel = document.getElementById('previousOpenCodeModel');
+    const nextOpenCodeModel = document.getElementById('nextOpenCodeModel');
     const dropdownBody = document.getElementById('dropdownBody');
     const kataToggle = document.getElementById('kataToggle');
     const promptTree = document.getElementById('promptTree');
@@ -315,6 +338,7 @@
     let keyboardConversationIndex = -1;
     let keyboardConversationAction = null;
     let openRouterFreeModelIds = [];
+    let openCodeFreeModelIds = [...OPENCODE_FREE_MODELS];
     let selectedHarness = 'normal';
     let tutorRunId = null;
     let tutorMessages = [];
@@ -869,6 +893,35 @@
       openRouterModelInput.value = openRouterFreeModelIds[nextIndex];
     }
 
+    async function loadOpenCodeFreeModels() {
+      try {
+        const response = await fetch(OPENCODE_MODELS_URL);
+        if (!response.ok) throw new Error(`OpenCode respondio con ${response.status}`);
+        const payload = await response.json();
+        const available = new Set(payload.data.map(model => model.id));
+        const ids = OPENCODE_FREE_MODELS.filter(id => available.has(id));
+        if (ids.length > 0) {
+          openCodeFreeModelIds = ids;
+          if (!ids.includes(openCodeModelInput.value)) openCodeModelInput.value = ids[0];
+        }
+      } catch (error) {
+        console.warn('No se pudieron cargar los modelos gratuitos de OpenCode:', error);
+      }
+    }
+
+    function cycleOpenCodeModel(direction) {
+      const currentIndex = openCodeFreeModelIds.indexOf(openCodeModelInput.value);
+      const nextIndex = currentIndex < 0
+        ? (direction > 0 ? 0 : openCodeFreeModelIds.length - 1)
+        : (currentIndex + direction + openCodeFreeModelIds.length) % openCodeFreeModelIds.length;
+      openCodeModelInput.value = openCodeFreeModelIds[nextIndex];
+    }
+
+    function selectOpenCodeModel() {
+      const id = openCodeModelInput.value;
+      selectModel({ id, label: id, provider: 'opencode', tag: 'OpenCode Zen' });
+    }
+
     function selectModel(m) {
       selectedModel = m;
       updateModelDisplay();
@@ -883,6 +936,7 @@
       openRouterModelInput.value = selectedModel.provider === 'openrouter'
         ? selectedModel.id
         : DEFAULT_OPENROUTER_MODEL;
+      if (selectedModel.provider === 'opencode') openCodeModelInput.value = selectedModel.id;
       setTimeout(() => {
         const selectedOption = dropdownBody.querySelector('.model-option.selected');
         (selectedOption || dropdownBody.querySelector('.model-option'))?.focus();
@@ -920,6 +974,24 @@
       cycleOpenRouterModel(1);
       openRouterModelInput.focus();
     });
+    openCodeModelInput.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        cycleOpenCodeModel(e.key === 'ArrowDown' ? 1 : -1);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        selectOpenCodeModel();
+      }
+    });
+    previousOpenCodeModel.addEventListener('click', () => {
+      cycleOpenCodeModel(-1);
+      openCodeModelInput.focus();
+    });
+    nextOpenCodeModel.addEventListener('click', () => {
+      cycleOpenCodeModel(1);
+      openCodeModelInput.focus();
+    });
+    openCodeModelInput.addEventListener('click', selectOpenCodeModel);
 
     function updateKataToggle() {
       const isKata = selectedHarness === 'kata';
@@ -2951,6 +3023,7 @@
     updateModelDisplay();
     buildDropdown();
     loadOpenRouterFreeModels();
+    loadOpenCodeFreeModels();
     updateSendBtn();
     updateKataToggle();
     syncLessonTutorOffset();

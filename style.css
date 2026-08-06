@@ -272,6 +272,10 @@ select {
   border-radius: var(--radius-md)
 }
 
+.openrouter-model-control + .openrouter-model-control {
+  margin-top: var(--space-2)
+}
+
 .dropdown-search input {
   display: block;
   width: 100%;

@@ -18,7 +18,19 @@ const PROVIDERS = {
   mistral: { url: 'https://api.mistral.ai/v1/chat/completions', key: 'MISTRAL_API_KEY' },
   cohere: { url: 'https://api.cohere.com/compatibility/v1/chat/completions', key: 'COHERE_API_KEY' },
   openrouter: { url: 'https://openrouter.ai/api/v1/chat/completions', key: 'OPENROUTER_API_KEY' },
+  opencode: { url: 'https://opencode.ai/zen/v1/chat/completions', key: 'OPENCODE_API_KEY' },
 };
+
+export const OPENCODE_FREE_MODELS = new Set([
+  'big-pickle',
+  'deepseek-v4-flash-free',
+  'mimo-v2.5-free',
+  'laguna-s-2.1-free',
+  'ling-3.0-flash-free',
+  'longcat-2.0-free',
+  'north-mini-code-free',
+  'nemotron-3-ultra-free',
+]);
 
 const IMAGE_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 const MAX_IMAGES = 5;
@@ -87,6 +99,7 @@ export async function handleChat(req, res) {
     const content = await chat(provider, model, chatMessages);
     return json(res, 200, { content });
   } catch (error) {
+    if (error.status === 400) return json(res, 400, { error: error.message });
     if (error.status === 429) {
       return json(res, 429, {
         error: error.message,
@@ -314,6 +327,11 @@ async function chat(provider, model, messages) {
   const apiKey = config && process.env[config.key];
   if (!config) throw new Error(`Proveedor no soportado: ${provider}`);
   if (!apiKey) throw new Error(`Falta ${config.key}`);
+  if (provider === 'opencode' && !OPENCODE_FREE_MODELS.has(model)) {
+    const error = new Error(`Modelo de OpenCode no permitido: ${model}`);
+    error.status = 400;
+    throw error;
+  }
 
   const body = { model, messages, stream: false, ...modelOptions(provider, model) };
   const headers = {
