@@ -21,6 +21,16 @@ const PROVIDERS = {
   opencode: { url: 'https://opencode.ai/zen/v1/chat/completions', key: 'OPENCODE_API_KEY' },
 };
 
+const MODEL_CATALOGS = {
+  groq: { url: 'https://api.groq.com/openai/v1/models', key: 'GROQ_API_KEY' },
+  // openrouter: { url: 'https://openrouter.ai/api/v1/models' },
+  opencode: { url: 'https://opencode.ai/zen/v1/models' },
+  google: { url: 'https://generativelanguage.googleapis.com/v1beta/models', key: 'GOOGLE_API_KEY', queryKey: true },
+  mistral: { url: 'https://api.mistral.ai/v1/models', key: 'MISTRAL_API_KEY' },
+  cohere: { url: 'https://api.cohere.com/v1/models?endpoint=chat&page_size=100', key: 'COHERE_API_KEY' },
+  cerebras: { url: 'https://api.cerebras.ai/v1/models', key: 'CEREBRAS_API_KEY' },
+};
+
 export const OPENCODE_FREE_MODELS = new Set([
   'big-pickle',
   'deepseek-v4-flash-free',
@@ -31,6 +41,19 @@ export const OPENCODE_FREE_MODELS = new Set([
   'north-mini-code-free',
   'nemotron-3-ultra-free',
 ]);
+
+const FALLBACK_MODELS = {
+  groq: ['qwen/qwen3.6-27b'],
+  openrouter: ['inclusionai/ling-3.0-flash:free'],
+  opencode: [...OPENCODE_FREE_MODELS],
+  google: ['gemini-pro-latest'],
+  mistral: ['codestral-latest'],
+  cohere: ['north-mini-code-1-0'],
+  cerebras: ['gpt-oss-120b'],
+};
+
+const MODEL_CATALOG_TTL_MS = 5 * 60 * 1000;
+let modelCatalogCache;
 
 const IMAGE_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 const MAX_IMAGES = 5;
@@ -53,6 +76,7 @@ if (isMainModule()) {
   createServer(async (req, res) => {
     try {
       if (req.url === '/api/chat') return await handleChat(req, res);
+      if (req.url === '/api/models') return await handleModels(req, res);
       if (req.url === '/api/learning') return await handleLearning(req, res);
       if (req.url === '/api/conversations') return await handleConversations(req, res);
       serveStatic(req, res);
@@ -60,6 +84,77 @@ if (isMainModule()) {
       json(res, 500, { error: error.message });
     }
   }).listen(port, () => console.log(`Local: http://localhost:${port}`));
+}
+
+export async function handleModels(req, res) {
+  if (req.method !== 'GET') return methodNotAllowed(res, ['GET']);
+  const providers = await getModelCatalog();
+  return json(res, 200, { providers }, { 'Cache-Control': 'no-store' });
+}
+
+async function getModelCatalog() {
+  if (modelCatalogCache?.expiresAt > Date.now()) return modelCatalogCache.providers;
+
+  const providers = await Promise.all(Object.entries(MODEL_CATALOGS).map(async ([provider, config]) => {
+    try {
+      const key = config.key && process.env[config.key];
+      if (config.key && !key) throw new Error(`Falta ${config.key}`);
+      const url = config.queryKey
+        ? `${config.url}?key=${encodeURIComponent(key)}`
+        : config.url;
+      const headers = config.key && !config.queryKey ? { Authorization: `Bearer ${key}` } : {};
+      const response = await fetch(url, { headers });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const models = normalizeProviderModels(provider, await response.json());
+      if (!models.length) throw new Error('catalogo vacio');
+      return { id: provider, models, source: 'live' };
+    } catch (error) {
+      console.warn(`[MODELS] ${provider}: ${error.message}`);
+      return { id: provider, models: FALLBACK_MODELS[provider], source: 'fallback' };
+    }
+  }));
+
+  modelCatalogCache = { providers, expiresAt: Date.now() + MODEL_CATALOG_TTL_MS };
+  return providers;
+}
+
+export function normalizeProviderModels(provider, payload) {
+  const rows = payload?.data || payload?.models || [];
+  let ids;
+  if (provider === 'openrouter') {
+    ids = rows
+      .filter(model => model.pricing?.prompt === '0' && model.pricing?.completion === '0')
+      .map(model => model.id)
+      .filter(id => id.endsWith(':free') && !/(?:safety|guard)/i.test(id));
+  } else if (provider === 'opencode') {
+    ids = rows.map(model => model.id).filter(id => OPENCODE_FREE_MODELS.has(id));
+  } else if (provider === 'groq') {
+    ids = rows.map(model => model.id).filter(id => !/(?:allam|whisper|tts|orpheus|guard|safeguard|moderation)/i.test(id));
+  } else if (provider === 'google') {
+    ids = rows
+      .filter(model => model.supportedGenerationMethods?.includes('generateContent'))
+      .map(model => (model.name || '').replace(/^models\//, ''))
+      .filter(id => id.endsWith('-latest'));
+  } else if (provider === 'mistral') {
+    ids = rows
+      .filter(model => model.capabilities?.completion_chat)
+      .map(model => model.id)
+      .filter(id => id.endsWith('-latest')
+        && !/(?:voxtral|vibe|fim|agent|labs-|leanstral)/i.test(id));
+  } else if (provider === 'cohere') {
+    const relevant = new Set([
+      'command-a-03-2025',
+      'command-a-plus-05-2026',
+      'command-a-reasoning-08-2025',
+      'north-mini-code-1-0',
+    ]);
+    ids = rows
+      .filter(model => !model.is_deprecated && model.endpoints?.includes('chat') && relevant.has(model.name))
+      .map(model => model.name);
+  } else {
+    ids = rows.map(model => model.id);
+  }
+  return [...new Set(ids.filter(Boolean))].sort((a, b) => a.localeCompare(b));
 }
 
 // Chat

@@ -6,6 +6,7 @@ import {
   OPENCODE_FREE_MODELS,
   learningRecordsFromState,
   learningStateFromRecords,
+  normalizeProviderModels,
   parseEvaluationResponse,
   validateEvaluationContext,
   validateLearningPayload,
@@ -146,6 +147,44 @@ test('OpenCode Zen rejects models outside the documented free list', async () =>
     if (originalKey === undefined) delete process.env.OPENCODE_API_KEY;
     else process.env.OPENCODE_API_KEY = originalKey;
   }
+});
+
+test('model catalogs keep only free and chat-compatible entries', () => {
+  assert.deepEqual(normalizeProviderModels('openrouter', { data: [
+    { id: 'free/chat:free', pricing: { prompt: '0', completion: '0' } },
+    { id: 'paid/chat', pricing: { prompt: '0.1', completion: '0.2' } },
+    { id: 'free/safety:free', pricing: { prompt: '0', completion: '0' } },
+  ] }), ['free/chat:free']);
+
+  assert.deepEqual(normalizeProviderModels('opencode', { data: [
+    { id: 'big-pickle' }, { id: 'gpt-5.6-sol' },
+  ] }), ['big-pickle']);
+
+  assert.deepEqual(normalizeProviderModels('groq', { data: [
+    { id: 'chat-model' }, { id: 'allam-2-7b' }, { id: 'whisper-large-v3' },
+    { id: 'prompt-guard' }, { id: 'orpheus-voice' },
+  ] }), ['chat-model']);
+
+  assert.deepEqual(normalizeProviderModels('mistral', { data: [
+    { id: 'mistral-small-latest', capabilities: { completion_chat: true } },
+    { id: 'mistral-medium-2604', capabilities: { completion_chat: true } },
+    { id: 'mistral-medium-2505', capabilities: { completion_chat: true } },
+    { id: 'mistral-vibe-cli-latest', capabilities: { completion_chat: true } },
+    { id: 'embed', capabilities: { completion_chat: false } },
+  ] }), ['mistral-small-latest']);
+
+  assert.deepEqual(normalizeProviderModels('cohere', { models: [
+    { name: 'north-mini-code-1-0', endpoints: ['chat'], is_deprecated: false },
+    { name: 'tiny-aya-earth', endpoints: ['chat'], is_deprecated: false },
+    { name: 'old', endpoints: ['chat'], is_deprecated: true },
+  ] }), ['north-mini-code-1-0']);
+
+  assert.deepEqual(normalizeProviderModels('google', { models: [
+    { name: 'models/gemini-pro-latest', supportedGenerationMethods: ['generateContent'] },
+    { name: 'models/gemini-flash-latest', supportedGenerationMethods: ['generateContent'] },
+    { name: 'models/gemini-pro-preview', supportedGenerationMethods: ['generateContent'] },
+    { name: 'models/embed', supportedGenerationMethods: ['embedContent'] },
+  ] }), ['gemini-flash-latest', 'gemini-pro-latest']);
 });
 
 test('learning payload metadata must match its state', () => {

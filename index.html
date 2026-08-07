@@ -51,26 +51,12 @@
               <path d="M6 9l6 6 6-6" />
             </svg>
           </button>
-          <div class="model-dropdown" id="modelDropdown" role="listbox">
-            <div class="dropdown-body" id="dropdownBody"></div>
+          <div class="model-dropdown" id="modelDropdown">
             <div class="dropdown-search">
-              <div class="openrouter-model-control">
-                <input type="text" id="openRouterModelInput" value="inclusionai/ling-3.0-flash:free" placeholder="ID de modelo OpenRouter..." autocomplete="off"
-                  aria-label="ID de modelo OpenRouter">
-                <div class="openrouter-model-arrows">
-                  <button type="button" id="previousOpenRouterModel" aria-label="Modelo OpenRouter anterior">↑</button>
-                  <button type="button" id="nextOpenRouterModel" aria-label="Modelo OpenRouter siguiente">↓</button>
-                </div>
-              </div>
-              <div class="openrouter-model-control">
-                <input type="text" id="openCodeModelInput" value="big-pickle" readonly
-                  aria-label="Modelo gratuito de OpenCode Zen">
-                <div class="openrouter-model-arrows">
-                  <button type="button" id="previousOpenCodeModel" aria-label="Modelo OpenCode anterior">↑</button>
-                  <button type="button" id="nextOpenCodeModel" aria-label="Modelo OpenCode siguiente">↓</button>
-                </div>
-              </div>
+              <input type="search" id="modelSearch" placeholder="Buscar modelo o proveedor..." autocomplete="off"
+                aria-label="Buscar modelo o proveedor">
             </div>
+            <div class="dropdown-body" id="dropdownBody"></div>
           </div>
         </div>
 
@@ -157,7 +143,7 @@
         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Escribe un mensaje…" aria-label="Mensaje"
           autocomplete="off" spellcheck="true"></textarea>
         <button class="send-btn" id="lessonForkBtn" type="button" aria-label="Forkear en Práctica libre"
-          title="Forkear en Práctica libre (Ctrl+Alt+F)" hidden>
+          title="Forkear en Práctica libre" hidden>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
             <circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/>
@@ -232,7 +218,7 @@
     const PROVIDERS = [
       { id: 'groq', name: 'Groq', color: '#a8b4f0' },
       { id: 'openrouter', name: 'OpenRouter', color: '#b4a0d4' },
-      { id: 'opencode', name: 'OpenCode Zen', color: '#f2f2f2' },
+      { id: 'opencode', name: 'OpenCode', color: '#f2f2f2' },
       { id: 'google', name: 'Google', color: '#8ab4f8' },
       { id: 'mistral', name: 'Mistral', color: '#ffab91' },
       { id: 'cohere', name: 'Cohere', color: '#a5d6a7' },
@@ -248,19 +234,7 @@
     ];
 
     const MAX_IMAGES = 5;
-    const DEFAULT_OPENROUTER_MODEL = 'inclusionai/ling-3.0-flash:free';
-    const OPENROUTER_MODELS_URL = 'https://openrouter.ai/api/v1/models';
-    const OPENCODE_MODELS_URL = 'https://opencode.ai/zen/v1/models';
-    const OPENCODE_FREE_MODELS = [
-      'big-pickle',
-      'deepseek-v4-flash-free',
-      'mimo-v2.5-free',
-      'laguna-s-2.1-free',
-      'ling-3.0-flash-free',
-      'longcat-2.0-free',
-      'north-mini-code-free',
-      'nemotron-3-ultra-free',
-    ];
+    const MODEL_FAVORITES_KEY = 'inferencia_model_favorites';
     const PROMPTS_FILE = '/prompts.json';
     const SOLUTION_UNLOCK_SCORE = 70;
     const API_RETRY_DELAY_MS = 70_000;
@@ -269,6 +243,8 @@
     const FORK_LESSON_MESSAGE_TYPES = new Set(['challenge', 'attempt', 'evaluation', 'solution']);
 
     let selectedModel = MODELS.find(m => m.id === 'gpt-oss-120b');
+    let availableModels = [...MODELS];
+    let modelFavorites = loadModelFavorites();
     let messages = [];
     const undoneTurns = new Map();
     let attachedImages = [];
@@ -293,12 +269,7 @@
     const modelIcon = document.getElementById('modelIcon');
     const modelLabel = document.getElementById('modelLabel');
     const modelDropdown = document.getElementById('modelDropdown');
-    const openRouterModelInput = document.getElementById('openRouterModelInput');
-    const previousOpenRouterModel = document.getElementById('previousOpenRouterModel');
-    const nextOpenRouterModel = document.getElementById('nextOpenRouterModel');
-    const openCodeModelInput = document.getElementById('openCodeModelInput');
-    const previousOpenCodeModel = document.getElementById('previousOpenCodeModel');
-    const nextOpenCodeModel = document.getElementById('nextOpenCodeModel');
+    const modelSearch = document.getElementById('modelSearch');
     const dropdownBody = document.getElementById('dropdownBody');
     const kataToggle = document.getElementById('kataToggle');
     const promptTree = document.getElementById('promptTree');
@@ -337,8 +308,6 @@
     let pendingDeleteId = null;
     let keyboardConversationIndex = -1;
     let keyboardConversationAction = null;
-    let openRouterFreeModelIds = [];
-    let openCodeFreeModelIds = [...OPENCODE_FREE_MODELS];
     let selectedHarness = 'normal';
     let tutorRunId = null;
     let tutorMessages = [];
@@ -820,6 +789,19 @@
     }
 
     // Selector de modelos
+    function loadModelFavorites() {
+      try {
+        const value = JSON.parse(localStorage.getItem(MODEL_FAVORITES_KEY) || '[]');
+        return new Set(Array.isArray(value) ? value.filter(item => typeof item === 'string') : []);
+      } catch {
+        return new Set();
+      }
+    }
+
+    function modelKey(model) {
+      return `${model.provider}:${model.id}`;
+    }
+
     function updateModelDisplay() {
       const p = PROVIDERS.find(pp => pp.id === selectedModel.provider);
       const iconEl = modelBtn.querySelector('[data-lucide="brain"]') || modelIcon;
@@ -829,97 +811,99 @@
         : selectedModel.label;
     }
 
-    function buildDropdown() {
-      dropdownBody.innerHTML = '';
-      MODELS.forEach(m => {
-        const p = PROVIDERS.find(pp => pp.id === m.provider);
-        const opt = document.createElement('div');
-        opt.className = 'model-option' + (selectedModel?.id === m.id ? ' selected' : '');
-        opt.dataset.provider = m.provider;
-        opt.dataset.model = m.id;
-        opt.dataset.label = m.label.toLowerCase();
-        opt.setAttribute('role', 'option');
-        opt.tabIndex = 0;
-        opt.innerHTML = `<span class="opt-dot" style="background:${p.color}"></span><span class="opt-name">${m.label}</span><span class="opt-tag">${m.tag}</span>`;
-        opt.addEventListener('click', (event) => {
-          event.stopPropagation();
-          selectModel(m);
-        });
-        opt.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            selectModel(m);
-          } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-            e.preventDefault();
-            const options = [...dropdownBody.querySelectorAll('.model-option')];
-            const direction = e.key === 'ArrowDown' ? 1 : -1;
-            const nextIndex = (options.indexOf(opt) + direction + options.length) % options.length;
-            options[nextIndex].focus();
-          }
-        });
-        dropdownBody.appendChild(opt);
+    function createModelOption(model) {
+      const provider = PROVIDERS.find(item => item.id === model.provider);
+      const option = document.createElement('div');
+      option.className = 'model-option' + (selectedModel?.id === model.id && selectedModel?.provider === model.provider ? ' selected' : '');
+      option.dataset.provider = model.provider;
+      option.dataset.model = model.id;
+      option.dataset.modelKey = modelKey(model);
+      option.setAttribute('role', 'option');
+      option.tabIndex = 0;
+
+      const dot = document.createElement('span');
+      dot.className = 'opt-dot';
+      dot.style.background = provider?.color || '#999';
+      const name = document.createElement('span');
+      name.className = 'opt-name';
+      name.textContent = model.label;
+      const tag = document.createElement('span');
+      tag.className = 'opt-tag';
+      tag.textContent = model.tag;
+      option.append(dot, name, tag);
+
+      option.addEventListener('click', event => {
+        event.stopPropagation();
+        selectModel(model);
       });
+      option.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          selectModel(model);
+        } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          const options = [...dropdownBody.querySelectorAll('.model-option')];
+          const direction = event.key === 'ArrowDown' ? 1 : -1;
+          options[(options.indexOf(option) + direction + options.length) % options.length]?.focus();
+        }
+      });
+      return option;
     }
 
-    async function loadOpenRouterFreeModels() {
+    function buildDropdown(focusKey) {
+      dropdownBody.innerHTML = '';
+      const query = modelSearch.value.trim().toLowerCase();
+      const visible = availableModels.filter(model => {
+        const provider = PROVIDERS.find(item => item.id === model.provider);
+        return !query || `${model.id} ${model.label} ${provider?.name || ''}`.toLowerCase().includes(query);
+      });
+      const visibleByKey = new Map(visible.map(model => [modelKey(model), model]));
+      const favorites = [...modelFavorites].map(key => visibleByKey.get(key)).filter(Boolean);
+      const regular = [];
+      PROVIDERS.forEach(provider => {
+        regular.push(...visible.filter(model => model.provider === provider.id && !modelFavorites.has(modelKey(model))));
+      });
+      [...favorites, ...regular].forEach(model => dropdownBody.appendChild(createModelOption(model)));
+      if (!visible.length) {
+        const empty = document.createElement('div');
+        empty.className = 'model-empty';
+        empty.textContent = 'No hay modelos que coincidan.';
+        dropdownBody.appendChild(empty);
+      }
+      if (focusKey) dropdownBody.querySelector(`[data-model-key="${CSS.escape(focusKey)}"]`)?.focus();
+    }
+
+    async function loadModels() {
       try {
-        const response = await fetch(OPENROUTER_MODELS_URL);
-        if (!response.ok) throw new Error(`OpenRouter respondio con ${response.status}`);
-
+        const response = await fetch('/api/models', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Catalogo respondio con ${response.status}`);
         const payload = await response.json();
-        const ids = payload.data
-          .map(model => model.id)
-          .filter(id => id.endsWith(':free') && id !== 'openrouter/free')
-          .sort((a, b) => a.localeCompare(b));
-
-        if (ids.length > 0) {
-          openRouterFreeModelIds = ids;
-          if (selectedModel.provider !== 'openrouter' && !openRouterModelInput.value.trim()) {
-            openRouterModelInput.value = ids[0];
-          }
-        }
+        availableModels = payload.providers.flatMap(({ id, models }) => models.map(model => ({
+          id: model,
+          label: model,
+          provider: id,
+          tag: PROVIDERS.find(provider => provider.id === id)?.name || id,
+        })));
+        const availableKeys = new Set(availableModels.map(modelKey));
+        modelFavorites = new Set([...modelFavorites].filter(key => availableKeys.has(key)));
+        localStorage.setItem(MODEL_FAVORITES_KEY, JSON.stringify([...modelFavorites]));
+        buildDropdown();
       } catch (error) {
-        console.warn('No se pudieron cargar los modelos gratuitos de OpenRouter:', error);
+        console.warn('No se pudo cargar el catalogo de modelos:', error);
       }
     }
 
-    function cycleOpenRouterModel(direction) {
-      if (openRouterFreeModelIds.length === 0) return;
-      const currentId = openRouterModelInput.value.trim();
-      const currentIndex = openRouterFreeModelIds.indexOf(currentId);
-      const nextIndex = currentIndex < 0
-        ? (direction > 0 ? 0 : openRouterFreeModelIds.length - 1)
-        : (currentIndex + direction + openRouterFreeModelIds.length) % openRouterFreeModelIds.length;
-      openRouterModelInput.value = openRouterFreeModelIds[nextIndex];
-    }
-
-    async function loadOpenCodeFreeModels() {
-      try {
-        const response = await fetch(OPENCODE_MODELS_URL);
-        if (!response.ok) throw new Error(`OpenCode respondio con ${response.status}`);
-        const payload = await response.json();
-        const available = new Set(payload.data.map(model => model.id));
-        const ids = OPENCODE_FREE_MODELS.filter(id => available.has(id));
-        if (ids.length > 0) {
-          openCodeFreeModelIds = ids;
-          if (!ids.includes(openCodeModelInput.value)) openCodeModelInput.value = ids[0];
-        }
-      } catch (error) {
-        console.warn('No se pudieron cargar los modelos gratuitos de OpenCode:', error);
+    function toggleModelFavorite(model) {
+      const key = modelKey(model);
+      if (modelFavorites.has(key)) {
+        modelFavorites.delete(key);
+        showToast('Quitado de favoritos');
+      } else {
+        modelFavorites = new Set([key, ...modelFavorites]);
+        showToast('Añadido a favoritos');
       }
-    }
-
-    function cycleOpenCodeModel(direction) {
-      const currentIndex = openCodeFreeModelIds.indexOf(openCodeModelInput.value);
-      const nextIndex = currentIndex < 0
-        ? (direction > 0 ? 0 : openCodeFreeModelIds.length - 1)
-        : (currentIndex + direction + openCodeFreeModelIds.length) % openCodeFreeModelIds.length;
-      openCodeModelInput.value = openCodeFreeModelIds[nextIndex];
-    }
-
-    function selectOpenCodeModel() {
-      const id = openCodeModelInput.value;
-      selectModel({ id, label: id, provider: 'opencode', tag: 'OpenCode Zen' });
+      localStorage.setItem(MODEL_FAVORITES_KEY, JSON.stringify([...modelFavorites]));
+      buildDropdown(key);
     }
 
     function selectModel(m) {
@@ -933,13 +917,9 @@
     function openDropdown() {
       modelDropdown.classList.add('open');
       modelBtn.setAttribute('aria-expanded', 'true');
-      openRouterModelInput.value = selectedModel.provider === 'openrouter'
-        ? selectedModel.id
-        : DEFAULT_OPENROUTER_MODEL;
-      if (selectedModel.provider === 'opencode') openCodeModelInput.value = selectedModel.id;
       setTimeout(() => {
-        const selectedOption = dropdownBody.querySelector('.model-option.selected');
-        (selectedOption || dropdownBody.querySelector('.model-option'))?.focus();
+        modelSearch.focus();
+        modelSearch.select();
       }, 60);
     }
     function closeDropdown() {
@@ -952,46 +932,13 @@
     });
     document.addEventListener('click', e => { if (!modelBtn.contains(e.target) && !modelDropdown.contains(e.target)) closeDropdown(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDropdown(); });
-    openRouterModelInput.addEventListener('keydown', e => {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        cycleOpenRouterModel(1);
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        cycleOpenRouterModel(-1);
-      } else if (e.key === 'Enter') {
-        const id = openRouterModelInput.value.trim();
-        if (!id) return;
-        e.preventDefault();
-        selectModel({ id, label: id, provider: 'openrouter', tag: 'OpenRouter' });
+    modelSearch.addEventListener('input', () => buildDropdown());
+    modelSearch.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        dropdownBody.querySelector('.model-option')?.focus();
       }
     });
-    previousOpenRouterModel.addEventListener('click', () => {
-      cycleOpenRouterModel(-1);
-      openRouterModelInput.focus();
-    });
-    nextOpenRouterModel.addEventListener('click', () => {
-      cycleOpenRouterModel(1);
-      openRouterModelInput.focus();
-    });
-    openCodeModelInput.addEventListener('keydown', e => {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        e.preventDefault();
-        cycleOpenCodeModel(e.key === 'ArrowDown' ? 1 : -1);
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        selectOpenCodeModel();
-      }
-    });
-    previousOpenCodeModel.addEventListener('click', () => {
-      cycleOpenCodeModel(-1);
-      openCodeModelInput.focus();
-    });
-    nextOpenCodeModel.addEventListener('click', () => {
-      cycleOpenCodeModel(1);
-      openCodeModelInput.focus();
-    });
-    openCodeModelInput.addEventListener('click', selectOpenCodeModel);
 
     function updateKataToggle() {
       const isKata = selectedHarness === 'kata';
@@ -1113,11 +1060,11 @@
         const canForkConversation = selectedHarness === 'normal' && currentConversationId && messages.length > 0;
         lessonForkBtn.hidden = !canForkConversation;
         lessonForkBtn.disabled = isLoading || !canForkConversation;
-        lessonForkBtn.title = 'Forkear conversación (Ctrl+Alt+F)';
+        lessonForkBtn.title = 'Forkear conversación';
         lessonForkBtn.setAttribute('aria-label', 'Forkear conversación');
       } else {
         lessonForkBtn.disabled = sendBtn.disabled;
-        lessonForkBtn.title = 'Forkear en Práctica libre (Ctrl+Alt+F)';
+        lessonForkBtn.title = 'Forkear en Práctica libre';
         lessonForkBtn.setAttribute('aria-label', 'Forkear en Práctica libre');
       }
     }
@@ -2975,9 +2922,13 @@
       }
 
       if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'f') {
+        if (e.target.matches('input, textarea, [contenteditable="true"]')) return;
         e.preventDefault();
-        if (!lessonForkBtn.hidden && !lessonForkBtn.disabled
-            && (!currentLessonRunId || chatInput.value.trim())) lessonForkBtn.click();
+        const focusedKey = modelDropdown.classList.contains('open')
+          ? document.activeElement?.dataset?.modelKey
+          : null;
+        const model = availableModels.find(item => modelKey(item) === focusedKey) || selectedModel;
+        if (model) toggleModelFavorite(model);
         return;
       }
 
@@ -3022,8 +2973,7 @@
 
     updateModelDisplay();
     buildDropdown();
-    loadOpenRouterFreeModels();
-    loadOpenCodeFreeModels();
+    loadModels();
     updateSendBtn();
     updateKataToggle();
     syncLessonTutorOffset();
